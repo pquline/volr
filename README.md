@@ -1,7 +1,5 @@
 # Volr
 
-![Volr](https://github.com/pquline/Volr/blob/main/assets/logo/logo-100.png)
-
 ## English
 Volr is a web app to signal and see dangers in the public transports.
 It works for the cities listed in the section [Cities](#cities).
@@ -14,3 +12,6 @@ L'application fonctionne pour les villes listées dans la section [Cities](#citi
 - Marseille
 - Paris
 - Rennes
+
+## Web App
+![Volr](https://i.ibb.co/mXSTrKw/app.png)
