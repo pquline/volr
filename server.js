@@ -13,14 +13,14 @@ app.use(cors());
 // Other middleware (like for parsing JSON, if needed)
 app.use(express.json());
 app.use('/', express.static('./'));
-app.use('/assets', express.static('./assets'));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './index.html'));
 });
 
 // Connection to the 'lines' database
-const linesDb = mongoose.createConnection('mongodb://mongo:27017/lines', {
+const linesDb = mongoose.createConnection('mongodb://localhost:27017/lines', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -28,7 +28,7 @@ linesDb.on('error', console.error.bind(console, 'connection error (linesDb):'));
 linesDb.once('open', () => console.log("Connected to 'lines' database"));
 
 // Connection to the 'entries' database
-const entriesDb = mongoose.createConnection('mongodb://mongo:27017/entries', {
+const entriesDb = mongoose.createConnection('mongodb://localhost:27017/entries', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
