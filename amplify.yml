@@ -7,7 +7,7 @@ frontend:
         - npm install
     build:
       commands:
-        - npm run build
+        - npm start
   artifacts:
     baseDirectory: .amplify-hosting
     files:
