@@ -1,4 +1,6 @@
-const MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017';
+require('dotenv').config();
+const MONGODB_URI = process.env.MONGO_URI;
+//console.log('MongoDB URI:', process.env.MONGO_URI);
 
 const path = require('path');
 const express = require('express');
