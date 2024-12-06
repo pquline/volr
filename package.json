@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postbuild": "chmod +x postbuild.sh && ./postbuild.sh"
+    "postinstall": "chmod +x postbuild.sh && ./postbuild.sh"
   },
   "author": "dev@volr.cc",
   "license": "ISC",
