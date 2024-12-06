@@ -6,7 +6,7 @@ services:
     depends_on:
       - db
     environment:
-      - MONGODB_URI=${MONGODB_URI}
+      - MONGO_URI=${MONGO_URI}
 
   db:
     image: mongo:latest
