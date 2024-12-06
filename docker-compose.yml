@@ -6,7 +6,7 @@ services:
     depends_on:
       - db
     environment:
-      - MONGODB_URI=mongodb+srv://admin:CacaProut75@volr.rbu7e.mongodb.net/?retryWrites=true&w=majority&appName=volr
+      - MONGODB_URI=${MONGODB_URI}
 
   db:
     image: mongo:latest
