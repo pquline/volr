@@ -1,3 +1,5 @@
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
@@ -19,18 +21,16 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, './index.html'));
 });
 
-// Connection to the 'lines' database
-const linesDb = mongoose.createConnection('mongodb://db:27017/lines', {
+const linesDb = mongoose.createConnection(`${MONGODB_URI}/lines`, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 });
 linesDb.on('error', console.error.bind(console, 'connection error (linesDb):'));
 linesDb.once('open', () => console.log("Connected to 'lines' database"));
 
-// Connection to the 'entries' database
-const entriesDb = mongoose.createConnection('mongodb://db:27017/entries', {
+const entriesDb = mongoose.createConnection(`${MONGODB_URI}/entries`, {
 	useNewUrlParser: true,
-	useUnifiedTopology: true
+    useUnifiedTopology: true
 });
 entriesDb.on('error', console.error.bind(console, 'connection error (entriesDb):'));
 entriesDb.once('open', () => console.log("Connected to 'entries' database"));
