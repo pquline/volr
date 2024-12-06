@@ -46,6 +46,7 @@ entriesDb.once("open", () => console.log("Connected to 'entries' database"));
 
 // Route for fetching data from 'lines' database
 app.get("/api/lines", async (req, res) => {
+  console.log("Fetching lines");
   const cityFilter = req.query.city;
   const query = cityFilter ? { city: cityFilter } : {};
 
