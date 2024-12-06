@@ -1,5 +1,5 @@
-//const WEBURL = "http://localhost:3000"; // Local development
-const WEBURL = "https://beta.volr.cc"; // Online
+const WEBURL = "http://localhost:3000"; // Local development
+//const WEBURL = "https://beta.volr.cc"; // Online
 const interchangeStationsRennes = [
     "Sainte-Anne",
     "Gares"];
@@ -56,6 +56,7 @@ const interchangeStationsParis = [
     "Louis Blanc",
     "Madeleine",
     "Mairie de Saint-Ouen",
+	"Maison Blanche",
     "Malesherbes",
     "Marcadet-Poissonniers",
     "Marché de Saint-Denis",
@@ -107,6 +108,7 @@ const interchangeStationsParis = [
     "République",
     "Saint-Cyr",
     "Saint-Denis",
+    "Saint-Denis - Pleyel",
     "Saint-Denis - Porte de Paris",
     "Saint-Fargeau",
     "Saint-Germain-en-Laye",
@@ -444,13 +446,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('line_select').addEventListener('change', function () {
         const selectedLineName = this.value;
         const selectedCity = document.getElementById('citySelect').value; // Get the selected city
-    
+
         fetch(`${WEBURL}/api/lines/name/${selectedLineName}?city=${selectedCity}`) // Include city in the API request
             .then(response => response.json())
             .then(lineData => {
                 updateStationSelect(lineData.stations);
                 updateDirectionSelect(lineData.terminus);
-    
+
                 // Set up event listener for station_select
                 const stationSelect = document.getElementById('station_select');
                 stationSelect.addEventListener('change', function () {
@@ -459,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             })
             .catch(error => console.error('Error:', error));
-    });    
+    });
 
     var form = document.getElementById('signalADangerForm');
 

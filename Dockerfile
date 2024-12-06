@@ -1,24 +1,20 @@
-# Use an official Node runtime as a parent image
 FROM node:latest
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock)
+# Copy package files
 COPY package*.json ./
 
-# Copy .env
-COPY .env ./
-
-# Install any needed packages specified in package.json
+# Install dependencies
 RUN npm install
 
-# Bundle app source
+# Copy the rest of the application code
 COPY . .
 
-# Make port 3000 available to the world outside this container
+# Copy lines.json file
+COPY lines.json /app/lines.json
+
+# Expose port (adjust if needed)
 EXPOSE 3000
 
-# Run server.js when the container launches
-CMD ["node", "server.js"]
-
+CMD ["npm", "start"]
