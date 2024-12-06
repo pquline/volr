@@ -4,6 +4,7 @@ frontend:
     preBuild:
       commands:
         - nvm use 18
+        - npm audit fix --force
         - npm install
     build:
       commands:
