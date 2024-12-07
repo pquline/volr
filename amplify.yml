@@ -3,6 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
+	    - echo "MONGO_URI=$MONGO_URI" >> .env
         - nvm use 18
         - npm audit fix --force
         - npm install
