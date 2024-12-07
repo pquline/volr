@@ -210,21 +210,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-// Function to delete outdated entries
-async function deleteOutdatedEntries() {
-  try {
-    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000); // Calculate the date 2 hours ago
-
-    // Delete entries with last_edit date older than two hours ago
-    const result = await Entry.deleteMany({ last_edit: { $lt: twoHoursAgo } });
-
-    if (result.deletedCount) {
-      console.log(
-        `Outdated entries deleted: ${result.deletedCount} entries removed.`
-      );
-    }
-  } catch (error) {
-    console.error("Error deleting outdated entries:", error);
-  }
-}
