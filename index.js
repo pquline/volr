@@ -15,6 +15,11 @@ const app = express();
 app.use(cors());
 
 // Other middleware (like for parsing JSON, if needed)
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store');
+    next();
+});
+
 app.use(express.json());
 app.use("/", express.static("./"));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
