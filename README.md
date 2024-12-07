@@ -1,5 +1,6 @@
 # VOLR 🚇
-Volr is a web application that allows users to report and track potential dangers in public transportation systems.
+
+[Volr](https://volr.cc) is a web application that allows users to report and track potential dangers in public transportation systems.
 The app currently supports transit networks in Paris, Marseille, and Rennes.
 
 ## ✨ Features
