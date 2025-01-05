@@ -8,10 +8,10 @@ const Footer = () => {
   return (
     <footer className="text-xs sm:text-sm text-foreground text-center bg-background py-6 pb-4 border-t border-muted space-y-2">
       <div className="justify-between items-center">
-        <div className="underline space-x-4">
-          <Link href="/about">About</Link>
-          <Link href="/privacy">Privacy Policy</Link>
-          <Link href="/terms">Terms of Service</Link>
+        <div className="space-x-4 text-foreground/95">
+          <Link href="/about" className="hover:underline">About</Link>
+          <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+          <Link href="/terms" className="hover:underline">Terms of Service</Link>
         </div>
       </div>
       <div className="flex justify-center items-center text-md space-x-2">

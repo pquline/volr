@@ -18,7 +18,7 @@ const mockEntries: Entry[] = [
     state: "danger",
     station: "Châtelet",
     line: "1",
-    last_edit: "5 minutes",
+    last_edit: "5m",
     edits: 3
   },
   {
@@ -26,7 +26,7 @@ const mockEntries: Entry[] = [
     state: "warning",
     station: "Gare de Lyon",
     line: "14",
-    last_edit: "10 minutes",
+    last_edit: "10m",
     edits: 1
   },
   {
@@ -34,7 +34,7 @@ const mockEntries: Entry[] = [
     state: "danger",
     station: "Bastille",
     line: "5",
-    last_edit: "15 minutes",
+    last_edit: "15m",
     edits: 2
   },
   {
@@ -42,7 +42,7 @@ const mockEntries: Entry[] = [
     state: "danger",
     station: "Nation",
     line: "6",
-    last_edit: "20 minutes",
+    last_edit: "20m",
     edits: 4
   },
   {
@@ -50,7 +50,7 @@ const mockEntries: Entry[] = [
     state: "warning",
     station: "République",
     line: "3",
-    last_edit: "25 minutes",
+    last_edit: "25m",
     edits: 2
   },
   {
@@ -58,7 +58,7 @@ const mockEntries: Entry[] = [
     state: "danger",
     station: "Opéra",
     line: "8",
-    last_edit: "30 minutes",
+    last_edit: "30m",
     edits: 5
   },
   {
@@ -66,7 +66,7 @@ const mockEntries: Entry[] = [
     state: "warning",
     station: "Montparnasse",
     line: "4",
-    last_edit: "35 minutes",
+    last_edit: "35m",
     edits: 1
   },
   {
@@ -74,7 +74,7 @@ const mockEntries: Entry[] = [
     state: "danger",
     station: "Saint-Lazare",
     line: "13",
-    last_edit: "40 minutes",
+    last_edit: "40m",
     edits: 3
   },
   {
@@ -82,7 +82,7 @@ const mockEntries: Entry[] = [
     state: "warning",
     station: "La Défense",
     line: "1",
-    last_edit: "45 minutes",
+    last_edit: "1h45m",
     edits: 2
   }
 ]

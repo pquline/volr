@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover"
 
 interface SearchableSelectProps {
+  label: string
   options: { value: string; label: string }[]
   value: string
   onValueChange: (value: string) => void
@@ -26,7 +27,7 @@ interface SearchableSelectProps {
   error?: boolean
 }
 
-export function SearchableSelect({ options, value, onValueChange, placeholder, error }: SearchableSelectProps) {
+export function SearchableSelect({ label, options, value, onValueChange, placeholder, error }: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -49,7 +50,7 @@ export function SearchableSelect({ options, value, onValueChange, placeholder, e
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
+          <CommandInput placeholder={`Search a ${label.toLowerCase()}...`} />
           <CommandEmpty>No {placeholder.toLowerCase()} found.</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (

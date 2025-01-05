@@ -5,7 +5,6 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { GeistSans } from 'geist/font/sans';
 
-
 export const metadata: Metadata = {
   title: "Volr",
   description: "Avoid dangers, travel as free as the air. Volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",

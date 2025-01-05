@@ -25,11 +25,11 @@ const ModeToggle: React.FC = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem className="space-x-2" onClick={() => setTheme("light")}>
-          <Sun className="h-4 w-4 text-tertiary" />
+          <Sun className="h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem className="space-x-2" onClick={() => setTheme("dark")}>
-          <Moon className="h-4 w-4 text-primary" />
+          <Moon className="h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem className="space-x-2" onClick={() => setTheme("system")}>

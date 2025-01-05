@@ -12,14 +12,13 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
 } from "@/components/ui/form"
 import { SearchableSelect } from "./searchable-select"
 
 const formSchema = z.object({
   line: z.string().min(1),
   station: z.string().min(1),
-  location: z.string().min(1),
-  direction: z.string().min(1),
 })
 
 export function SignalDangerForm() {
@@ -31,13 +30,9 @@ export function SignalDangerForm() {
   const [options, setOptions] = React.useState<{
     lines: { value: string; label: string }[],
     stations: { value: string; label: string }[],
-    locations: { value: string; label: string }[],
-    directions: { value: string; label: string }[],
   }>({
     lines: [],
     stations: [],
-    locations: [],
-    directions: [],
   })
 
   React.useEffect(() => {
@@ -52,18 +47,8 @@ export function SignalDangerForm() {
         { value: "station2", label: "Station 2" },
         { value: "station3", label: "Station 3" },
       ]
-      const locations = [
-        { value: "location1", label: "Location 1" },
-        { value: "location2", label: "Location 2" },
-        { value: "location3", label: "Location 3" },
-      ]
-      const directions = [
-        { value: "direction1", label: "Direction 1" },
-        { value: "direction2", label: "Direction 2" },
-        { value: "direction3", label: "Direction 3" },
-      ]
 
-      setOptions({ lines, stations, locations, directions })
+      setOptions({ lines, stations })
     }
 
     fetchOptions()
@@ -85,13 +70,15 @@ export function SignalDangerForm() {
                 control={form.control}
                 name="line"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-4">
-                    <FormControl className="flex-grow">
+                  <FormItem>
+                    <FormLabel className="px-2 font-bold">Line</FormLabel>
+                    <FormControl>
                       <SearchableSelect
+                        label="line"
                         options={options.lines}
                         value={field.value}
                         onValueChange={field.onChange}
-                        placeholder="Line"
+                        placeholder="Select a line..."
                         error={!!form.formState.errors.line}
                       />
                     </FormControl>
@@ -102,48 +89,16 @@ export function SignalDangerForm() {
                 control={form.control}
                 name="station"
                 render={({ field }) => (
-                  <FormItem className="flex items-center space-x-4">
-                    <FormControl className="flex-grow">
+                  <FormItem>
+                    <FormLabel className="px-2 font-bold">Station</FormLabel>
+                    <FormControl>
                       <SearchableSelect
+                        label="station"
                         options={options.stations}
                         value={field.value}
                         onValueChange={field.onChange}
-                        placeholder="Station"
+                        placeholder="Select a station..."
                         error={!!form.formState.errors.station}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-4">
-                    <FormControl className="flex-grow">
-                      <SearchableSelect
-                        options={options.locations}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Location"
-                        error={!!form.formState.errors.location}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="direction"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-4">
-                    <FormControl className="flex-grow">
-                      <SearchableSelect
-                        options={options.directions}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Direction"
-                        error={!!form.formState.errors.direction}
                       />
                     </FormControl>
                   </FormItem>
