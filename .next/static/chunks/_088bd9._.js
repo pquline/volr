@@ -1654,13 +1654,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$reported$2d$da
 ;
 function Home() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "container mx-auto flex justify-between items-center sm:items-start py-4 px-4 sm:px-16 md:px-32 lg:px-56 xl:px-80 2xl:px-96 grid grid-cols-1 md:grid-cols-3 space-y-6 md:space-y-0 md:space-x-6",
+        className: "container mx-auto flex justify-between items-center lg:items-start py-4 px-4 sm:px-16 md:px-32 grid grid-cols-1 lg:grid-cols-3 space-y-6 lg:space-y-0 lg:space-x-6",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "w-full md:col-span-1 space-y-4",
+                className: "w-full lg:col-span-1 space-y-4",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: "px-4 text-base font-black truncate",
+                        className: "px-4 text-lg font-black truncate",
                         children: "Report A Danger"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
@@ -1679,10 +1679,10 @@ function Home() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "w-full md:col-span-2 space-y-4",
+                className: "w-full lg:col-span-2 space-y-4",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: "px-4 text-base font-black truncate",
+                        className: "px-4 text-lg font-black truncate",
                         children: "Reported Dangers"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
