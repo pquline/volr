@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Check, Text, Trash, MapPin, Signpost, Clock } from 'lucide-react'
+import { Check, Text, Trash, Clock } from 'lucide-react'
 
 interface EntryCardProps {
   entry: {
