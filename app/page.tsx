@@ -3,7 +3,7 @@
 import * as React from "react";
 import ReportADanger from "@/components/report-a-danger";
 import ReportedDangers from "@/components/reported-dangers";
-import { Toaster } from "sonner";
+// import { Toaster } from "sonner";
 
 export default function Home() {
   return (

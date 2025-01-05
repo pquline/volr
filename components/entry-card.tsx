@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Check, Text, Trash, Clock } from 'lucide-react'
+import Image from "next/image"
 
 interface EntryCardProps {
   entry: {
@@ -28,7 +29,7 @@ export function EntryCard({ entry }: EntryCardProps) {
         <div className="flex justify-between">
           <div className="space-y-2 text-sm">
             <div className="flex items-center space-x-4">
-              <img src={`/placeholder.svg?height=13&width=13`} alt={`Line ${entry.line}`} className="h-4 w-4" />
+              <Image width={15} height={15} src={`/public/${entry.line}.png`} alt={entry.line} />
               <span>Ligne {entry.line}</span>
             </div>
             <div className="flex items-center space-x-4">

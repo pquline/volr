@@ -89,8 +89,10 @@ const mockEntries: Entry[] = [
 
 export default function ReportedDangers() {
   const [entries, setEntries] = useState<Entry[]>(mockEntries)
-  const [sortBy, setSortBy] = useState<"line" | "station" | "last_edit">("last_edit")
-  const [isAscending, setIsAscending] = useState(true)
+  const [sortBy] = useState<"line" | "station" | "last_edit">("last_edit")
+  const [isAscending] = useState(true)
+  // const [sortBy, setSortBy] = useState<"line" | "station" | "last_edit">("last_edit")
+  // const [isAscending, setIsAscending] = useState(true)
 
   useEffect(() => {
     const sortedEntries = [...entries].sort((a, b) => {
