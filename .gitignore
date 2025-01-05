@@ -8,6 +8,7 @@ node_modules/
 # Build output
 dist/
 build/
+.devcontainer/
 
 # Environment variables
 .env
