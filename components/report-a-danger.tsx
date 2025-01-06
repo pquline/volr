@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -13,12 +13,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form"
 import { SearchableSelect } from "./searchable-select"
+import { Textarea } from "@/components/ui/textarea"
 
 const formSchema = z.object({
   line: z.string().min(1),
   station: z.string().min(1),
+  comment: z.string().max(180).optional(),
 })
 
 export function SignalDangerForm() {
@@ -59,10 +62,11 @@ export function SignalDangerForm() {
   }
 
   return (
-    <Card className="border-muted">
-        {/* <CardHeader>
-          <CardTitle className="text-base sm:text-lg">Report A Danger</CardTitle>
-        </CardHeader> */}
+    <div className="w-full space-y-4">
+      <div className="h-[36px] flex items-center">
+        <h2 className="text-lg font-black truncate lg:text-xl">Report A Danger</h2>
+      </div>
+      <Card>
         <CardContent className="p-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -71,7 +75,7 @@ export function SignalDangerForm() {
                 name="line"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="px-2 font-bold">Line</FormLabel>
+                    <FormLabel className="px-2 font-bold">Line<span className="font-normal"> (Required)</span></FormLabel>
                     <FormControl>
                       <SearchableSelect
                         label="line"
@@ -90,7 +94,7 @@ export function SignalDangerForm() {
                 name="station"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="px-2 font-bold">Station</FormLabel>
+                    <FormLabel className="px-2 font-bold">Station<span className="font-normal"> (Required)</span></FormLabel>
                     <FormControl>
                       <SearchableSelect
                         label="station"
@@ -104,13 +108,32 @@ export function SignalDangerForm() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="comment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="px-2 font-bold">Comment</FormLabel>
+                      <FormControl>
+                      <Textarea
+                        placeholder="Enter an optional comment detailing the danger..."
+                        className="resize-none"
+                        {...field}
+                        maxLength={80}
+                      />
+                      </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="w-full flex justify-end">
-                <Button type="submit" size="sm" className="justify-end">Submit</Button>
+                <Button variant="default" type="submit" size="sm" className="justify-end">Submit</Button>
               </div>
             </form>
           </Form>
         </CardContent>
       </Card>
+    </div>
   )
 }
 

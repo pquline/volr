@@ -1,119 +1,125 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, KeyboardEvent, useRef } from "react"
 import { EntryCard } from "./entry-card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
 
 interface Entry {
   id: string
-  state: "danger" | "warning"
   station: string
   line: string
   last_edit: string
+  comment: string | null
   edits: number
 }
 
 const mockEntries: Entry[] = [
-  {
-    id: "1",
-    state: "danger",
-    station: "Châtelet",
-    line: "1",
-    last_edit: "5m",
-    edits: 3
-  },
-  {
-    id: "2",
-    state: "warning",
-    station: "Gare de Lyon",
-    line: "14",
-    last_edit: "10m",
-    edits: 1
-  },
-  {
-    id: "3",
-    state: "danger",
-    station: "Bastille",
-    line: "5",
-    last_edit: "15m",
-    edits: 2
-  },
-  {
-    id: "4",
-    state: "danger",
-    station: "Nation",
-    line: "6",
-    last_edit: "20m",
-    edits: 4
-  },
-  {
-    id: "5",
-    state: "warning",
-    station: "République",
-    line: "3",
-    last_edit: "25m",
-    edits: 2
-  },
-  {
-    id: "6",
-    state: "danger",
-    station: "Opéra",
-    line: "8",
-    last_edit: "30m",
-    edits: 5
-  },
-  {
-    id: "7",
-    state: "warning",
-    station: "Montparnasse",
-    line: "4",
-    last_edit: "35m",
-    edits: 1
-  },
-  {
-    id: "8",
-    state: "danger",
-    station: "Saint-Lazare",
-    line: "13",
-    last_edit: "40m",
-    edits: 3
-  },
-  {
-    id: "9",
-    state: "warning",
-    station: "La Défense",
-    line: "1",
-    last_edit: "1h45m",
-    edits: 2
-  }
+  { id: "1", station: "Châtelet", line: "1", last_edit: "5m", comment: null, edits: 3 },
+  { id: "2", station: "Gare de Lyon", line: "14", last_edit: "10m", comment: "Les controleurs sont la mdr", edits: 1 },
+  { id: "3", station: "Bastille", line: "5", last_edit: "15m", comment: "Les controleurs sont la mdr", edits: 2 },
+  { id: "4", station: "Nation", line: "6", last_edit: "20m", comment: null, edits: 4 },
+  { id: "5", station: "République", line: "3", last_edit: "25m", comment: "Les controleurs sont la mdr", edits: 2 },
+  { id: "6", station: "Opéra", line: "8", last_edit: "30m", comment: "Les controleurs sont la mdr", edits: 5 },
+  { id: "7", station: "Montparnasse", line: "4", last_edit: "35m", comment: "Les controleurs sont la mdr", edits: 1 },
+  { id: "8", station: "Saint-Lazare", line: "13", last_edit: "40m", comment: "Les controleurs sont la mdr", edits: 3 },
+  { id: "9", station: "La Défense", line: "1", last_edit: "1h45m", comment: "sortie 2, mobiles", edits: 2 }
 ]
+
+type SortField = "line" | "station" | "edits"
+type SortDirection = "asc" | "desc"
 
 export default function ReportedDangers() {
   const [entries, setEntries] = useState<Entry[]>(mockEntries)
-  const [sortBy] = useState<"line" | "station" | "last_edit">("last_edit")
-  const [isAscending] = useState(true)
-  // const [sortBy, setSortBy] = useState<"line" | "station" | "last_edit">("last_edit")
-  // const [isAscending, setIsAscending] = useState(true)
+  const [sortField, setSortField] = useState<SortField>("edits")
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
+  const [filter, setFilter] = useState("")
+  const [isOpen, setIsOpen] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    const sortedEntries = [...entries].sort((a, b) => {
-      if (sortBy === "line" || sortBy === "station") {
-        return isAscending
-          ? b[sortBy].localeCompare(a[sortBy])
-          : a[sortBy].localeCompare(b[sortBy])
-      } else {
-        const dateA = new Date(a.last_edit).getTime()
-        const dateB = new Date(b.last_edit).getTime()
-        return isAscending ? dateA - dateB : dateB - dateA
+    const filteredEntries = mockEntries.filter(
+      (entry) =>
+        entry.line.toLowerCase().includes(filter.toLowerCase()) ||
+        entry.station.toLowerCase().includes(filter.toLowerCase())
+    )
+
+    const sortedEntries = [...filteredEntries].sort((a, b) => {
+      if (sortField === "line" || sortField === "station") {
+        return sortDirection === "asc"
+          ? a[sortField].localeCompare(b[sortField])
+          : b[sortField].localeCompare(a[sortField])
       }
+      return sortDirection === "asc" ? a.edits - b.edits : b.edits - a.edits
     })
+
     setEntries(sortedEntries)
-  }, [sortBy, isAscending])
+  }, [sortField, sortDirection, filter])
+
+  const handleSort = (field: SortField) => {
+    if (field === sortField) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+    } else {
+      setSortField(field)
+      setSortDirection("asc")
+    }
+    setIsOpen(false)
+  }
+
+  const getSortIcon = (field: SortField) => {
+    if (field === sortField) {
+      return sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+    }
+    return <ArrowUpDown className="h-4 w-4 opacity-40" />
+  }
+
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Tab") {
+      setIsOpen(false)
+    }
+  }
 
   return (
-    <div>
+    <div className="w-full space-y-4">
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="text-lg font-black truncate lg:text-xl">Reported Dangers</h2>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-auto">
+            <div className="px-2 py-2">
+              <Input
+                placeholder="Line or Station..."
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                onKeyDown={handleInputKeyDown}
+                ref={inputRef}
+                className="h-8"
+              />
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleSort("line")}>
+              {getSortIcon("line")} Line
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort("station")}>
+              {getSortIcon("station")} Station
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSort("edits")}>
+              {getSortIcon("edits")} Number of Updates
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="space-y-6">
         {entries.map((entry) => (
           <EntryCard key={entry.id} entry={entry} />
         ))}
+      </div>
     </div>
-    );
-};
+  )
+}

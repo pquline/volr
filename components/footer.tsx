@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="text-xs sm:text-sm text-foreground text-center bg-background py-6 border-t border-muted space-y-2">
+    <footer className="text-xs sm:text-sm text-foreground text-center bg-background py-6 border-t border-foreground/10 dark:border-foreground/20 space-y-4">
       <div className="justify-between items-center">
         <div className="space-x-4">
           <Link href="/about" className="hover:underline">About</Link>
@@ -18,7 +18,7 @@ const Footer = () => {
         <div>Made with</div>
         <Heart className="w-5 h-5 text-destructive animate-pulse" />
         <div>on</div>
-        <Link className="text-tertiary hover:underline" href="https://github.com/pquline/Volr" target="_blank">GitHub</Link>
+        <Link className="text-primary dark:text-tertiary hover:underline" href="https://github.com/pquline/Volr" target="_blank">GitHub</Link>
       </div>
     </footer>
   );

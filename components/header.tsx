@@ -7,7 +7,7 @@ import CityToggle from "./city-toggle";
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 border-b border-muted py-4 bg-background px-6 sm:px-16 md:px-32">
+    <header className="sticky top-0 z-50 border-b border-foreground/10 dark:border-foreground/20 py-4 bg-background px-6 sm:px-16 md:px-32">
       <div className="container mx-auto flex justify-between items-center">
         <Branding></Branding>
         <div className="flex justify-between items-center space-x-4">

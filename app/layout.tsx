@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={GeistSans.className}>
       <head />
       <body className="antialiased">
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning={true}>
           {typeof window !== "undefined" ? typeof window : null}
           <ThemeProvider
             attribute="class"
@@ -28,7 +28,9 @@ export default function RootLayout({
             disableTransitionOnChange
             >
             <Header></Header>
-            {children}
+            <div className="py-4 bg-gradient-to-b from-background to-secondary/10">
+              {children}
+            </div>
             <Footer></Footer>
           </ThemeProvider>
         </div>
