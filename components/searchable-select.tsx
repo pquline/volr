@@ -1,34 +1,41 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from 'lucide-react'
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 interface SearchableSelectProps {
-  label: string
-  options: { value: string; label: string }[]
-  value: string
-  onValueChange: (value: string) => void
-  placeholder: string
-  error?: boolean
+  label: string;
+  options: { value: string; label: string }[];
+  value: string;
+  onValueChange: (value: string) => void;
+  placeholder: string;
+  error?: boolean;
 }
 
-export function SearchableSelect({ label, options, value, onValueChange, placeholder, error }: SearchableSelectProps) {
-  const [open, setOpen] = React.useState(false)
+export function SearchableSelect({
+  label,
+  options,
+  value,
+  onValueChange,
+  placeholder,
+  error,
+}: SearchableSelectProps) {
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,9 +44,11 @@ export function SearchableSelect({ label, options, value, onValueChange, placeho
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-label={"select-" + label}
+          aria-labelledby={"select-" + label}
           className={cn(
             "w-full justify-between",
-            error && "ring-destructive/70 ring-2 ring-offset-1",
+            error && "ring-destructive/70 ring-2 ring-offset-1"
           )}
         >
           {value
@@ -57,8 +66,8 @@ export function SearchableSelect({ label, options, value, onValueChange, placeho
               <CommandItem
                 key={option.value}
                 onSelect={() => {
-                  onValueChange(option.value === value ? "" : option.value)
-                  setOpen(false)
+                  onValueChange(option.value === value ? "" : option.value);
+                  setOpen(false);
                 }}
               >
                 <Check
@@ -74,6 +83,5 @@ export function SearchableSelect({ label, options, value, onValueChange, placeho
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
-
