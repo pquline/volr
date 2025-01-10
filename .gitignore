@@ -5,6 +5,7 @@ logs
 # Dependency directories
 node_modules/
 .next/
+.next/*
 
 # Build output
 dist/

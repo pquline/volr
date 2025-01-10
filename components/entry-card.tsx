@@ -68,11 +68,11 @@ export function EntryCard({ entry }: EntryCardProps) {
               {entry.comment ? (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger className="flex items-start space-x-4">
+                    <TooltipTrigger className="flex items-center space-x-4">
                       {/* <Image width={15} height={15} src={`/public/${entry.line}.png`} alt={entry.line} /> */}
-                      <Text className="h-4 w-4 mt-2 flex-shrink-0" />
-                      <div className="flex px-2 py-1 rounded-sm border border-input border-foreground/10 bg-background/10">
-                        <p className="text-foreground/80 line-clamp-3 text-left">{entry.comment}</p>
+                      <Text className="h-4 w-4 flex-shrink-0" />
+                      <div className="flex px-2 py-1 rounded-sm border border-foreground/10 bg-background/50">
+                        <p className="text-foreground/80 line-clamp-3 text-left font-mono text-xs">{entry.comment}</p>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent><p>Last Comment</p></TooltipContent>
@@ -83,7 +83,7 @@ export function EntryCard({ entry }: EntryCardProps) {
             <div className="flex flex-col justify-end ml-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">Update</Button>
+                  <Button variant="tertiary">Update</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>

@@ -63,7 +63,7 @@ export function SignalDangerForm() {
 
   return (
     <div className="w-full space-y-4">
-      <div className="h-[36px] flex items-center">
+      <div className="h-[40px] flex items-center">
         <h2 className="text-lg font-black truncate lg:text-xl">Report A Danger</h2>
       </div>
       <Card>
@@ -116,7 +116,7 @@ export function SignalDangerForm() {
                     <FormLabel className="px-2 font-bold">Comment</FormLabel>
                       <FormControl>
                       <Textarea
-                        placeholder="Enter an optional comment detailing the danger..."
+                        placeholder="Enter an optional comment describing the danger..."
                         className="resize-none"
                         {...field}
                         maxLength={80}
@@ -127,7 +127,7 @@ export function SignalDangerForm() {
                 )}
               />
               <div className="w-full flex justify-end">
-                <Button variant="default" type="submit" size="sm" className="justify-end">Submit</Button>
+                <Button variant="default" type="submit" className="justify-end">Submit</Button>
               </div>
             </form>
           </Form>

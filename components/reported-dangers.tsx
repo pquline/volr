@@ -87,7 +87,7 @@ export default function ReportedDangers() {
         <h2 className="text-lg font-black truncate lg:text-xl">Reported Dangers</h2>
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline">
               <ArrowUpDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

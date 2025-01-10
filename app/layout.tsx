@@ -28,7 +28,7 @@ export default function RootLayout({
             disableTransitionOnChange
             >
             <Header></Header>
-            <div className="py-4 bg-gradient-to-b from-background to-secondary/10">
+            <div className="py-4 bg-gradient-to-t from-secondary/30 to-secondary/50 dark:from-secondary/10 dark:to-secondary/30">
               {children}
             </div>
             <Footer></Footer>
