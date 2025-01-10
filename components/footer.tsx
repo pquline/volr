@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Heart } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 
