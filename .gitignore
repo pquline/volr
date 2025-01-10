@@ -10,6 +10,7 @@ node_modules
 dist
 build
 .devcontainer
+*.lockb
 
 # Environment variables
 .env
