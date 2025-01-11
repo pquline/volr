@@ -34,7 +34,7 @@ const Footer = () => {
         </Link>
       </div>
       <div className="text-center space-y-3">
-        <p className="text-sm text-foreground/90">
+        <p className="text-foreground/90">
           © {new Date().getFullYear()} Volr. No rights reserved.
         </p>
       </div>

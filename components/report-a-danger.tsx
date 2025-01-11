@@ -40,20 +40,49 @@ export function SignalDangerForm() {
 
   React.useEffect(() => {
     const fetchOptions = async () => {
-      const lines = [
-        { value: "line1", label: "Line 1" },
-        { value: "line2", label: "Line 2" },
-        { value: "line3", label: "Line 3" },
-      ];
-      const stations = [
-        { value: "station1", label: "Station 1" },
-        { value: "station2", label: "Station 2" },
-        { value: "station3", label: "Station 3" },
-      ];
-
-      setOptions({ lines, stations });
+	const lines = [
+	  { value: "line1", label: "Line 1" },
+	  { value: "line2", label: "Line 2" },
+	  { value: "line3", label: "Line 3" },
+	  { value: "line4", label: "Line 3bis" },
+	  { value: "line5", label: "Line 4" },
+	  { value: "line6", label: "Line 5" },
+	  { value: "line7", label: "Line 6" },
+	  { value: "line8", label: "Line 7" },
+	  { value: "line9", label: "Line 7bis" },
+	  { value: "line10", label: "Line 8" },
+	  { value: "line11", label: "Line 9" },
+	  { value: "line12", label: "Line 10" },
+	  { value: "line13", label: "Line 11" },
+	  { value: "line14", label: "Line 12" },
+	  { value: "line15", label: "Line 13" },
+	  { value: "line16", label: "Line 14" },
+	];
+	const stations = [
+		{ value: "station1", label: "Saint-Denis Pleyel" },
+		{ value: "station2", label: "Mairie de Saint-Ouen" },
+		{ value: "station3", label: "Saint-Ouen" },
+		{ value: "station4", label: "Porte de Clichy" },
+		{ value: "station5", label: "Pont Cardinet" },
+		{ value: "station6", label: "Saint-Lazare" },
+		{ value: "station7", label: "Madeleine" },
+		{ value: "station8", label: "Pyramides" },
+		{ value: "station9", label: "Châtelet" },
+		{ value: "station10", label: "Gare de Lyon" },
+		{ value: "station11", label: "Bercy" },
+		{ value: "station12", label: "Cour Saint-Émilion" },
+		{ value: "station13", label: "Bibliothèque François Mitterrand" },
+		{ value: "station14", label: "Olympiades" },
+		{ value: "station15", label: "Maison Blanche" },
+		{ value: "station16", label: "Hôpital Bicêtre" },
+		{ value: "station17", label: "Villejuif - Gustave Roussy" },
+		{ value: "station18", label: "L'Haÿ-les-Roses" },
+		{ value: "station19", label: "Chevilly-Larue" },
+		{ value: "station20", label: "Thiais - Orly" },
+		{ value: "station21", label: "Aéroport d'Orly" },
+	];
+	setOptions({ lines, stations });
     };
-
     fetchOptions();
   }, []);
 

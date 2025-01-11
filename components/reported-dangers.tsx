@@ -82,11 +82,11 @@ const mockEntries: Entry[] = [
   {
     id: "8",
     station: "Saint-Lazare",
-    line: "13",
-    last_edit: "40m",
+    line: "14",
+    last_edit: "4m",
     comment:
-      "Les controleurs sont la mdr hahahahahahahahahahaahah mdrrrrrrrrrrrrrrrrrrrrrrrrrrrrr c trop ptrdrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr lol",
-    edits: 3,
+      "Quai dir. Saint-Denis Pleyel",
+    edits: 7,
   },
   {
     id: "9",
@@ -113,6 +113,7 @@ export default function ReportedDangers() {
     const filteredEntries = mockEntries.filter(
       (entry) =>
         entry.line.toLowerCase().includes(filter.toLowerCase()) ||
+        (entry.comment && entry.comment.toLowerCase().includes(filter.toLowerCase())) ||
         entry.station.toLowerCase().includes(filter.toLowerCase())
     );
 
@@ -163,7 +164,7 @@ export default function ReportedDangers() {
         </h2>
         <div className="flex space-x-4 w-full sm:w-auto">
           <Input
-            placeholder="Line or Station..."
+            placeholder="Filter Dangers..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onKeyDown={handleInputKeyDown}
