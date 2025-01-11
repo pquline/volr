@@ -1,5 +1,13 @@
 # VOLR 🚇
 
+> [!IMPORTANT]  
+> This version of Volr is no longer being maintained.
+> I'm actively working on migrating the project to **Next.js** for improved performance, features and overall design.</br>
+> Developing branch: [feature/nextjs-migration](https://github.com/pquline/Volr/tree/feature/nextjs-migration)</br>
+> Preview:</br>
+> <img src="https://github.com/user-attachments/assets/9214e53c-4930-4759-812a-8c31c0d2af7b" class="left" data-canonical-src="https://github.com/user-attachments/assets/9214e53c-4930-4759-812a-8c31c0d2af7b" width="300"/>
+
+
 [Volr](https://volr.cc) is a web application that allows users to report and track potential 👮 dangers 👮 in public transportation systems.
 The app currently supports transit networks in Paris, Marseille, and Rennes.
 
