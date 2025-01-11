@@ -7,14 +7,12 @@ import ReportedDangers from "@/components/reported-dangers";
 
 export default function Home() {
   return (
-    <div className="container mx-auto justify-between items-center lg:items-start py-4 px-6 sm:px-16 md:px-32 grid grid-cols-1 lg:grid-cols-3 space-y-6 lg:space-y-0 lg:space-x-6">
-      <div className="lg:col-span-1">
+    <div className="grid place-items-center">
+      <div className="grid grid-cols-1 gap-6 max-w-xl w-full px-6 pb-4 sm:pt-6">
         <ReportADanger />
-      </div>
-      <div className="lg:col-span-2">
         <ReportedDangers />
+        {/* <Toaster theme="dark" position="top-center" /> */}
       </div>
-      {/* <Toaster theme="dark" position="top-center" /> */}
     </div>
   );
 }

@@ -12,11 +12,10 @@ const Branding: React.FC = () => {
         <Image
           src={Logo}
           alt="Logo"
-          width={30}
-          height={30}
-          className="md:w-[40px]"
+          width={40}
+          height={40}
         />
-        <h1 className="ml-4 text-xl font-extrabold tracking-tight lg:text-3xl">Volr</h1>
+        <h1 className="ml-4 text-2xl font-extrabold tracking-tight">Volr</h1>
       </div>
     </Link>
   );

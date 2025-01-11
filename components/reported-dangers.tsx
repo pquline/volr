@@ -84,7 +84,7 @@ const mockEntries: Entry[] = [
     station: "Saint-Lazare",
     line: "13",
     last_edit: "40m",
-    comment: "Les controleurs sont la mdr",
+    comment: "Les controleurs sont la mdr hahahahahahahahahahaahah mdrrrrrrrrrrrrrrrrrrrrrrrrrrrrr c trop ptrdrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr lol",
     edits: 3,
   },
   {

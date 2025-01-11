@@ -1,55 +1,85 @@
 "use client";
 
 import * as React from "react";
-import { MapPin, Check } from "lucide-react";
-
-import { Button } from "@/components/ui/button"
+import { Check, ChevronsUpDown, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+const cities = [
+  { value: "marseille", label: "Marseille" },
+  { value: "paris", label: "Paris" },
+  { value: "rennes", label: "Rennes" },
+];
 
 const CityToggle: React.FC = () => {
-  const { city, setCity } = useCity()
+  const [open, setOpen] = React.useState(false);
+  const { city, setCity } = useCity();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">
-          <MapPin className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MapPin className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle city</span>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className=""
+          aria-label="select-city"
+          aria-labelledby="select-city"
+        >
+          <MapPin className="h-4 w-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem className="space-x-2" onClick={() => setCity("marseille")}>
-          {city === "marseille" && <Check className="h-4 w-4" /> || <span className="h-4 w-4" />}
-          <span>Marseille</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="space-x-2" onClick={() => setCity("paris")}>
-          {city === "paris" && <Check className="h-4 w-4" /> || <span className="h-4 w-4" />}
-          <span>Paris</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="space-x-2" onClick={() => setCity("rennes")}>
-          {city === "rennes" && <Check className="h-4 w-4" /> || <span className="h-4 w-4" />}
-          <span>Rennes</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="City..." className="h-9" />
+          <CommandEmpty>No city found.</CommandEmpty>
+          <CommandGroup>
+            {cities.map((c) => (
+              <CommandItem
+                key={c.value}
+                value={c.value}
+                onSelect={(currentValue) => {
+                  setCity(currentValue === city ? null : currentValue);
+                  setOpen(false);
+                }}
+              >
+                {c.label}
+                <Check
+                  className={cn(
+                    "ml-auto h-4 w-4",
+                    city === c.value ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 export default CityToggle;
 
 const useCity = () => {
-  const [city, setCity] = React.useState<string | null>(null);
+  const [city, setCity] = React.useState<string | null>("paris");
 
   React.useEffect(() => {
     if (city) {
       // Here you would typically fetch and load data for the selected city
-      console.log(`City changed to: ${city}`);
+      console.log(`[DEBUG]: City set to ${city.charAt(0).toUpperCase() + city.slice(1)}`);
     }
   }, [city]);
 

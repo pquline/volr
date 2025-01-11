@@ -122,7 +122,7 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Last Comment</p>
+                        <p>Comment</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
