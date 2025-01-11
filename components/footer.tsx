@@ -18,6 +18,9 @@ const Footer = () => {
           <Link href="/privacy-policy" className="hover:underline">
             Privacy Policy
           </Link>
+          <Link href="/terms-of-use" className="hover:underline">
+            Terms Of Use
+          </Link>
         </div>
       </div>
       <div className="flex justify-center items-center text-sm font-mono space-x-2 font-bold">
