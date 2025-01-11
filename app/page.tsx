@@ -8,7 +8,7 @@ import ReportedDangers from "@/components/reported-dangers";
 export default function Home() {
   return (
     <div className="grid place-items-center">
-      <div className="grid grid-cols-1 gap-6 max-w-xl w-full px-6 pb-4 sm:pt-6">
+      <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-xl w-full px-6 pb-4 sm:pt-2">
         <ReportADanger />
         <ReportedDangers />
         {/* <Toaster theme="dark" position="top-center" /> */}

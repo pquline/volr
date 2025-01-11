@@ -84,7 +84,8 @@ const mockEntries: Entry[] = [
     station: "Saint-Lazare",
     line: "13",
     last_edit: "40m",
-    comment: "Les controleurs sont la mdr hahahahahahahahahahaahah mdrrrrrrrrrrrrrrrrrrrrrrrrrrrrr c trop ptrdrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr lol",
+    comment:
+      "Les controleurs sont la mdr hahahahahahahahahahaahah mdrrrrrrrrrrrrrrrrrrrrrrrrrrrrr c trop ptrdrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr lol",
     edits: 3,
   },
   {
@@ -155,44 +156,43 @@ export default function ReportedDangers() {
   };
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex items-center justify-between gap-4">
+    <div className="w-full space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-lg font-black truncate lg:text-xl">
           Reported Dangers
         </h2>
-        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              aria-label="dropdown-sort-filter"
-              aria-labelledby="dropdown-sort-filter"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-auto">
-            <div className="px-2 py-2">
-              <Input
-                placeholder="Line or Station..."
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                onKeyDown={handleInputKeyDown}
-                ref={inputRef}
-                className="h-8"
-              />
-            </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleSort("line")}>
-              {getSortIcon("line")} Line
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleSort("station")}>
-              {getSortIcon("station")} Station
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleSort("edits")}>
-              {getSortIcon("edits")} Number of Updates
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex space-x-4 w-full sm:w-auto">
+          <Input
+            placeholder="Line or Station..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onKeyDown={handleInputKeyDown}
+            ref={inputRef}
+            className="max-w-auto border-foreground/10 dark:border-foreground/20 hover:bg-foreground/5 dark:bg-background dark:hover:bg-foreground/5"
+          />
+          <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                aria-label="dropdown-sort-filter"
+                aria-labelledby="dropdown-sort-filter"
+              >
+                <ArrowUpDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-auto">
+              <DropdownMenuItem onClick={() => handleSort("line")}>
+                {getSortIcon("line")} Line
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSort("station")}>
+                {getSortIcon("station")} Station
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSort("edits")}>
+                {getSortIcon("edits")} Number of Updates
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="space-y-6">
         {entries.map((entry) => (
