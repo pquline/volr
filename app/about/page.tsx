@@ -9,8 +9,8 @@ export default function About() {
   return (
     <div className="grid place-items-center py-4">
       <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-2xl w-full px-6 sm:pt-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>About Volr</CardTitle>
             <Train className="h-5 w-5 text-primary" />
           </CardHeader>
@@ -23,8 +23,8 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Reports</CardTitle>
             <Clock className="h-5 w-5 text-primary" />
           </CardHeader>
@@ -36,8 +36,8 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Collected Data</CardTitle>
             <Database className="h-5 w-5 text-primary" />
           </CardHeader>
@@ -46,8 +46,8 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
             <Mail className="h-5 w-5 text-primary" />
           </CardHeader>

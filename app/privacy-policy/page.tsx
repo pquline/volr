@@ -8,8 +8,8 @@ export default function PrivacyPolicy() {
   return (
     <div className="grid place-items-center py-4">
       <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-2xl w-full px-6 sm:pt-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Privacy Policy</CardTitle>
           </CardHeader>
           <CardContent>
@@ -27,8 +27,8 @@ export default function PrivacyPolicy() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Data Collection</CardTitle>
           </CardHeader>
           <CardContent>
@@ -44,8 +44,8 @@ export default function PrivacyPolicy() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Open Source</CardTitle>
           </CardHeader>
           <CardContent>
@@ -63,8 +63,8 @@ export default function PrivacyPolicy() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>User Responsibility</CardTitle>
           </CardHeader>
           <CardContent>
@@ -72,13 +72,17 @@ export default function PrivacyPolicy() {
               <strong>User-Generated Content:</strong> Reports submitted by
               users must not include personal or sensitive information. Users
               are responsible for ensuring the information they provide complies
-              with the project's <Link href="/terms-of-use" className="text-foreground underline">terms of use</Link>.
+              with the project's{" "}
+              <Link href="/terms-of-use" className="text-foreground underline">
+                terms of use
+              </Link>
+              .
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
           </CardHeader>
           <CardContent>

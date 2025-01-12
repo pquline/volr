@@ -8,8 +8,8 @@ export default function LegalMentions() {
   return (
     <div className="grid place-items-center py-4">
       <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-2xl w-full px-6 sm:pt-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Legal Mentions</CardTitle>
           </CardHeader>
           <CardContent>
@@ -41,8 +41,8 @@ export default function LegalMentions() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Hosting</CardTitle>
           </CardHeader>
           <CardContent>
@@ -58,8 +58,8 @@ export default function LegalMentions() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contributors</CardTitle>
           </CardHeader>
           <CardContent>
@@ -77,8 +77,8 @@ export default function LegalMentions() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Liability</CardTitle>
           </CardHeader>
           <CardContent>
@@ -95,8 +95,8 @@ export default function LegalMentions() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
           </CardHeader>
           <CardContent>
