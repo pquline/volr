@@ -60,7 +60,7 @@ export function SearchableSelect({
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder={`Search a ${label.toLowerCase()}...`} />
-          <CommandEmpty>No {placeholder.toLowerCase()} found.</CommandEmpty>
+          <CommandEmpty>No {label.toLowerCase()} found.</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
               <CommandItem
