@@ -7,7 +7,7 @@ import { GeistSans } from 'geist/font/sans';
 
 export const metadata: Metadata = {
   title: "Volr",
-  description: "Avoid dangers, travel as free as the air. Volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",
+  description: "Avoid disruptions, travel as free as the air. Volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",
 };
 
 export default function RootLayout({

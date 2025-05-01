@@ -27,7 +27,7 @@ export default function TermsOfUse() {
           <CardContent>
             <p>
               Volr is an open-source platform that enables users to report
-              public transport dangers and share safety-related information. The
+              public transport disruptions and share safety-related information. The
               project is intended for informational purposes only and is
               maintained by contributors.
             </p>

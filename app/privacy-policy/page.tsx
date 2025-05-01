@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
             </p>
             <p>
               <strong>Purpose:</strong> Volr is an open-source project designed
-              to share reports about public transport dangers.
+              to share reports about public transport disruptions.
             </p>
             <p>
               <strong>Transparency:</strong> This project does not collect or

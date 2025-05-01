@@ -16,10 +16,10 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <p className="mb-2">
-              Volr is a web application used to share reports of dangers from
+              Volr is a web application used to share reports of disruptions from
               public transport users.
             </p>
-            <p>Anyone can add, delete, and view reported dangers.</p>
+            <p>Anyone can add, delete, and view reported disruptions.</p>
           </CardContent>
         </Card>
 

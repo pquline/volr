@@ -25,7 +25,7 @@ const formSchema = z.object({
   comment: z.string().max(180).optional(),
 });
 
-export function SignalDangerForm() {
+export function SignalDisruptionForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -61,7 +61,7 @@ export function SignalDangerForm() {
     <div className="w-full space-y-4">
       <div className="h-[40px] flex items-center">
         <h2 className="text-lg font-black truncate lg:text-xl">
-          Report A Danger
+          Report A Disruption
         </h2>
       </div>
       <Card>
@@ -120,7 +120,7 @@ export function SignalDangerForm() {
                     <FormLabel className="px-2 font-bold">Comment</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter an optional comment describing the danger..."
+                        placeholder="Enter an optional comment describing the disruption..."
                         className="resize-none"
                         {...field}
                         maxLength={180}
@@ -143,4 +143,4 @@ export function SignalDangerForm() {
   );
 }
 
-export default SignalDangerForm;
+export default SignalDisruptionForm;

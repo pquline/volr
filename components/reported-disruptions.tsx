@@ -101,7 +101,7 @@ const mockEntries: Entry[] = [
 type SortField = "line" | "station" | "edits";
 type SortDirection = "asc" | "desc";
 
-export default function ReportedDangers() {
+export default function ReportedDisruptions() {
   const [entries, setEntries] = useState<Entry[]>(mockEntries);
   const [sortField, setSortField] = useState<SortField>("edits");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
@@ -160,11 +160,11 @@ export default function ReportedDangers() {
     <div className="w-full space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-lg font-black truncate lg:text-xl">
-          Reported Dangers
+          Reported Disruptions
         </h2>
         <div className="flex space-x-4 w-full sm:w-auto">
           <Input
-            placeholder="Filter Dangers..."
+            placeholder="Filter Disruptions..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onKeyDown={handleInputKeyDown}
