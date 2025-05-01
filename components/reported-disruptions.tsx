@@ -50,7 +50,12 @@ export default function ReportedDisruptions() {
     );
 
     const sorted = [...filtered].sort((a, b) => {
-      if (sortField === "line" || sortField === "station") {
+      if (sortField === "line") {
+        // Extract numeric parts from line strings
+        const numA = parseInt(a.line.match(/\d+/)?.[0] || "0");
+        const numB = parseInt(b.line.match(/\d+/)?.[0] || "0");
+        return sortDirection === "asc" ? numA - numB : numB - numA;
+      } else if (sortField === "station") {
         return sortDirection === "asc"
           ? a[sortField].localeCompare(b[sortField])
           : b[sortField].localeCompare(a[sortField]);
