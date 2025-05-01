@@ -9,100 +9,23 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
-
-interface Entry {
-  id: string;
-  station: string;
-  line: string;
-  last_edit: string;
-  comment: string | null;
-  edits: number;
-}
-
-const mockEntries: Entry[] = [
-  {
-    id: "1",
-    station: "Châtelet",
-    line: "1",
-    last_edit: "5m",
-    comment: null,
-    edits: 3,
-  },
-  {
-    id: "2",
-    station: "Gare de Lyon",
-    line: "14",
-    last_edit: "10m",
-    comment: "Les controleurs sont la mdr",
-    edits: 1,
-  },
-  {
-    id: "3",
-    station: "Bastille",
-    line: "5",
-    last_edit: "15m",
-    comment: "Les controleurs sont la mdr",
-    edits: 2,
-  },
-  {
-    id: "4",
-    station: "Nation",
-    line: "6",
-    last_edit: "20m",
-    comment: null,
-    edits: 4,
-  },
-  {
-    id: "5",
-    station: "République",
-    line: "3",
-    last_edit: "25m",
-    comment: "Les controleurs sont la mdr",
-    edits: 2,
-  },
-  {
-    id: "6",
-    station: "Opéra",
-    line: "8",
-    last_edit: "30m",
-    comment: "Les controleurs sont la mdr",
-    edits: 5,
-  },
-  {
-    id: "7",
-    station: "Montparnasse",
-    line: "4",
-    last_edit: "35m",
-    comment: "Les controleurs sont la mdr",
-    edits: 1,
-  },
-  {
-    id: "8",
-    station: "Saint-Lazare",
-    line: "14",
-    last_edit: "4m",
-    comment:
-      "Quai dir. Saint-Denis Pleyel",
-    edits: 7,
-  },
-  {
-    id: "9",
-    station: "La Défense",
-    line: "1",
-    last_edit: "1h45m",
-    comment: "sortie 2, mobiles",
-    edits: 2,
-  },
-];
+import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
 
 type SortField = "line" | "station" | "edits";
 type SortDirection = "asc" | "desc";
 
+const normalizeText = (text: string) => {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+};
+
 export default function ReportedDisruptions() {
-  const [entries, setEntries] = useState<Entry[]>(mockEntries);
+  const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
+  const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
   const [sortField, setSortField] = useState<SortField>("edits");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [filter, setFilter] = useState("");
@@ -110,14 +33,23 @@ export default function ReportedDisruptions() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const filteredEntries = mockEntries.filter(
+    const loadDisruptions = async () => {
+      const data = await fetchDisruptions();
+      setOriginalEntries(data);
+      setFilteredEntries(data);
+    };
+    loadDisruptions();
+  }, []);
+
+  useEffect(() => {
+    const normalizedFilter = normalizeText(filter);
+    const filtered = originalEntries.filter(
       (entry) =>
-        entry.line.toLowerCase().includes(filter.toLowerCase()) ||
-        (entry.comment && entry.comment.toLowerCase().includes(filter.toLowerCase())) ||
-        entry.station.toLowerCase().includes(filter.toLowerCase())
+        normalizeText(entry.line).includes(normalizedFilter) ||
+        normalizeText(entry.station).includes(normalizedFilter)
     );
 
-    const sortedEntries = [...filteredEntries].sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       if (sortField === "line" || sortField === "station") {
         return sortDirection === "asc"
           ? a[sortField].localeCompare(b[sortField])
@@ -126,8 +58,8 @@ export default function ReportedDisruptions() {
       return sortDirection === "asc" ? a.edits - b.edits : b.edits - a.edits;
     });
 
-    setEntries(sortedEntries);
-  }, [sortField, sortDirection, filter]);
+    setFilteredEntries(sorted);
+  }, [sortField, sortDirection, filter, originalEntries]);
 
   const handleSort = (field: SortField) => {
     if (field === sortField) {
@@ -164,7 +96,7 @@ export default function ReportedDisruptions() {
         </h2>
         <div className="flex space-x-4 w-full sm:w-auto">
           <Input
-            placeholder="Filter Disruptions..."
+            placeholder="Filter by line or station..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onKeyDown={handleInputKeyDown}
@@ -196,7 +128,7 @@ export default function ReportedDisruptions() {
         </div>
       </div>
       <div className="space-y-6">
-        {entries.map((entry) => (
+        {filteredEntries.map((entry) => (
           <EntryCard key={entry.id} entry={entry} />
         ))}
       </div>
