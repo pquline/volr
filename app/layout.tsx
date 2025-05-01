@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { GeistSans } from 'geist/font/sans';
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Volr",
@@ -32,6 +33,7 @@ export default function RootLayout({
               {children}
             </div>
             <Footer />
+            <Toaster />
           </ThemeProvider>
         </div>
       </body>

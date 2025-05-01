@@ -18,6 +18,8 @@ import {
 import { SearchableSelect } from "./searchable-select";
 import { Textarea } from "@/components/ui/textarea";
 import { fetchTransportData } from "../actions/fetchTransportData";
+import { submitDisruption } from "../actions/submitDisruption";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   line: z.string().min(1),
@@ -26,6 +28,7 @@ const formSchema = z.object({
 });
 
 export function SignalDisruptionForm() {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -52,9 +55,23 @@ export function SignalDisruptionForm() {
     loadTransportData();
   }, []);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Here you would typically send this data to your backend
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setIsSubmitting(true);
+      const result = await submitDisruption(values);
+
+      if (result.success) {
+        toast.success("Disruption reported successfully!");
+        form.reset();
+      } else {
+        toast.error(result.error || "Failed to submit disruption");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -131,8 +148,13 @@ export function SignalDisruptionForm() {
                 )}
               />
               <div className="w-full flex justify-end">
-                <Button variant="default" type="submit" className="justify-end">
-                  Submit
+                <Button
+                  variant="default"
+                  type="submit"
+                  className="justify-end"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </form>
