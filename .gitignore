@@ -14,6 +14,7 @@ build
 
 # Environment variables
 .env
+.env.local
 
 # Editor/IDE specific files
 .vscode
