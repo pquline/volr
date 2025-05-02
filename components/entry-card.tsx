@@ -26,29 +26,77 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { SkeletonCard } from "./skeleton-card"
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
+import { updateDisruption } from "@/actions/updateDisruption";
+import { deleteDisruption } from "@/actions/deleteDisruption";
+import { toast } from "sonner";
 
 interface EntryCardProps {
   entry: {
     id: string
     station: string
     line: string
-    last_edit: string
+    last_edit: Date
     comment: string | null
     edits: number
   }
   isLoading?: boolean
+  onRefresh?: () => void
+  onDelete?: () => void
 }
 
-export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
+export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: EntryCardProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleConfirm = () => {
-    console.log("[DEBUG]: Confirm on", entry.station, "(Line", entry.line + ") #" + entry.id)
+  const lastEditDate = entry.last_edit instanceof Date ? entry.last_edit : new Date(entry.last_edit)
+
+  const handleConfirm = async () => {
+    try {
+      setIsSubmitting(true)
+      const result = await updateDisruption(entry.id, entry.edits)
+      if (result.success) {
+        setShowConfirmDialog(false)
+        setIsSubmitting(false)
+        onRefresh?.()
+        toast.success("Disruption updated successfully!")
+      } else {
+        setIsSubmitting(false)
+        toast.error(result.error || "Failed to update disruption")
+      }
+    } catch (error) {
+      setIsSubmitting(false)
+      toast.error("An unexpected error occurred")
+      console.error('Error updating disruption:', error)
+    }
   }
 
-  const handleDelete = () => {
-    console.log("[DEBUG]: Delete on", entry.station, "(Line", entry.line + ") #" + entry.id)
+  const handleDelete = async () => {
+    try {
+      setIsSubmitting(true)
+      const result = await deleteDisruption(entry.id)
+      if (result.success) {
+        setShowDeleteDialog(false)
+        setIsSubmitting(false)
+        onDelete?.()
+        toast.success("Disruption deleted successfully!")
+      } else {
+        setIsSubmitting(false)
+        toast.error(result.error || "Failed to delete disruption")
+      }
+    } catch (error) {
+      setIsSubmitting(false)
+      toast.error("An unexpected error occurred")
+      console.error('Error deleting disruption:', error)
+    }
+  }
+
+  const handleDialogClose = () => {
+    setShowConfirmDialog(false)
+    setShowDeleteDialog(false)
+    setIsSubmitting(false)
   }
 
   if (isLoading) {
@@ -103,7 +151,11 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
                       <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">{entry.last_edit} ago</span>
+                      <span className="truncate">
+                        {formatDistanceToNow(lastEditDate, {
+                          locale: enUS
+                        })} ago
+                      </span>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Last Update</p>
@@ -131,16 +183,20 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
               <div className="flex flex-col justify-end ml-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="tertiary">Update</Button>
+                    <Button variant="tertiary" disabled={isSubmitting}>Update</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem
                       onClick={() => setShowConfirmDialog(true)}
+                      disabled={isSubmitting}
                     >
                       <Check className="mr-2 h-4 w-4 text-valid" />
                       <span>Confirm</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
+                    <DropdownMenuItem
+                      onClick={() => setShowDeleteDialog(true)}
+                      disabled={isSubmitting}
+                    >
                       <Trash className="mr-2 h-4 w-4 text-destructive" />
                       <span>Delete</span>
                     </DropdownMenuItem>
@@ -152,7 +208,12 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
         </CardContent>
       </Card>
 
-      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+      <AlertDialog
+        open={showConfirmDialog}
+        onOpenChange={(open) => {
+          if (!open) handleDialogClose()
+        }}
+      >
         <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-xl font-semibold mb-2">
@@ -167,17 +228,24 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex justify-end sm:space-x-2">
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirm}
               className="bg-valid hover:bg-valid/90"
+              disabled={isSubmitting}
             >
-              Confirm
+              {isSubmitting ? "Updating..." : "Confirm"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+
+      <AlertDialog
+        open={showDeleteDialog}
+        onOpenChange={(open) => {
+          if (!open) handleDialogClose()
+        }}
+      >
         <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-xl font-semibold mb-2">
@@ -192,12 +260,13 @@ export function EntryCard({ entry, isLoading = false }: EntryCardProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex justify-end sm:space-x-2">
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive hover:bg-destructive/90"
+              disabled={isSubmitting}
             >
-              Delete
+              {isSubmitting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

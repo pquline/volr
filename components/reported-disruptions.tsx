@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
+import { useCity } from "./city-toggle";
 
 type SortField = "line" | "station" | "edits";
 type SortDirection = "asc" | "desc";
@@ -24,6 +25,7 @@ const normalizeText = (text: string) => {
 };
 
 export default function ReportedDisruptions() {
+  const { city } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
   const [sortField, setSortField] = useState<SortField>("edits");
@@ -33,19 +35,50 @@ export default function ReportedDisruptions() {
   const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const loadDisruptions = async () => {
+    try {
+      setIsLoading(true);
+      const data = await fetchDisruptions(city || "paris");
+      setOriginalEntries(data);
+      setFilteredEntries(data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEntryUpdate = async (updatedEntry: any) => {
+    setOriginalEntries(prev =>
+      prev.map(entry =>
+        entry.id === updatedEntry.id
+          ? {
+              ...entry,
+              edits: updatedEntry.edits,
+              last_edit: new Date(updatedEntry.last_edit)
+            }
+          : entry
+      )
+    );
+    setFilteredEntries(prev =>
+      prev.map(entry =>
+        entry.id === updatedEntry.id
+          ? {
+              ...entry,
+              edits: updatedEntry.edits,
+              last_edit: new Date(updatedEntry.last_edit)
+            }
+          : entry
+      )
+    );
+  };
+
+  const handleEntryDelete = async (deletedId: string) => {
+    setOriginalEntries(prev => prev.filter(entry => entry.id !== deletedId));
+    setFilteredEntries(prev => prev.filter(entry => entry.id !== deletedId));
+  };
+
   useEffect(() => {
-    const loadDisruptions = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchDisruptions();
-        setOriginalEntries(data);
-        setFilteredEntries(data);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     loadDisruptions();
-  }, []);
+  }, [city]);
 
   useEffect(() => {
     const normalizedFilter = normalizeText(filter);
@@ -142,16 +175,21 @@ export default function ReportedDisruptions() {
         {isLoading ? (
           <>
             <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
-            <div className="p-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold truncate">Loading disruptions...</h3>
+              <div className="p-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-semibold truncate">Loading disruptions...</h3>
+                </div>
               </div>
             </div>
-          </div>
           </>
         ) : filteredEntries.length > 0 ? (
           filteredEntries.map((entry) => (
-            <EntryCard key={entry.id} entry={entry} />
+            <EntryCard
+              key={entry.id}
+              entry={entry}
+              onRefresh={() => handleEntryUpdate(entry)}
+              onDelete={() => handleEntryDelete(entry.id)}
+            />
           ))
         ) : (
           <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">

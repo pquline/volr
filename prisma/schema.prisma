@@ -8,18 +8,25 @@ datasource db {
 }
 
 model Line {
-	id			Int			@id @default(autoincrement())
-	city		String
-	name		String
-	order		String
-	stations	String[]
+  id       Int      @id @default(autoincrement())
+  city     String
+  name     String
+  order    String
+  stations String[]
+  entries  Entry[]
+
+  @@unique([city, name])
 }
 
 model Entry {
-	id			Int			@id @default(autoincrement())
-	edits		Int			@default(0)
-	updatedAt	DateTime	@updatedAt
-	city		String
-	line		String
-	station		String
+  id        Int      @id @default(autoincrement())
+  edits     Int      @default(0)
+  updatedAt DateTime @updatedAt
+  city      String
+  station   String
+  comment   String?
+  createdAt DateTime @default(now())
+  lineId    Int
+  lineName  String
+  line      Line     @relation(fields: [lineId], references: [id])
 }

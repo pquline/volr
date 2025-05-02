@@ -1,35 +1,61 @@
-export async function fetchTransportData() {
-  try {
-    // Try to fetch from real API
-    const response = await fetch('https://api.transport.com/v1/lines-and-stations', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+export interface TransportData {
+  lines: { value: string; label: string }[];
+  stations: { value: string; label: string }[];
+}
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+interface LineOption {
+  value: string;
+  label: string;
+}
+
+interface LineWithOrder extends LineOption {
+  order: number;
+}
+
+export async function fetchTransportData(city: string, lineName?: string): Promise<TransportData> {
+  try {
+    // Capitalize the city name to match database format
+    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+
+    // Fetch lines for the city
+    const linesResponse = await fetch(`/api/lines?city=${encodeURIComponent(capitalizedCity)}`);
+    if (!linesResponse.ok) {
+      throw new Error('Failed to fetch lines');
+    }
+    const lines = await linesResponse.json();
+
+    let stations: string[] = [];
+    if (lineName) {
+      // Fetch stations for the specific line
+      const line = lines.find((l: { name: string }) => l.name === lineName);
+      if (line) {
+        stations = line.stations;
+      }
     }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch transport data:', error);
-    console.log('Falling back to mock data');
+    // Sort lines by their order field from the database
+    const sortedLines = lines
+      .map((line: { name: string; order: number }) => ({
+        value: line.name,
+        label: line.name,
+        order: line.order,
+      }))
+      .sort((a: LineWithOrder, b: LineWithOrder) => {
+        return a.order - b.order;
+      })
+      .map(({ value, label }: LineOption) => ({ value, label }));
 
-    // Fallback to mock data
     return {
-      lines: [
-        { value: "1", label: "Line 1" },
-        { value: "2", label: "Line 2" },
-        { value: "3", label: "Line 3" },
-      ],
-      stations: [
-        { value: "station1", label: "Station 1" },
-        { value: "station2", label: "Station 2" },
-        { value: "station3", label: "Station 3" },
-      ],
+      lines: sortedLines,
+      stations: stations
+        .sort((a, b) => a.localeCompare(b))
+        .map((station: string) => ({
+          value: station,
+          label: station,
+        })),
     };
+  } catch (error) {
+    console.error('Error fetching transport data:', error);
+    throw error;
   }
 }

@@ -4,6 +4,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useEffect, useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { fetchTransportData } from "../actions/fetchTransportData";
 import { submitDisruption } from "../actions/submitDisruption";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { useCity } from "./city-toggle";
 
 const formSchema = z.object({
   line: z.string().min(1),
@@ -28,12 +31,8 @@ const formSchema = z.object({
 });
 
 export function SignalDisruptionForm() {
+  const { city } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    mode: "onChange",
-  });
-
   const [options, setOptions] = React.useState<{
     lines: { value: string; label: string }[];
     stations: { value: string; label: string }[];
@@ -41,28 +40,67 @@ export function SignalDisruptionForm() {
     lines: [],
     stations: [],
   });
+  const [formData, setFormData] = useState({
+    lineName: '',
+    station: '',
+  });
 
-  React.useEffect(() => {
-    const loadTransportData = async () => {
-      try {
-        const data = await fetchTransportData();
-        setOptions(data);
-      } catch (error) {
-        console.error('Failed to load transport data:', error);
-        // Here you might want to show an error message to the user
-      }
-    };
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      line: "",
+      station: "",
+      comment: "",
+    },
+  });
+
+  const loadTransportData = async () => {
+    if (!city) return;
+    try {
+      const data = await fetchTransportData(city, formData.lineName);
+      setOptions(data);
+    } catch (error) {
+      console.error('Error loading transport data:', error);
+    }
+  };
+
+  useEffect(() => {
     loadTransportData();
-  }, []);
+  }, [city, formData.lineName]);
+
+  const handleLineChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      lineName: value,
+      station: '', // Reset station when line changes
+    }));
+    form.setValue("line", value);
+  };
+
+  const handleStationChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      station: value,
+    }));
+    form.setValue("station", value);
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
-      const result = await submitDisruption(values);
+      const result = await submitDisruption({
+        ...values,
+        city: city || "paris"
+      });
 
       if (result.success) {
         toast.success("Disruption reported successfully!");
         form.reset();
+        setFormData({
+          lineName: "",
+          station: "",
+        });
       } else {
         toast.error(result.error || "Failed to submit disruption");
       }
@@ -94,14 +132,16 @@ export function SignalDisruptionForm() {
                       Line<span className="font-normal"> (Required)</span>
                     </FormLabel>
                     <FormControl>
-                      <SearchableSelect
-                        label="line"
-                        options={options.lines}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select a line..."
-                        error={!!form.formState.errors.line}
-                      />
+                      <div className={cn(!city && "opacity-50 pointer-events-none")}>
+                        <SearchableSelect
+                          label="line"
+                          options={options.lines}
+                          value={formData.lineName}
+                          onValueChange={handleLineChange}
+                          placeholder="Select a line..."
+                          error={!!form.formState.errors.line}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -116,14 +156,16 @@ export function SignalDisruptionForm() {
                       Station<span className="font-normal"> (Required)</span>
                     </FormLabel>
                     <FormControl>
-                      <SearchableSelect
-                        label="station"
-                        options={options.stations}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select a station..."
-                        error={!!form.formState.errors.station}
-                      />
+                      <div className={cn(!formData.lineName && "opacity-50 pointer-events-none")}>
+                        <SearchableSelect
+                          label="station"
+                          options={options.stations}
+                          value={formData.station}
+                          onValueChange={handleStationChange}
+                          placeholder="Select a station..."
+                          error={!!form.formState.errors.station}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,7 +182,7 @@ export function SignalDisruptionForm() {
                         placeholder="Enter an optional comment describing the disruption..."
                         className="resize-none"
                         {...field}
-                        maxLength={180}
+                        maxLength={45}
                       />
                     </FormControl>
                     <FormMessage />
@@ -152,7 +194,7 @@ export function SignalDisruptionForm() {
                   variant="default"
                   type="submit"
                   className="justify-end"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !city}
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>

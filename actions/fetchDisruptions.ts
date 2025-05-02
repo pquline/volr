@@ -2,54 +2,31 @@ export interface Disruption {
   id: string;
   station: string;
   line: string;
-  last_edit: string;
+  last_edit: Date;
   comment: string | null;
   edits: number;
 }
 
-export async function fetchDisruptions() {
+export async function fetchDisruptions(city: string): Promise<Disruption[]> {
   try {
-    const response = await fetch('https://api.transport.com/v1/disruptions', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
+    const response = await fetch(`/api/disruptions?city=${encodeURIComponent(city)}`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error('Failed to fetch disruptions');
     }
 
     const data = await response.json();
-    return data as Disruption[];
+
+    // Transform the API response to match the expected Disruption interface
+    return data.map((entry: any) => ({
+      id: entry.id.toString(),
+      station: entry.station,
+      line: entry.lineName,
+      last_edit: new Date(entry.updatedAt),
+      comment: entry.comment,
+      edits: entry.edits
+    }));
   } catch (error) {
-    console.error('Failed to fetch disruptions:', error);
-    // Fallback to mock data if API fails
-    return [
-      {
-        id: "1",
-        station: "Châtelet",
-        line: "1",
-        last_edit: "5m",
-        comment: null,
-        edits: 3,
-      },
-      {
-        id: "2",
-        station: "Gare de Lyon",
-        line: "14",
-        last_edit: "10m",
-        comment: "Les controleurs sont la mdr",
-        edits: 1,
-      },
-      {
-        id: "3",
-        station: "Bastille",
-        line: "5",
-        last_edit: "15m",
-        comment: "Les controleurs sont la mdr",
-        edits: 2,
-      },
-    ];
+    console.error('Error fetching disruptions:', error);
+    throw error;
   }
 }

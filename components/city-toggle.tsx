@@ -23,6 +23,19 @@ const cities = [
   { value: "rennes", label: "Rennes" },
 ];
 
+export const useCity = () => {
+  const [city, setCity] = React.useState<string | null>("paris");
+
+  React.useEffect(() => {
+    if (city) {
+      // Here you would typically fetch and load data for the selected city
+      console.log(`[DEBUG]: City set to ${city.charAt(0).toUpperCase() + city.slice(1)}`);
+    }
+  }, [city]);
+
+  return { city, setCity };
+};
+
 const CityToggle: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const { city, setCity } = useCity();
@@ -72,16 +85,3 @@ const CityToggle: React.FC = () => {
 };
 
 export default CityToggle;
-
-const useCity = () => {
-  const [city, setCity] = React.useState<string | null>("paris");
-
-  React.useEffect(() => {
-    if (city) {
-      // Here you would typically fetch and load data for the selected city
-      console.log(`[DEBUG]: City set to ${city.charAt(0).toUpperCase() + city.slice(1)}`);
-    }
-  }, [city]);
-
-  return { city, setCity };
-};
