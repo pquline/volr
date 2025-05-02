@@ -3,12 +3,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { GeistSans } from 'geist/font/sans';
+import { GeistSans } from "geist/font/sans";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Volr",
-  description: "Avoid disruptions, travel as free as the air. Volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",
+  description:
+    "Avoid disruptions, travel as free as the air. Volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",
 };
 
 export default function RootLayout({
