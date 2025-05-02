@@ -28,12 +28,14 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-            >
-            <Header />
-            <div className="py-4 bg-gradient-to-t from-secondary/5 to-secondary/30">
-              {children}
+          >
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1 py-4 bg-gradient-to-t from-secondary/5 to-secondary/30">
+                {children}
+              </main>
+              <Footer />
             </div>
-            <Footer />
             <Toaster />
           </ThemeProvider>
         </div>
