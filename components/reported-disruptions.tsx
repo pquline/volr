@@ -30,13 +30,19 @@ export default function ReportedDisruptions() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [filter, setFilter] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadDisruptions = async () => {
-      const data = await fetchDisruptions();
-      setOriginalEntries(data);
-      setFilteredEntries(data);
+      try {
+        setIsLoading(true);
+        const data = await fetchDisruptions();
+        setOriginalEntries(data);
+        setFilteredEntries(data);
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadDisruptions();
   }, []);
@@ -133,9 +139,29 @@ export default function ReportedDisruptions() {
         </div>
       </div>
       <div className="space-y-6">
-        {filteredEntries.map((entry) => (
-          <EntryCard key={entry.id} entry={entry} />
-        ))}
+        {isLoading ? (
+          <>
+            <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
+            <div className="p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold truncate">Loading disruptions...</h3>
+              </div>
+            </div>
+          </div>
+          </>
+        ) : filteredEntries.length > 0 ? (
+          filteredEntries.map((entry) => (
+            <EntryCard key={entry.id} entry={entry} />
+          ))
+        ) : (
+          <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
+            <div className="p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold truncate">No reported disruptions</h3>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
