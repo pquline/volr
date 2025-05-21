@@ -9,7 +9,23 @@ import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   title: "volr",
   description:
-    "Avoid disruptions, travel as free as the air. volr: the interactive platform for reporting and viewing public transportation hazards in real time, ensuring safer and more informed journeys.",
+    "The interactive platform for reporting and viewing public transportation disruptions in real time, ensuring more informed journeys.",
+  manifest: "/manifest.json",
+  themeColor: "#030712",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "volr",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  icons: {
+    icon: "/pwa.png",
+    apple: "/pwa.png",
+  },
 };
 
 export default function RootLayout({
