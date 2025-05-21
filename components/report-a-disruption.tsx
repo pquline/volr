@@ -35,7 +35,7 @@ interface ReportADisruptionProps {
 }
 
 export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptionProps) {
-  const { city } = useCity();
+  const { city, isLoading: isCityLoading } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [options, setOptions] = React.useState<{
     lines: { value: string; label: string }[];
@@ -59,19 +59,43 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     },
   });
 
-  const loadTransportData = async () => {
+  const loadTransportData = React.useCallback(async () => {
     if (!city) return;
     try {
+      // Clear existing options while loading
+      setOptions({
+        lines: [],
+        stations: []
+      });
       const data = await fetchTransportData(city, formData.lineName);
       setOptions(data);
     } catch (error) {
       console.error('Error loading transport data:', error);
     }
-  };
+  }, [city, formData.lineName]);
 
   useEffect(() => {
-    loadTransportData();
-  }, [city, formData.lineName]);
+    if (!isCityLoading && city) {
+      loadTransportData();
+    }
+  }, [loadTransportData, isCityLoading, city]);
+
+  useEffect(() => {
+    const handleCityChange = () => {
+      loadTransportData();
+      // Reset form data when city changes
+      setFormData({
+        lineName: '',
+        station: '',
+      });
+      form.reset();
+    };
+
+    window.addEventListener('cityChanged', handleCityChange);
+    return () => {
+      window.removeEventListener('cityChanged', handleCityChange);
+    };
+  }, [loadTransportData, form]);
 
   const handleLineChange = (value: string) => {
     setFormData(prev => ({
@@ -91,11 +115,12 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!city) return;
     try {
       setIsSubmitting(true);
       const result = await submitDisruption({
         ...values,
-        city: city || "paris"
+        city
       });
 
       if (result.success) {

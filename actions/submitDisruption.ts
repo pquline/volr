@@ -18,7 +18,7 @@ export async function submitDisruption(data: z.infer<typeof formSchema>) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        city: data.city,
+        city: data.city.charAt(0).toUpperCase() + data.city.slice(1),
         lineName: data.line,
         station: data.station,
         comment: data.comment
@@ -26,13 +26,14 @@ export async function submitDisruption(data: z.infer<typeof formSchema>) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to submit disruption');
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || 'Failed to submit disruption');
     }
 
     const result = await response.json();
     return { success: true, data: result };
   } catch (error) {
     console.error('Error submitting disruption:', error);
-    return { success: false, error: 'Failed to submit disruption' };
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to submit disruption' };
   }
 }

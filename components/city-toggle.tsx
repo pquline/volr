@@ -24,16 +24,37 @@ const cities = [
 ];
 
 export const useCity = () => {
-  const [city, setCity] = React.useState<string | null>("paris");
+  const [city, setCity] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    if (city) {
-      // Here you would typically fetch and load data for the selected city
-      console.log(`[DEBUG]: City set to ${city.charAt(0).toUpperCase() + city.slice(1)}`);
+    // Load city from localStorage on mount
+    const savedCity = localStorage.getItem("selectedCity");
+    if (savedCity) {
+      setCity(savedCity);
+    } else {
+      // If no saved city, set default to paris and save it
+      setCity("paris");
+      localStorage.setItem("selectedCity", "paris");
     }
+    setIsLoading(false);
+  }, []);
+
+  const updateCity = React.useCallback((newCity: string) => {
+    if (newCity === city) return; // Don't update if city hasn't changed
+    setCity(newCity);
+    localStorage.setItem("selectedCity", newCity);
+    // Refresh the page to load new data
+    window.location.reload();
   }, [city]);
 
-  return { city, setCity };
+  // Return loading state
+  if (isLoading) {
+    return { city: null, setCity: updateCity, isLoading: true };
+  }
+
+  // Return the current city state
+  return { city, setCity: updateCity, isLoading: false };
 };
 
 const CityToggle: React.FC = () => {
@@ -52,6 +73,7 @@ const CityToggle: React.FC = () => {
           aria-labelledby="select-city"
         >
           <MapPin className="h-4 w-4" />
+          <span className="ml-2">{cities.find(c => c.value === city)?.label || "Select City"}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
@@ -64,7 +86,7 @@ const CityToggle: React.FC = () => {
                 key={c.value}
                 value={c.value}
                 onSelect={(currentValue) => {
-                  setCity(currentValue === city ? null : currentValue);
+                  setCity(currentValue);
                   setOpen(false);
                 }}
               >

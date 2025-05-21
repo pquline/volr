@@ -19,9 +19,9 @@ async function devSetup() {
     const importLinesPath = path.join(process.cwd(), 'scripts', 'import-lines.ts');
     execSync(`npx ts-node ${importLinesPath}`, { stdio: 'inherit' });
 
-    console.log('Generating mock entries...');
-    const generateMockPath = path.join(process.cwd(), 'scripts', 'generate-mock-entries.ts');
-    execSync(`npx ts-node ${generateMockPath}`, { stdio: 'inherit' });
+    // console.log('Generating mock entries...');
+    // const generateMockPath = path.join(process.cwd(), 'scripts', 'generate-mock-entries.ts');
+    // execSync(`npx ts-node ${generateMockPath}`, { stdio: 'inherit' });
 
     console.log('Development setup completed successfully!');
   } catch (error) {

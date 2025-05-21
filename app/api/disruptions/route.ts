@@ -15,9 +15,12 @@ export async function GET(request: Request) {
       );
     }
 
+    // Capitalize the city name
+    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+
     const disruptions = await prisma.entry.findMany({
       where: {
-        city,
+        city: capitalizedCity,
         ...(lineName && { lineName }),
         ...(station && { station })
       },
@@ -44,17 +47,27 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { city, lineName, station, comment } = body;
 
+    if (!city || !lineName || !station) {
+      return NextResponse.json(
+        { error: 'Missing required fields: city, lineName, and station are required' },
+        { status: 400 }
+      );
+    }
+
+    // Capitalize the city name
+    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+
     // First, find or create the line
     const line = await prisma.line.upsert({
       where: {
         city_name: {
-          city,
+          city: capitalizedCity,
           name: lineName
         }
       },
       update: {},
       create: {
-        city,
+        city: capitalizedCity,
         name: lineName,
         order: '', // You might want to handle this differently
         stations: [station]
@@ -64,7 +77,7 @@ export async function POST(request: Request) {
     // Then create the disruption entry
     const disruption = await prisma.entry.create({
       data: {
-        city,
+        city: capitalizedCity,
         lineName,
         station,
         comment,
@@ -79,7 +92,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating disruption:', error);
     return NextResponse.json(
-      { error: 'Failed to create disruption' },
+      { error: error instanceof Error ? error.message : 'Failed to create disruption' },
       { status: 500 }
     );
   }

@@ -15,15 +15,10 @@ interface LineData {
 
 async function importLines() {
   try {
-    // Read the JSON file
     const jsonPath = path.join(process.cwd(), 'lines.json');
     const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as LineData[];
 
-    // Process each line
     for (const lineData of jsonData) {
-      console.log(`Processing line ${lineData.name} for city ${lineData.city}...`);
-
-      // Create or update the line
       await prisma.line.upsert({
         where: {
           city_name: {
@@ -43,7 +38,7 @@ async function importLines() {
         }
       });
 
-      console.log(`Successfully processed line ${lineData.name}`);
+      console.log(`+ ${lineData.name} @ ${lineData.city}`);
     }
 
     console.log('Import completed successfully!');

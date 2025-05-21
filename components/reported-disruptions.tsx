@@ -13,6 +13,7 @@ import {
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
 import { useCity } from "./city-toggle";
+import React from "react";
 
 type SortField = "line" | "station" | "edits";
 type SortDirection = "asc" | "desc";
@@ -29,7 +30,7 @@ interface ReportedDisruptionsProps {
 }
 
 export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsProps) {
-  const { city } = useCity();
+  const { city, isLoading: isCityLoading } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
   const [sortField, setSortField] = useState<SortField>("edits");
@@ -40,12 +41,13 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const loadDisruptions = async (isInitialLoad = false) => {
+  const loadDisruptions = React.useCallback(async (isInitialLoad = false) => {
+    if (!city) return; // Don't load if no city is selected
     try {
       if (isInitialLoad) {
         setIsLoading(true);
       }
-      const data = await fetchDisruptions(city || "paris");
+      const data = await fetchDisruptions(city);
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
@@ -53,12 +55,13 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
         setIsLoading(false);
       }
     }
-  };
+  }, [city]);
 
   const handleEntryUpdate = async (updatedEntry: any) => {
+    if (!city) return;
     try {
       setUpdatingIds(prev => new Set([...prev, updatedEntry.id]));
-      const data = await fetchDisruptions(city || "paris");
+      const data = await fetchDisruptions(city);
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
@@ -73,9 +76,10 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   };
 
   const handleEntryDelete = async (deletedId: string) => {
+    if (!city) return;
     try {
       setUpdatingIds(prev => new Set([...prev, deletedId]));
-      const data = await fetchDisruptions(city || "paris");
+      const data = await fetchDisruptions(city);
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
@@ -89,15 +93,21 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
     }
   };
 
+  // Handle initial load and city changes
   useEffect(() => {
-    loadDisruptions(true);
-  }, [city]);
+    if (!isCityLoading && city) {
+      setIsLoading(true);
+      setOriginalEntries([]);
+      setFilteredEntries([]);
+      loadDisruptions(true);
+    }
+  }, [city, isCityLoading, loadDisruptions]);
 
   useEffect(() => {
     if (lastUpdate) {
       loadDisruptions(false);
     }
-  }, [lastUpdate]);
+  }, [lastUpdate, loadDisruptions]);
 
   useEffect(() => {
     const normalizedFilter = normalizeText(filter);

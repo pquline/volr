@@ -9,7 +9,9 @@ export interface Disruption {
 
 export async function fetchDisruptions(city: string): Promise<Disruption[]> {
   try {
-    const response = await fetch(`/api/disruptions?city=${encodeURIComponent(city)}`);
+    // Capitalize the city name to match database format
+    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+    const response = await fetch(`/api/disruptions?city=${encodeURIComponent(capitalizedCity)}`);
     if (!response.ok) {
       throw new Error('Failed to fetch disruptions');
     }
