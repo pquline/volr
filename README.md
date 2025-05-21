@@ -1,35 +1,36 @@
-# 🚍 volr - Public Transport Disruption Reporting System
+# 🚍 volr - Public Transport Disruption Reporter
 
-`volr` is a modern web application that allows users to report and track public transport disruptions in real-time. Built with Next.js, it provides a user-friendly interface for reporting issues and viewing current disruptions in the transport network.
+A modern web application for reporting and tracking public transport disruptions. Built with Next.js, TypeScript, and PostgreSQL.
 
 ## ✨ Features
 
-- 🚍 Real-time disruption reporting
-- 📍 Location-based reporting
-- 🔍 Search and filter disruptions
-- 📱 Mobile-responsive design
-- 🌙 Dark mode support
-- 🎨 Modern UI with shadcn/ui components
+- 🚌 Real-time disruption reporting for public transport lines
+- 🌍 Multi-city support
+- 📱 Responsive design for mobile and desktop
+- 🎨 Modern UI with dark mode support
+- 🔍 Searchable line and station selection
+- 🔒 Secure API endpoints
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui
-- **Database**: PostgreSQL (via Prisma)
-- **Development**: Turbopack for faster development
-- **Containerization**: Docker & Docker Compose
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Styling**: Tailwind CSS with shadcn/ui components
 - **Form Handling**: React Hook Form with Zod validation
+- **State Management**: React Hooks
+- **API**: Next.js API Routes with middleware protection
+- **Development**: Turbopack for fast development
 - **Notifications**: Sonner toast notifications
+- **UI Components**: Radix UI primitives
+
+## 📋 Prerequisites
+
+- Node.js 18+ and npm/yarn
+- PostgreSQL database
+- Docker (optional, for containerized development)
 
 ## 🚀 Getting Started
-
-### 📋 Prerequisites
-
-- Node.js 18+ or Bun
-- Docker and Docker Compose (for local database)
-- Git
-
-### ⚙️ Installation
 
 1. Clone the repository:
    ```bash
@@ -40,104 +41,91 @@
 2. Install dependencies:
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
 3. Set up environment variables:
-   ```bash
-   cp .env.example .env.local
+   Create a `.env` file in the root directory with the following variables:
    ```
-   Edit `.env.local` with your configuration.
-
-4. Start the PostgreSQL database:
-   ```bash
-   docker-compose up -d
+   DATABASE_URL="postgresql://user:password@localhost:5432/volr"
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"
    ```
 
-5. Set up the database:
+4. Set up the database:
    ```bash
+   # Run database migrations
    npx prisma migrate dev
+
+   # Import initial line data
+   npm run import
    ```
 
-6. Start the development server:
+5. Start the development server:
    ```bash
    npm run dev
+   # or
+   yarn dev
    ```
 
-7. Open [http://localhost:3000](http://localhost:3000) in your browser.
+The application will be available at `http://localhost:3000`.
 
-### 🔧 Development Setup
+## 📁 Project Structure
 
-For a quick development setup, run:
-```bash
-npm run dev:setup
 ```
-This script will:
-- Install dependencies
-- Run database migrations
-- Import lines
-- Seed mock entries
+volr/
+├── actions/          # Server actions for data operations
+├── app/             # Next.js app router pages and API routes
+├── components/      # React components
+├── lib/            # Utility functions and shared code
+├── prisma/         # Database schema and migrations
+├── public/         # Static assets
+├── scripts/        # Utility scripts
+└── types/          # TypeScript type definitions
+```
 
-### 📜 Available Scripts
+## 💾 Database Schema
+
+### Line Model
+- Represents a public transport line
+- Fields: id, city, name, order, type, stations
+- Supports multiple cities and line types
+
+### Entry Model
+- Represents a disruption report
+- Fields: id, city, station, comment, lineId, lineName
+- Tracks edit history and timestamps
+
+## 👨‍💻 Development
+
+### Available Scripts
 
 - `npm run dev` - Start development server with Turbopack
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
-- `npx prisma generate` - Generate Prisma client
-- `npx prisma migrate dev` - Run database migrations
-- `npm run dev:setup` - Run the development setup script
+- `npm run import` - Import line data
 - `npm run cleanup` - Clean up development data
-- `npm run import` - Import transport lines data
 
-### 🎨 Code Style
+### Database Management
 
-This project uses:
-- ESLint for code linting
-- Prettier for code formatting
-- TypeScript for type safety
-- Modern ESM configuration
+- Use Prisma Studio for database management:
+  ```bash
+  npx prisma studio
+  ```
 
-## 🚢 Deployment
-
-### 🔧 Local Development
-
-The project uses Docker Compose for local development:
-- Next.js application container
-- PostgreSQL database container
-- Persistent volume storage for database data
-- Easy setup and teardown
-
-To start the development environment:
-```bash
-docker-compose up -d
-```
-
-### 🏗️ Production Deployment
-
-The application is containerized and can be deployed to any container platform (AWS, GCP, Azure, etc.). The Docker setup includes:
-- Multi-stage build for optimal production deployment
-- Production-ready Node.js environment
-- Automatic database migrations
-- Environment variable configuration
-
-To build and run the production containers:
-```bash
-docker-compose -f docker-compose.yml up -d --build
-```
+- Reset database and apply migrations:
+  ```bash
+  npx prisma migrate reset
+  ```
 
 ## 🤝 Contributing
-
-We welcome contributions!
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
