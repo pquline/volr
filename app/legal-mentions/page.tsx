@@ -99,9 +99,9 @@ export default function LegalMentions() {
               For inquiries or suggestions, reach out via email:{" "}
               <Link
                 href="mailto:dev@volr.cc"
-                className="text-foreground underline"
+                className="hover:underline font-mono"
               >
-                dev @ volr.cc
+                dev@volr.cc
               </Link>
               <br />
             </p>
