@@ -24,7 +24,11 @@ const normalizeText = (text: string) => {
     .toLowerCase();
 };
 
-export default function ReportedDisruptions() {
+interface ReportedDisruptionsProps {
+  lastUpdate?: number;
+}
+
+export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsProps) {
   const { city } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
@@ -33,52 +37,67 @@ export default function ReportedDisruptions() {
   const [filter, setFilter] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const loadDisruptions = async () => {
+  const loadDisruptions = async (isInitialLoad = false) => {
     try {
-      setIsLoading(true);
+      if (isInitialLoad) {
+        setIsLoading(true);
+      }
       const data = await fetchDisruptions(city || "paris");
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
-      setIsLoading(false);
+      if (isInitialLoad) {
+        setIsLoading(false);
+      }
     }
   };
 
   const handleEntryUpdate = async (updatedEntry: any) => {
-    setOriginalEntries(prev =>
-      prev.map(entry =>
-        entry.id === updatedEntry.id
-          ? {
-              ...entry,
-              edits: updatedEntry.edits,
-              last_edit: new Date(updatedEntry.last_edit)
-            }
-          : entry
-      )
-    );
-    setFilteredEntries(prev =>
-      prev.map(entry =>
-        entry.id === updatedEntry.id
-          ? {
-              ...entry,
-              edits: updatedEntry.edits,
-              last_edit: new Date(updatedEntry.last_edit)
-            }
-          : entry
-      )
-    );
+    try {
+      setUpdatingIds(prev => new Set([...prev, updatedEntry.id]));
+      const data = await fetchDisruptions(city || "paris");
+      setOriginalEntries(data);
+      setFilteredEntries(data);
+    } finally {
+      setTimeout(() => {
+        setUpdatingIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(updatedEntry.id);
+          return newSet;
+        });
+      }, 100);
+    }
   };
 
   const handleEntryDelete = async (deletedId: string) => {
-    setOriginalEntries(prev => prev.filter(entry => entry.id !== deletedId));
-    setFilteredEntries(prev => prev.filter(entry => entry.id !== deletedId));
+    try {
+      setUpdatingIds(prev => new Set([...prev, deletedId]));
+      const data = await fetchDisruptions(city || "paris");
+      setOriginalEntries(data);
+      setFilteredEntries(data);
+    } finally {
+      setTimeout(() => {
+        setUpdatingIds(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(deletedId);
+          return newSet;
+        });
+      }, 100);
+    }
   };
 
   useEffect(() => {
-    loadDisruptions();
+    loadDisruptions(true);
   }, [city]);
+
+  useEffect(() => {
+    if (lastUpdate) {
+      loadDisruptions(false);
+    }
+  }, [lastUpdate]);
 
   useEffect(() => {
     const normalizedFilter = normalizeText(filter);
@@ -189,6 +208,7 @@ export default function ReportedDisruptions() {
               entry={entry}
               onRefresh={() => handleEntryUpdate(entry)}
               onDelete={() => handleEntryDelete(entry.id)}
+              isLoading={updatingIds.has(entry.id)}
             />
           ))
         ) : (

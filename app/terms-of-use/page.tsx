@@ -26,7 +26,7 @@ export default function TermsOfUse() {
           </CardHeader>
           <CardContent>
             <p>
-              Volr is an open-source platform that enables users to report
+              <Link href="/"className="font-mono hover:underline">volr</Link> is an open-source platform that enables users to report
               public transport disruptions and share safety-related information. The
               project is intended for informational purposes only and is
               maintained by contributors.
@@ -67,7 +67,7 @@ export default function TermsOfUse() {
           <CardContent>
             <p>
               All user-submitted content remains the property of its respective
-              authors. However, by submitting content to Volr, you grant us a
+              authors. However, by submitting content to <Link href="/"className="font-mono hover:underline">volr</Link>, you grant us a
               non-exclusive, royalty-free, and perpetual license to use, modify,
               and distribute the content for the purposes of the platform.
             </p>
@@ -81,7 +81,7 @@ export default function TermsOfUse() {
           <CardContent>
             <p>
               The information provided on this platform is user-generated and
-              may not always be accurate or up-to-date. Volr and its
+              may not always be accurate or up-to-date. <Link href="/"className="font-mono hover:underline">volr</Link> and its
               contributors are not responsible for any errors, omissions, or
               consequences arising from the use of this platform.
             </p>
@@ -130,9 +130,9 @@ export default function TermsOfUse() {
               For inquiries or suggestions, reach out via email:{" "}
               <Link
                 href="mailto:dev@volr.cc"
-                className="text-foreground underline"
+                className="font-mono hover:underline"
               >
-                dev @ volr.cc
+                dev@volr.cc
               </Link>
               <br />
             </p>

@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  pointer-events: auto !important;
 }
 
 @layer base {
@@ -78,5 +79,8 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button, a, [role="button"] {
+    pointer-events: auto !important;
   }
 }

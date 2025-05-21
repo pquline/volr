@@ -1,6 +1,6 @@
-# 🚍 Volr - Public Transport Disruption Reporting System
+# 🚍 volr - Public Transport Disruption Reporting System
 
-Volr is a modern web application that allows users to report and track public transport disruptions in real-time. Built with Next.js, it provides a user-friendly interface for reporting issues and viewing current disruptions in the transport network.
+`volr` is a modern web application that allows users to report and track public transport disruptions in real-time. Built with Next.js, it provides a user-friendly interface for reporting issues and viewing current disruptions in the transport network.
 
 ## ✨ Features
 
@@ -30,13 +30,13 @@ Volr is a modern web application that allows users to report and track public tr
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/pquline/Volr.git
+   git clone https://github.com/pquline/volr.git
    cd volr
    ```
 
 2. Install dependencies:
    ```bash
-   bun install
+   npm install
    ```
 
 3. Set up environment variables:
@@ -47,42 +47,37 @@ Volr is a modern web application that allows users to report and track public tr
 
 4. Set up the database:
    ```bash
-   bun prisma migrate dev
+   npx prisma migrate dev
    ```
 
 5. Start the development server:
    ```bash
-   bun dev
+   npm run dev
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📁 Project Structure
+### 🔧 Development Setup
 
+For a quick development setup, run:
+```bash
+npm run dev:setup
 ```
-volr/
-├── app/                # Next.js app directory
-│   ├── api/            # API routes
-│   └── (routes)/       # Page routes
-├── components/         # React components
-│   ├── ui/             # UI components
-│   └── ...             # Feature components
-├── lib/                # Utility functions
-├── prisma/             # Database schema and migrations
-├── public/             # Static assets
-└── styles/             # Global styles
-```
-
-## 💻 Development
+This script will:
+- Install dependencies
+- Run database migrations
+- Import lines
+- Seed mock entries
 
 ### 📜 Available Scripts
 
-- `bun dev` - Start development server
-- `bun build` - Build for production
-- `bun start` - Start production server
-- `bun lint` - Run ESLint
-- `bun prisma generate` - Generate Prisma client
-- `bun prisma migrate dev` - Run database migrations
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npx prisma generate` - Generate Prisma client
+- `npx prisma migrate dev` - Run database migrations
+- `npm run dev:setup` - Run the development setup script
 
 ### 🎨 Code Style
 

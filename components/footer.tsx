@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
         <Link
           className="text-white"
-          href="https://github.com/pquline/Volr"
+          href="https://github.com/pquline/volr"
           target="_blank"
         >
           <Badge>GitHub</Badge>
@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
       <div className="text-center space-y-3">
         <p className="text-foreground/90">
-          © {new Date().getFullYear()} Volr. No rights reserved.
+          © {new Date().getFullYear()} volr. No rights reserved.
         </p>
       </div>
     </footer>

@@ -14,10 +14,10 @@ export default function PrivacyPolicy() {
           </CardHeader>
           <CardContent>
             <p>
-              <strong>Project Name:</strong> Volr
+              <strong>Project Name:</strong> <Link href="/"className="font-mono hover:underline">volr</Link>
             </p>
             <p>
-              <strong>Purpose:</strong> Volr is an open-source project designed
+              <strong>Purpose:</strong> <Link href="/"className="font-mono hover:underline">volr</Link> is an open-source project designed
               to share reports about public transport disruptions.
             </p>
             <p>
@@ -53,8 +53,8 @@ export default function PrivacyPolicy() {
               <strong>Code Transparency:</strong> The source code is publicly
               available on{" "}
               <Link
-                href="https://github.com/pquline/Volr"
-                className="text-foreground underline"
+                href="https://github.com/pquline/volr"
+                className="font-mono hover:underline"
               >
                 GitHub
               </Link>
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
               users must not include personal or sensitive information. Users
               are responsible for ensuring the information they provide complies
               with the project's{" "}
-              <Link href="/terms-of-use" className="text-foreground underline">
+              <Link href="/terms-of-use" className="font-mono hover:underline">
                 terms of use
               </Link>
               .
@@ -90,9 +90,9 @@ export default function PrivacyPolicy() {
               For inquiries or suggestions, reach out via email:{" "}
               <Link
                 href="mailto:dev@volr.cc"
-                className="text-foreground underline"
+                className="font-mono hover:underline"
               >
-                dev @ volr.cc
+                dev@volr.cc
               </Link>
               <br />
             </p>

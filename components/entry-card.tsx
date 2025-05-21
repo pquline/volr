@@ -24,7 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SkeletonCard } from "./skeleton-card"
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -58,18 +58,16 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       setIsSubmitting(true)
       const result = await updateDisruption(entry.id, entry.edits)
       if (result.success) {
-        setShowConfirmDialog(false)
-        setIsSubmitting(false)
         onRefresh?.()
+        setShowConfirmDialog(false)
         toast.success("Disruption updated successfully!")
       } else {
-        setIsSubmitting(false)
         toast.error(result.error || "Failed to update disruption")
       }
     } catch (error) {
-      setIsSubmitting(false)
       toast.error("An unexpected error occurred")
       console.error('Error updating disruption:', error)
+    } finally {
     }
   }
 
@@ -78,30 +76,31 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       setIsSubmitting(true)
       const result = await deleteDisruption(entry.id)
       if (result.success) {
-        setShowDeleteDialog(false)
-        setIsSubmitting(false)
         onDelete?.()
+        setShowDeleteDialog(false)
         toast.success("Disruption deleted successfully!")
       } else {
-        setIsSubmitting(false)
         toast.error(result.error || "Failed to delete disruption")
       }
     } catch (error) {
-      setIsSubmitting(false)
       toast.error("An unexpected error occurred")
       console.error('Error deleting disruption:', error)
+    } finally {
     }
   }
 
   const handleDialogClose = () => {
-    setShowConfirmDialog(false)
-    setShowDeleteDialog(false)
-    setIsSubmitting(false)
+    if (!isSubmitting) {
+      setShowConfirmDialog(false)
+      setShowDeleteDialog(false)
+    }
   }
 
-  if (isLoading) {
-    return <SkeletonCard />
-  }
+  useEffect(() => {
+    if (!isLoading) {
+      setIsSubmitting(false)
+    }
+  }, [isLoading])
 
   return (
     <>
@@ -183,19 +182,19 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
               <div className="flex flex-col justify-end ml-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="tertiary" disabled={isSubmitting}>Update</Button>
+                    <Button variant="tertiary" disabled={isSubmitting || isLoading}>Update</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem
                       onClick={() => setShowConfirmDialog(true)}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isLoading}
                     >
                       <Check className="mr-2 h-4 w-4 text-valid" />
                       <span>Confirm</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setShowDeleteDialog(true)}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isLoading}
                     >
                       <Trash className="mr-2 h-4 w-4 text-destructive" />
                       <span>Delete</span>
@@ -208,69 +207,73 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
         </CardContent>
       </Card>
 
-      <AlertDialog
-        open={showConfirmDialog}
-        onOpenChange={(open) => {
-          if (!open) handleDialogClose()
-        }}
-      >
-        <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-semibold mb-2">
-              Confirm Entry
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm mb-4">
-              Are you sure you want to confirm{" "}
-              <span className="font-bold">
-                {entry.station} (Line {entry.line})
-              </span>
-              ? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="flex justify-end sm:space-x-2">
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleConfirm}
-              className="bg-valid hover:bg-valid/90"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Confirm"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {showConfirmDialog && (
+        <AlertDialog
+          open={showConfirmDialog}
+          onOpenChange={(open) => {
+            if (!open) handleDialogClose()
+          }}
+        >
+          <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-semibold mb-2">
+                Confirm Entry
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm mb-4">
+                Are you sure you want to confirm{" "}
+                <span className="font-bold">
+                  {entry.station} (Line {entry.line})
+                </span>
+                ? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex justify-end sm:space-x-2">
+              <AlertDialogCancel disabled={isSubmitting || isLoading}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirm}
+                className="bg-valid hover:bg-valid/90"
+                disabled={isSubmitting || isLoading}
+              >
+                {isSubmitting ? "Updating..." : "Confirm"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
 
-      <AlertDialog
-        open={showDeleteDialog}
-        onOpenChange={(open) => {
-          if (!open) handleDialogClose()
-        }}
-      >
-        <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-semibold mb-2">
-              Delete Entry
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm mb-4">
-              Are you sure you want to delete{" "}
-              <span className="font-bold">
-                {entry.station} (Line {entry.line})
-              </span>
-              ? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="flex justify-end sm:space-x-2">
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive hover:bg-destructive/90"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Deleting..." : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {showDeleteDialog && (
+        <AlertDialog
+          open={showDeleteDialog}
+          onOpenChange={(open) => {
+            if (!open) handleDialogClose()
+          }}
+        >
+          <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-semibold mb-2">
+                Delete Entry
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm mb-4">
+                Are you sure you want to delete{" "}
+                <span className="font-bold">
+                  {entry.station} (Line {entry.line})
+                </span>
+                ? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex justify-end sm:space-x-2">
+              <AlertDialogCancel disabled={isSubmitting || isLoading}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                className="bg-destructive hover:bg-destructive/90"
+                disabled={isSubmitting || isLoading}
+              >
+                {isSubmitting ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </>
   )
 }

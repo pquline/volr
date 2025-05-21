@@ -30,7 +30,11 @@ const formSchema = z.object({
   comment: z.string().max(180).optional(),
 });
 
-export function SignalDisruptionForm() {
+interface ReportADisruptionProps {
+  onDisruptionSubmitted?: () => void;
+}
+
+export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptionProps) {
   const { city } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [options, setOptions] = React.useState<{
@@ -101,6 +105,7 @@ export function SignalDisruptionForm() {
           lineName: "",
           station: "",
         });
+        onDisruptionSubmitted?.();
       } else {
         toast.error(result.error || "Failed to submit disruption");
       }

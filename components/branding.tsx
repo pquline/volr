@@ -15,7 +15,7 @@ const Branding: React.FC = () => {
           width={40}
           height={40}
         />
-        <h1 className="ml-4 text-2xl font-extrabold tracking-tight">Volr</h1>
+        <h1 className="ml-4 text-2xl font-extrabold tracking-tight font-mono">volr</h1>
       </div>
     </Link>
   );

@@ -11,12 +11,12 @@ export default function About() {
       <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-2xl w-full px-6 sm:pt-2">
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
-            <CardTitle>About Volr</CardTitle>
+            <CardTitle>About <Link href="/"className="font-mono hover:underline">volr</Link></CardTitle>
             <Train className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p className="mb-2">
-              Volr is a web application used to share reports of disruptions from
+              <Link href="/"className="font-mono hover:underline">volr</Link> is a web application used to share reports of disruptions from
               public transport users.
             </p>
             <p>Anyone can add, delete, and view reported disruptions.</p>
@@ -42,7 +42,7 @@ export default function About() {
             <Database className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <p>No personal data is collected by Volr.</p>
+            <p>No personal data is collected by <Link href="/"className="font-mono hover:underline">volr</Link>.</p>
           </CardContent>
         </Card>
 
@@ -56,9 +56,9 @@ export default function About() {
               For inquiries or suggestions, reach out via email:{" "}
               <Link
                 href="mailto:dev@volr.cc"
-                className="text-foreground hover:underline"
+                className="text-foreground hover:underline font-mono"
               >
-                dev @ volr.cc
+                dev@volr.cc
               </Link>
               <br />
             </p>

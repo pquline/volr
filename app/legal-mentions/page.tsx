@@ -14,25 +14,20 @@ export default function LegalMentions() {
           </CardHeader>
           <CardContent>
             <p>
-              <strong>Project Name:</strong> Volr
+              <strong>Project Name:</strong> <Link href="/"className="font-mono hover:underline">volr</Link>
             </p>
             <p>
               <strong>License:</strong> This project is open source and
               distributed under the terms of the{" "}
-              <Link
-                href="https://www.gnu.org/licenses/gpl-3.0.html"
-                className="text-foreground underline"
-              >
-                GNU General Public License (GPL v3)
-              </Link>
+              <Link href="https://www.gnu.org/licenses/gpl-3.0.html"className="font-mono hover:underline">GNU General Public License (GPL v3)</Link>
               .
             </p>
             <p>
               <strong>Source Code:</strong> The source code is publicly
               available on{" "}
               <Link
-                href="https://github.com/pquline/Volr"
-                className="text-foreground underline"
+                href="https://github.com/pquline/volr"
+                className="font-mono hover:underline"
               >
                 GitHub
               </Link>
@@ -50,7 +45,7 @@ export default function LegalMentions() {
               <strong>Hosting Provider:</strong>{" "}
               <Link
                 href="https://www.netcup.com/"
-                className="text-foreground underline"
+                className="font-mono hover:underline"
               >
                 netcup
               </Link>
@@ -67,8 +62,8 @@ export default function LegalMentions() {
               This project is maintained by its contributors. For a list of
               contributors, visit the{" "}
               <Link
-                href="https://github.com/pquline/Volr/graphs/contributors"
-                className="text-foreground underline"
+                href="https://github.com/pquline/volr/graphs/contributors"
+                className="font-mono hover:underline"
               >
                 contributors page
               </Link>
