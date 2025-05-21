@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  entries       Entry[]
+}
+
 model Line {
   id       Int      @id @default(autoincrement())
   city     String
@@ -16,6 +26,8 @@ model Line {
   entries  Entry[]
 
   @@unique([city, name])
+  @@index([city])
+  @@index([city, name])
 }
 
 model Entry {
@@ -29,4 +41,10 @@ model Entry {
   lineId    Int
   lineName  String
   line      Line     @relation(fields: [lineId], references: [id])
+
+  @@index([city])
+  @@index([city, lineName])
+  @@index([city, station])
+  @@index([createdAt])
+  @@index([updatedAt])
 }

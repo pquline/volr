@@ -31,6 +31,7 @@ import { enUS } from 'date-fns/locale';
 import { updateDisruption } from "@/actions/updateDisruption";
 import { deleteDisruption } from "@/actions/deleteDisruption";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface EntryCardProps {
   entry: {
@@ -66,8 +67,9 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       }
     } catch (error) {
       toast.error("An unexpected error occurred")
-      console.error('Error updating disruption:', error)
+      logger.error('Error updating disruption:', error)
     } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -84,8 +86,9 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       }
     } catch (error) {
       toast.error("An unexpected error occurred")
-      console.error('Error deleting disruption:', error)
+      logger.error('Error deleting disruption:', error)
     } finally {
+      setIsSubmitting(false)
     }
   }
 

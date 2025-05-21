@@ -25,6 +25,7 @@ interface SearchableSelectProps {
   onValueChange: (value: string) => void;
   placeholder: string;
   error?: boolean;
+  disabled?: boolean;
 }
 
 export function SearchableSelect({
@@ -34,6 +35,7 @@ export function SearchableSelect({
   onValueChange,
   placeholder,
   error,
+  disabled,
 }: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -48,8 +50,10 @@ export function SearchableSelect({
           aria-labelledby={"select-" + label}
           className={cn(
             "w-full justify-between",
-            error && "ring-destructive/70 ring-2 ring-offset-1"
+            error && "ring-destructive/70 ring-2 ring-offset-1",
+            disabled && "opacity-50 pointer-events-none"
           )}
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label

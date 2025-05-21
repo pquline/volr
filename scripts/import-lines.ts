@@ -1,52 +1,44 @@
-const { PrismaClient } = require('@prisma/client');
-const fs = require('fs');
-const path = require('path');
+import { PrismaClient } from '@prisma/client';
+import lines from '../lines.json';
+import { logger } from '../lib/logger';
 
 const prisma = new PrismaClient();
 
-interface LineData {
-  city: string;
-  order: number;
-  name: string | number;
-  type: string;
-  stations: string[];
-  terminus: string[];
-}
-
 async function importLines() {
   try {
-    const jsonPath = path.join(process.cwd(), 'lines.json');
-    const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as LineData[];
+    logger.info('Starting lines import...');
 
-    for (const lineData of jsonData) {
-      await prisma.line.upsert({
-        where: {
-          city_name: {
-            city: lineData.city,
-            name: lineData.name.toString()
-          }
-        },
-        update: {
-          order: lineData.order.toString(),
-          stations: lineData.stations
-        },
-        create: {
-          city: lineData.city,
-          name: lineData.name.toString(),
-          order: lineData.order.toString(),
-          stations: lineData.stations
-        }
-      });
+    // Clear existing lines
+    await prisma.line.deleteMany();
+    logger.info('Cleared existing lines');
 
-      console.log(`+ ${lineData.name} @ ${lineData.city}`);
-    }
+    // Import new lines
+    const importedLines = await prisma.line.createMany({
+      data: lines.map(line => ({
+        city: line.city,
+        name: line.name.toString(),
+        order: line.order.toString(),
+        type: line.type,
+        stations: line.stations,
+        terminus: line.terminus
+      }))
+    });
 
-    console.log('Import completed successfully!');
+    logger.info(`Successfully imported ${importedLines.count} lines`);
   } catch (error) {
-    console.error('Error importing lines:', error);
+    logger.error('Error importing lines:', error);
+    throw error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-importLines();
+importLines()
+  .then(() => {
+    logger.info('Import completed successfully');
+    process.exit(0);
+  })
+  .catch((error) => {
+    logger.error('Import failed:', error);
+    process.exit(1);
+  });

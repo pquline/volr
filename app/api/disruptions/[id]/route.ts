@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: Request,
@@ -20,7 +21,7 @@ export async function GET(
 
     return NextResponse.json(disruption);
   } catch (error) {
-    console.error('Error fetching disruption:', error);
+    logger.error('Error fetching disruption:', error);
     return NextResponse.json(
       { error: 'Failed to fetch disruption' },
       { status: 500 }
@@ -48,7 +49,7 @@ export async function PUT(
 
     return NextResponse.json(disruption);
   } catch (error) {
-    console.error('Error updating disruption:', error);
+    logger.error('Error updating disruption:', error);
     return NextResponse.json(
       { error: 'Failed to update disruption' },
       { status: 500 }
@@ -75,7 +76,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting disruption:', error);
+    logger.error('Error deleting disruption:', error);
     return NextResponse.json(
       { error: 'Failed to delete disruption' },
       { status: 500 }
@@ -109,7 +110,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedEntry);
   } catch (error) {
-    console.error('Error updating disruption:', error);
+    logger.error('Error updating disruption:', error);
     return NextResponse.json(
       { error: 'Failed to update disruption' },
       { status: 500 }

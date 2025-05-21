@@ -12,6 +12,7 @@ const formSchema = z.object({
 export async function submitDisruption(data: z.infer<typeof formSchema>) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
     const response = await fetch(`${baseUrl}/api/disruptions`, {
       method: 'POST',
       headers: {
@@ -19,7 +20,7 @@ export async function submitDisruption(data: z.infer<typeof formSchema>) {
       },
       body: JSON.stringify({
         city: data.city.charAt(0).toUpperCase() + data.city.slice(1),
-        lineName: data.line,
+        line: data.line,
         station: data.station,
         comment: data.comment
       }),
@@ -27,6 +28,7 @@ export async function submitDisruption(data: z.infer<typeof formSchema>) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
+      console.error('Error response:', errorData);
       throw new Error(errorData?.error || 'Failed to submit disruption');
     }
 

@@ -23,11 +23,12 @@ import { submitDisruption } from "../actions/submitDisruption";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useCity } from "./city-toggle";
+import { logger } from "@/lib/logger";
 
 const formSchema = z.object({
-  line: z.string().min(1),
-  station: z.string().min(1),
-  comment: z.string().max(180).optional(),
+  line: z.string().min(1, "Please select a line"),
+  station: z.string().min(1, "Please select a station"),
+  comment: z.string().max(50, "Comment must be less than 50 characters").optional(),
 });
 
 interface ReportADisruptionProps {
@@ -37,6 +38,7 @@ interface ReportADisruptionProps {
 export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptionProps) {
   const { city, isLoading: isCityLoading } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isLoadingData, setIsLoadingData] = React.useState(false);
   const [options, setOptions] = React.useState<{
     lines: { value: string; label: string }[];
     stations: { value: string; label: string }[];
@@ -62,15 +64,24 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
   const loadTransportData = React.useCallback(async () => {
     if (!city) return;
     try {
+      setIsLoadingData(true);
+      logger.debug(`Loading transport data for city: ${city}, line: ${formData.lineName}`);
+
       // Clear existing options while loading
       setOptions({
         lines: [],
         stations: []
       });
+
       const data = await fetchTransportData(city, formData.lineName);
       setOptions(data);
+
+      logger.debug(`Transport data loaded successfully. Lines: ${data.lines.length}, Stations: ${data.stations.length}`);
     } catch (error) {
-      console.error('Error loading transport data:', error);
+      logger.error('Error loading transport data', error);
+      toast.error("Failed to load transport data. Please try again.");
+    } finally {
+      setIsLoadingData(false);
     }
   }, [city, formData.lineName]);
 
@@ -118,12 +129,24 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     if (!city) return;
     try {
       setIsSubmitting(true);
+      logger.debug('Form values:', values);
+      logger.debug('City:', city);
+      logger.debug('Submitting disruption with data:', {
+        city,
+        line: values.line,
+        station: values.station,
+        comment: values.comment
+      });
+
       const result = await submitDisruption({
-        ...values,
-        city
+        city,
+        line: values.line,
+        station: values.station,
+        comment: values.comment
       });
 
       if (result.success) {
+        logger.info(`Disruption submitted successfully for city: ${city}, line: ${values.line}, station: ${values.station}`);
         toast.success("Disruption reported successfully!");
         form.reset();
         setFormData({
@@ -132,11 +155,12 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
         });
         onDisruptionSubmitted?.();
       } else {
+        logger.error(`Failed to submit disruption: ${result.error}`);
         toast.error(result.error || "Failed to submit disruption");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred");
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form', error);
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -162,14 +186,18 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                       Line<span className="font-normal"> (Required)</span>
                     </FormLabel>
                     <FormControl>
-                      <div className={cn(!city && "opacity-50 pointer-events-none")}>
+                      <div className={cn(
+                        !city && "opacity-50 pointer-events-none",
+                        isLoadingData && "opacity-50 pointer-events-none"
+                      )}>
                         <SearchableSelect
                           label="line"
                           options={options.lines}
                           value={formData.lineName}
                           onValueChange={handleLineChange}
-                          placeholder="Select a line..."
+                          placeholder={isLoadingData ? "Loading lines..." : "Select a line..."}
                           error={!!form.formState.errors.line}
+                          disabled={isLoadingData}
                         />
                       </div>
                     </FormControl>
@@ -186,14 +214,18 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                       Station<span className="font-normal"> (Required)</span>
                     </FormLabel>
                     <FormControl>
-                      <div className={cn(!formData.lineName && "opacity-50 pointer-events-none")}>
+                      <div className={cn(
+                        !formData.lineName && "opacity-50 pointer-events-none",
+                        isLoadingData && "opacity-50 pointer-events-none"
+                      )}>
                         <SearchableSelect
                           label="station"
                           options={options.stations}
                           value={formData.station}
                           onValueChange={handleStationChange}
-                          placeholder="Select a station..."
+                          placeholder={isLoadingData ? "Loading stations..." : "Select a station..."}
                           error={!!form.formState.errors.station}
+                          disabled={isLoadingData}
                         />
                       </div>
                     </FormControl>
@@ -212,7 +244,8 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                         placeholder="Enter an optional comment describing the disruption..."
                         className="resize-none"
                         {...field}
-                        maxLength={45}
+                        maxLength={180}
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
@@ -224,7 +257,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                   variant="default"
                   type="submit"
                   className="justify-end"
-                  disabled={isSubmitting || !city}
+                  disabled={isSubmitting || !city || isLoadingData}
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>

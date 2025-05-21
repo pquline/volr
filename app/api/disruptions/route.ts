@@ -1,99 +1,101 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { handleError, validateInput } from '@/lib/error-handling';
+import { clearCache } from '@/lib/data-fetching';
+import { logger } from '@/lib/logger';
+import { z } from 'zod';
+import { protectApiRoute } from '@/lib/security';
 
-export async function GET(request: Request) {
+const disruptionSchema = z.object({
+  city: z.string().min(1),
+  lineName: z.string().min(1),
+  station: z.string().min(1),
+  comment: z.string().max(180).optional(),
+});
+
+async function handler(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const city = searchParams.get('city');
-    const lineName = searchParams.get('line');
-    const station = searchParams.get('station');
+    if (request.method === 'POST') {
+      const body = await request.json();
+      logger.debug('Received POST request body:', body);
+      const { city, line, station, comment } = body;
 
-    if (!city) {
-      return NextResponse.json(
-        { error: 'City parameter is required' },
-        { status: 400 }
-      );
+      if (!city || !line || !station) {
+        logger.error('Missing required fields:', { city, line, station });
+        return NextResponse.json(
+          { error: 'Missing required fields' },
+          { status: 400 }
+        );
+      }
+
+      const lineRecord = await prisma.line.findFirst({
+        where: {
+          city,
+          name: line,
+        },
+      });
+
+      if (!lineRecord) {
+        return NextResponse.json(
+          { error: 'Line not found' },
+          { status: 404 }
+        );
+      }
+
+      const entry = await prisma.entry.create({
+        data: {
+          city,
+          lineName: line,
+          station,
+          comment,
+          lineId: lineRecord.id,
+        },
+      });
+
+      logger.info(`Created new disruption entry: ${entry.id}`);
+      return NextResponse.json(entry, { status: 201 });
     }
 
-    // Capitalize the city name
-    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+    if (request.method === 'GET') {
+      const { searchParams } = new URL(request.url);
+      const city = searchParams.get('city');
+      const line = searchParams.get('line');
+      const station = searchParams.get('station');
 
-    const disruptions = await prisma.entry.findMany({
-      where: {
-        city: capitalizedCity,
-        ...(lineName && { lineName }),
-        ...(station && { station })
-      },
-      include: {
-        line: true
-      },
-      orderBy: {
-        createdAt: 'desc'
+      if (!city) {
+        return NextResponse.json(
+          { error: 'City parameter is required' },
+          { status: 400 }
+        );
       }
-    });
 
-    return NextResponse.json(disruptions);
-  } catch (error) {
-    console.error('Error fetching disruptions:', error);
+      const entries = await prisma.entry.findMany({
+        where: {
+          city,
+          ...(line && { lineName: line }),
+          ...(station && { station }),
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      logger.debug(`Fetched ${entries.length} disruptions`);
+      return NextResponse.json(entries);
+    }
+
     return NextResponse.json(
-      { error: 'Failed to fetch disruptions' },
+      { error: 'Method not allowed' },
+      { status: 405 }
+    );
+  } catch (error) {
+    logger.error('Error in disruptions API:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { city, lineName, station, comment } = body;
-
-    if (!city || !lineName || !station) {
-      return NextResponse.json(
-        { error: 'Missing required fields: city, lineName, and station are required' },
-        { status: 400 }
-      );
-    }
-
-    // Capitalize the city name
-    const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
-
-    // First, find or create the line
-    const line = await prisma.line.upsert({
-      where: {
-        city_name: {
-          city: capitalizedCity,
-          name: lineName
-        }
-      },
-      update: {},
-      create: {
-        city: capitalizedCity,
-        name: lineName,
-        order: '', // You might want to handle this differently
-        stations: [station]
-      }
-    });
-
-    // Then create the disruption entry
-    const disruption = await prisma.entry.create({
-      data: {
-        city: capitalizedCity,
-        lineName,
-        station,
-        comment,
-        lineId: line.id
-      },
-      include: {
-        line: true
-      }
-    });
-
-    return NextResponse.json(disruption, { status: 201 });
-  } catch (error) {
-    console.error('Error creating disruption:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to create disruption' },
-      { status: 500 }
-    );
-  }
-}
+export const GET = protectApiRoute(handler);
+export const POST = protectApiRoute(handler);

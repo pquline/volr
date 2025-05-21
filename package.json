@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:setup": "npx ts-node scripts/dev-setup.ts"
+    "dev:setup": "npx ts-node scripts/dev-setup.ts",
+    "cleanup": "ts-node scripts/cleanup.ts",
+    "import": "ts-node scripts/import-lines.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
