@@ -3,18 +3,22 @@ logs
 *.log
 
 # Dependency directories
-node_modules/
+node_modules
+.next
 
 # Build output
-dist/
-build/
+dist
+build
+.devcontainer
+*.lockb
 
 # Environment variables
 .env
+.env.local
 
 # Editor/IDE specific files
-.vscode/
-.idea/
+.vscode
+.idea
 
 # OS generated files
 .DS_Store

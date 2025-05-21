@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Line {
+  id       String   @id @default(cuid())
+  city     String
+  name     String
+  order    Int
+  type     String   @default("bus")
+  stations String[]
+  entries  Entry[]
+
+  @@index([city])
+  @@index([name])
+  @@unique([city, name])
+}
+
+model Entry {
+  id        Int      @id @default(autoincrement())
+  edits     Int      @default(0)
+  updatedAt DateTime @updatedAt
+  city      String
+  station   String
+  comment   String
+  createdAt DateTime @default(now())
+  lineId    String
+  lineName  String
+  line      Line     @relation(fields: [lineId], references: [id])
+
+  @@index([city])
+  @@index([station])
+  @@index([lineId])
+  @@index([lineName])
+}
