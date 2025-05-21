@@ -25,7 +25,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useState, useEffect } from "react"
-import { SkeletonCard } from "./skeleton-card"
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { updateDisruption } from "@/actions/updateDisruption";

@@ -78,7 +78,7 @@ export default function LegalMentions() {
           </CardHeader>
           <CardContent>
             <p>
-              This project is provided "as is," without warranty of any kind,
+              This project is provided &quot;as is,&quot; without warranty of any kind,
               express or implied, including but not limited to the warranties of
               merchantability, fitness for a particular purpose, and
               noninfringement. In no event shall the contributors or copyright

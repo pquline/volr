@@ -10,6 +10,8 @@ async function handler(request: Request) {
       const city = searchParams.get('city');
       const name = searchParams.get('name');
 
+      logger.debug(`Received request for city: ${city}, name: ${name}`);
+
       if (!city) {
         return NextResponse.json(
           { error: 'City parameter is required' },
@@ -34,7 +36,7 @@ async function handler(request: Request) {
         }
       });
 
-      logger.debug(`Fetched ${lines.length} lines`);
+      logger.debug(`Fetched lines: ${JSON.stringify(lines, null, 2)}`);
       return NextResponse.json(lines);
     }
 

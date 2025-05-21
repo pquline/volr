@@ -1,9 +1,9 @@
 /// <reference types="node" />
 
-const { execSync } = require('child_process');
-const { PrismaClient } = require('@prisma/client');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 
 const prisma = new PrismaClient();
 

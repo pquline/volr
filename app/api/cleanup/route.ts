@@ -4,7 +4,7 @@ import { handleError } from '@/lib/error-handling';
 import { clearCache } from '@/lib/data-fetching';
 import { logger } from '@/lib/logger';
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     logger.info('Starting API cleanup process');
 

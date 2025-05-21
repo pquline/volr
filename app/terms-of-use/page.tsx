@@ -86,7 +86,7 @@ export default function TermsOfUse() {
               consequences arising from the use of this platform.
             </p>
             <p>
-              This project is provided "as is" without any warranties of any
+              This project is provided &quot;as is&quot; without any warranties of any
               kind, express or implied, including but not limited to
               merchantability, fitness for a particular purpose, and
               noninfringement.

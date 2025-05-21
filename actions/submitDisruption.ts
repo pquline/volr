@@ -20,7 +20,7 @@ export async function submitDisruption(data: z.infer<typeof formSchema>) {
       },
       body: JSON.stringify({
         city: data.city.charAt(0).toUpperCase() + data.city.slice(1),
-        line: data.line,
+        lineName: data.line,
         station: data.station,
         comment: data.comment
       }),

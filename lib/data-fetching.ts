@@ -10,7 +10,7 @@ interface CacheEntry<T> {
   timestamp: number;
 }
 
-const cacheStore = new Map<string, CacheEntry<any>>();
+const cacheStore = new Map<string, CacheEntry<unknown>>();
 
 function getCacheKey(key: string): string {
   return `cache:${key}`;
@@ -25,7 +25,7 @@ export async function fetchWithCache<T>(
   fetchFn: () => Promise<T>
 ): Promise<T> {
   const cacheKey = getCacheKey(key);
-  const cached = cacheStore.get(cacheKey);
+  const cached = cacheStore.get(cacheKey) as CacheEntry<T> | undefined;
 
   if (cached && isCacheValid(cached.timestamp)) {
     logger.debug(`Cache hit for key: ${key}`);

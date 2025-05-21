@@ -7,27 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  entries       Entry[]
-}
-
 model Line {
-  id       Int      @id @default(autoincrement())
+  id       String   @id @default(cuid())
   city     String
   name     String
-  order    String
+  order    Int
+  type     String   @default("bus")
   stations String[]
   entries  Entry[]
 
-  @@unique([city, name])
   @@index([city])
-  @@index([city, name])
+  @@index([name])
+  @@unique([city, name])
 }
 
 model Entry {
@@ -36,15 +27,14 @@ model Entry {
   updatedAt DateTime @updatedAt
   city      String
   station   String
-  comment   String?
+  comment   String
   createdAt DateTime @default(now())
-  lineId    Int
+  lineId    String
   lineName  String
   line      Line     @relation(fields: [lineId], references: [id])
 
   @@index([city])
-  @@index([city, lineName])
-  @@index([city, station])
-  @@index([createdAt])
-  @@index([updatedAt])
+  @@index([station])
+  @@index([lineId])
+  @@index([lineName])
 }

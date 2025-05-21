@@ -1,5 +1,4 @@
 services:
-
   postgres:
     image: postgres:latest
     container_name: postgres-db
@@ -11,6 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:

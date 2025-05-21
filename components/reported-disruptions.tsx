@@ -57,7 +57,7 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
     }
   }, [city]);
 
-  const handleEntryUpdate = async (updatedEntry: any) => {
+  const handleEntryUpdate = async (updatedEntry: Disruption) => {
     if (!city) return;
     try {
       setUpdatingIds(prev => new Set([...prev, updatedEntry.id]));

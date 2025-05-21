@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { handleError, validateInput } from '@/lib/error-handling';
-import { clearCache } from '@/lib/data-fetching';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { protectApiRoute } from '@/lib/security';
@@ -18,20 +16,22 @@ async function handler(request: Request) {
     if (request.method === 'POST') {
       const body = await request.json();
       logger.debug('Received POST request body:', body);
-      const { city, line, station, comment } = body;
 
-      if (!city || !line || !station) {
-        logger.error('Missing required fields:', { city, line, station });
+      const validationResult = disruptionSchema.safeParse(body);
+      if (!validationResult.success) {
+        logger.error('Validation error:', validationResult.error);
         return NextResponse.json(
-          { error: 'Missing required fields' },
+          { error: 'Invalid input data', details: validationResult.error.format() },
           { status: 400 }
         );
       }
 
+      const { city, lineName, station, comment } = validationResult.data;
+
       const lineRecord = await prisma.line.findFirst({
         where: {
           city,
-          name: line,
+          name: lineName,
         },
       });
 
@@ -45,7 +45,7 @@ async function handler(request: Request) {
       const entry = await prisma.entry.create({
         data: {
           city,
-          lineName: line,
+          lineName,
           station,
           comment,
           lineId: lineRecord.id,

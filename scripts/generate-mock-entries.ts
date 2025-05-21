@@ -1,6 +1,14 @@
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client');
+const path = require('path');
+const fs = require('fs');
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+// Simple logger implementation
+const logger = {
+  info: (message: string) => console.log(`[INFO] ${message}`),
+  error: (message: string, error?: any) => console.error(`[ERROR] ${message}`, error || '')
+};
 
 // Mock data for each city
 const mockData = {
@@ -69,39 +77,39 @@ const mockData = {
       { name: 'C8', stations: ['Saint-Jacques', 'Gares', 'Cesson'] }
     ]
   }
-}
+};
 
 async function generateMockEntries() {
   try {
     // Get all lines for each city
     for (const [cityKey, data] of Object.entries(mockData)) {
       // Convert city name to match database format (e.g., "paris" -> "Paris")
-      const city = cityKey.charAt(0).toUpperCase() + cityKey.slice(1)
-      console.log(`Processing city: ${city}`)
+      const city = cityKey.charAt(0).toUpperCase() + cityKey.slice(1);
+      logger.info(`Processing city: ${city}`);
 
       const lines = await prisma.line.findMany({
         where: { city },
         include: { entries: true }
-      })
-      console.log(`Found ${lines.length} lines for ${city}`)
+      });
+      logger.info(`Found ${lines.length} lines for ${city}`);
 
       // For each line, create mock entries
       for (const line of lines) {
-        console.log(`Processing line: ${line.name} in ${city}`)
-        const lineData = data.lines.find(l => l.name === line.name)
+        logger.info(`Processing line: ${line.name} in ${city}`);
+        const lineData = data.lines.find((l: any) => l.name === line.name);
         if (!lineData) {
-          console.log(`No mock data found for line ${line.name} in ${city}`)
+          logger.info(`No mock data found for line ${line.name} in ${city}`);
           // If no mock data found, use the stations from the database
-          const stations = line.stations || []
-          console.log(`Using ${stations.length} stations from database for line ${line.name}`)
+          const stations = line.stations || [];
+          logger.info(`Using ${stations.length} stations from database for line ${line.name}`);
 
           // Create 2-5 mock entries per station
           for (const station of stations) {
-            const numEntries = Math.floor(Math.random() * 4) + 2 // Random number between 2 and 5
+            const numEntries = Math.floor(Math.random() * 4) + 2; // Random number between 2 and 5
 
             for (let i = 0; i < numEntries; i++) {
-              const edits = Math.floor(Math.random() * 5) // Random number between 0 and 4
-              const comment = Math.random() > 0.5 ? `Mock entry ${i + 1} for ${station}` : null
+              const edits = Math.floor(Math.random() * 5); // Random number between 0 and 4
+              const comment = Math.random() > 0.5 ? `Mock entry ${i + 1} for ${station}` : null;
 
               try {
                 await prisma.entry.create({
@@ -113,25 +121,25 @@ async function generateMockEntries() {
                     edits,
                     lineId: line.id
                   }
-                })
+                });
               } catch (error) {
-                console.error(`Error creating entry for ${station} on line ${line.name}:`, error)
+                logger.error(`Error creating entry for ${station} on line ${line.name}:`, error);
               }
             }
           }
-          continue
+          continue;
         }
 
-        const stations = Array.isArray(lineData.stations) ? lineData.stations : [lineData.stations]
-        console.log(`Creating entries for ${stations.length} stations in line ${line.name}`)
+        const stations = Array.isArray(lineData.stations) ? lineData.stations : [lineData.stations];
+        logger.info(`Creating entries for ${stations.length} stations in line ${line.name}`);
 
         // Create 2-5 mock entries per station
         for (const station of stations) {
-          const numEntries = Math.floor(Math.random() * 4) + 2 // Random number between 2 and 5
+          const numEntries = Math.floor(Math.random() * 4) + 2; // Random number between 2 and 5
 
           for (let i = 0; i < numEntries; i++) {
-            const edits = Math.floor(Math.random() * 5) // Random number between 0 and 4
-            const comment = Math.random() > 0.5 ? `Mock entry ${i + 1} for ${station}` : null
+            const edits = Math.floor(Math.random() * 5); // Random number between 0 and 4
+            const comment = Math.random() > 0.5 ? `Mock entry ${i + 1} for ${station}` : null;
 
             try {
               await prisma.entry.create({
@@ -143,17 +151,17 @@ async function generateMockEntries() {
                   edits,
                   lineId: line.id
                 }
-              })
+              });
             } catch (error) {
-              console.error(`Error creating entry for ${station} on line ${line.name}:`, error)
+              logger.error(`Error creating entry for ${station} on line ${line.name}:`, error);
             }
           }
         }
       }
     }
 
-    const totalEntries = await prisma.entry.count()
-    console.log(`Successfully generated ${totalEntries} mock entries`)
+    const totalEntries = await prisma.entry.count();
+    logger.info(`Successfully generated ${totalEntries} mock entries`);
 
     // Log some sample entries to verify
     const sampleEntries = await prisma.entry.findMany({
@@ -161,13 +169,21 @@ async function generateMockEntries() {
       include: {
         line: true
       }
-    })
-    console.log('Sample entries:', sampleEntries)
+    });
+    logger.info('Sample entries:', sampleEntries);
   } catch (error) {
-    console.error('Error generating mock entries:', error)
+    logger.error('Error generating mock entries:', error);
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }
 
 generateMockEntries()
+  .then(() => {
+    logger.info('Mock entries generation completed successfully');
+    process.exit(0);
+  })
+  .catch((error) => {
+    logger.error('Mock entries generation failed:', error);
+    process.exit(1);
+  });

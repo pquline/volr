@@ -1,14 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function GET(request: NextRequest, context: any) {
   try {
     const disruption = await prisma.entry.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(context.params.id) },
       include: { line: true }
     });
 
@@ -29,16 +27,14 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PUT(request: NextRequest, context: any) {
   try {
     const body = await request.json();
     const { station, comment } = body;
 
     const disruption = await prisma.entry.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(context.params.id) },
       data: {
         station,
         comment,
@@ -57,12 +53,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function DELETE(request: NextRequest, context: any) {
   try {
-    const id = parseInt(params.id);
+    const id = parseInt(context.params.id);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: 'Invalid ID format' },
@@ -84,12 +78,10 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const id = parseInt(params.id);
+    const id = parseInt(context.params.id);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: 'Invalid ID format' },

@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
               <strong>User-Generated Content:</strong> Reports submitted by
               users must not include personal or sensitive information. Users
               are responsible for ensuring the information they provide complies
-              with the project's{" "}
+              with the project&apos;s{" "}
               <Link href="/terms-of-use" className="font-mono hover:underline">
                 terms of use
               </Link>

@@ -9,8 +9,9 @@ const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes in milliseconds
 const ipRequests = new Map<string, { count: number; resetTime: number }>();
 
 export function middleware(request: NextRequest) {
-  // Get client IP
-  const ip = request.ip ?? 'anonymous';
+  // Get client IP from headers
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const ip = forwardedFor ? forwardedFor.split(',')[0] : 'anonymous';
   const now = Date.now();
 
   // Rate limiting

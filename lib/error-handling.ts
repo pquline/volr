@@ -1,4 +1,5 @@
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 export class AppError extends Error {
   constructor(
@@ -28,10 +29,10 @@ export const handleError = (error: unknown) => {
   return { error: 'An unexpected error occurred', statusCode: 500 };
 };
 
-export const validateInput = (data: unknown, schema: any) => {
+export const validateInput = <T>(data: unknown, schema: z.ZodSchema<T>): T => {
   try {
     return schema.parse(data);
-  } catch (error) {
+  } catch {
     throw new AppError('Invalid input data', 400);
   }
 };

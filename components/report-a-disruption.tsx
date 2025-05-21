@@ -180,7 +180,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
               <FormField
                 control={form.control}
                 name="line"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel className="px-2 font-bold">
                       Line<span className="font-normal"> (Required)</span>
@@ -208,7 +208,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
               <FormField
                 control={form.control}
                 name="station"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel className="px-2 font-bold">
                       Station<span className="font-normal"> (Required)</span>
