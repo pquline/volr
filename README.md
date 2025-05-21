@@ -2,11 +2,15 @@
   <img src="public/logo.png" alt="Volr Logo" width="60" />
 </p>
 
-# VOLR - Public Transport Disruption Reporter
+<h1 align="center">VOLR</h1>
+<p align="center"><em>Public Transport Disruption Reporter</em></p>
 
-A modern web application for reporting and tracking public transport disruptions.
+<p align="center">
+  A modern web application for reporting and tracking public transport disruptions.<br/>
+  Built with Next.js, TypeScript, and PostgreSQL.
+</p>
 
-Built with Next.js, TypeScript, and PostgreSQL.
+---
 
 ## ✨ Features
 
