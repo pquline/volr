@@ -1,21 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Check, MapPin } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 const cities = [
   { value: "marseille", label: "Marseille" },
@@ -58,51 +45,29 @@ export const useCity = () => {
 };
 
 const CityToggle: React.FC = () => {
-  const [open, setOpen] = React.useState(false);
   const { city, setCity } = useCity();
+  const selectRef = React.useRef<HTMLSelectElement>(null);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className=""
-          aria-label="select-city"
-          aria-labelledby="select-city"
-        >
-          <MapPin className="h-4 w-4" />
-          <span className="ml-2">{cities.find(c => c.value === city)?.label || "Select City"}</span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="City..." className="h-9" />
-          <CommandEmpty>No city found.</CommandEmpty>
-          <CommandGroup>
-            {cities.map((c) => (
-              <CommandItem
-                key={c.value}
-                value={c.value}
-                onSelect={(currentValue) => {
-                  setCity(currentValue);
-                  setOpen(false);
-                }}
-              >
-                {c.label}
-                <Check
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    city === c.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="relative">
+      <select
+        ref={selectRef}
+        value={city || ""}
+        onChange={(e) => setCity(e.target.value)}
+        className={cn(
+          "w-full min-w-[110px] appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
+          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        )}
+        aria-label="Select city"
+      >
+        {cities.map((c) => (
+          <option key={c.value} value={c.value}>
+            {c.label}
+          </option>
+        ))}
+      </select>
+      <ChevronsUpDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+    </div>
   );
 };
 
