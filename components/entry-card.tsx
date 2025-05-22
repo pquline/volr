@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Clock, Text, ArrowUp, ArrowDown } from 'lucide-react'
+import { Clock, Text, ArrowUp, ArrowDown, Train } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -189,7 +189,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
-                      <ArrowUp className="h-4 w-4 text-valid flex-shrink-0" />
+                      <Train className="h-4 w-4 text-valid flex-shrink-0" />
                       <span className="truncate">Line {entry.line}</span>
                     </TooltipTrigger>
                     <TooltipContent>
