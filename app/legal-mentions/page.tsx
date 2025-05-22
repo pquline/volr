@@ -44,10 +44,10 @@ export default function LegalMentions() {
             <p>
               <strong>Hosting Provider:</strong>{" "}
               <Link
-                href="https://www.netcup.com/"
+                href="https://vercel.com//"
                 className="font-mono hover:underline"
               >
-                netcup
+                Vercel
               </Link>
             </p>
           </CardContent>

@@ -139,12 +139,13 @@ volr/
 
 ## 🙏 Acknowledgments
 
-- [Next.js](https://nextjs.org/) - The React framework
-- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Prisma](https://www.prisma.io/) - Next-generation ORM
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible components
-- [Geist](https://vercel.com/font) - Modern typeface by Vercel
+- [Next.js](https://nextjs.org/) – React framework with SSR, ISR, and API routes
+- [Prisma](https://www.prisma.io/) – Type-safe ORM for Node.js and TypeScript
+- [Supabase](https://supabase.com/) - Open source Firebase alternative with Postgres and Realtime APIs
+- [Vercel](https://vercel.com/) – Edge-first deployment platform optimized for frontend frameworks
+- [shadcn/ui](https://ui.shadcn.com/) – Accessible UI components built on Radix and Tailwind
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for rapid UI development
+- [Radix UI](https://www.radix-ui.com/) – Unstyled, accessible primitives for custom component design
 
 ## 📬 Contact
 
