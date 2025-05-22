@@ -189,7 +189,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
-                      <Train className="h-4 w-4 text-valid flex-shrink-0" />
+                      <Train className="h-4 w-4 flex-shrink-0" />
                       <span className="truncate">Line {entry.line}</span>
                     </TooltipTrigger>
                     <TooltipContent>
