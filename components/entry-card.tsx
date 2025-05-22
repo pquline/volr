@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Check, Trash, Clock, Text } from 'lucide-react'
+import { Clock, Text, ArrowUp, ArrowDown } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -31,6 +31,7 @@ import { updateDisruption } from "@/actions/updateDisruption";
 import { deleteDisruption } from "@/actions/deleteDisruption";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { voteDisruption } from "@/actions/voteDisruption";
 
 interface EntryCardProps {
   entry: {
@@ -40,6 +41,7 @@ interface EntryCardProps {
     last_edit: Date
     comment: string | null
     edits: number
+    votes: number
   }
   isLoading?: boolean
   onRefresh?: () => void
@@ -98,6 +100,53 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
     }
   }
 
+  const handleVote = async (voteType: 'up' | 'down') => {
+    try {
+      setIsSubmitting(true)
+
+      // Check if this device has already voted on this entry
+      const votedEntries = JSON.parse(localStorage.getItem('votedEntries') || '{}')
+      const previousVote = votedEntries[entry.id]
+
+      // If there's a previous vote and it's the same as the new vote, remove the vote
+      if (previousVote === voteType) {
+        const result = await voteDisruption(entry.id, 'remove', previousVote)
+        if (result.success) {
+          // Remove the vote from localStorage
+          delete votedEntries[entry.id]
+          localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
+
+          onRefresh?.()
+          toast.success('Vote removed successfully!')
+        } else {
+          toast.error(result.error || "Failed to remove vote")
+        }
+        return
+      }
+
+      const result = await voteDisruption(entry.id, voteType, previousVote)
+      if (result.success) {
+        // Store the vote in localStorage
+        votedEntries[entry.id] = voteType
+        localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
+
+        onRefresh?.()
+        toast.success(`${voteType === 'up' ? 'Upvoted' : 'Downvoted'} successfully!`)
+      } else {
+        toast.error(result.error || "Failed to update accuracy")
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred")
+      logger.error('Error voting:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Check if this device has already voted on this entry
+  const votedEntries = JSON.parse(localStorage.getItem('votedEntries') || '{}')
+  const previousVote = votedEntries[entry.id]
+
   useEffect(() => {
     if (!isLoading) {
       setIsSubmitting(false)
@@ -124,10 +173,10 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Badge variant="default">{entry.edits}</Badge>
+                  <Badge variant="default">{entry.votes}</Badge>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Number of Updates</p>
+                  <p>Accuracy Score</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -140,7 +189,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
-                      <Check className="h-4 w-4 text-valid flex-shrink-0" />
+                      <ArrowUp className="h-4 w-4 text-valid flex-shrink-0" />
                       <span className="truncate">Line {entry.line}</span>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -181,25 +230,25 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                   </TooltipProvider>
                 ) : null}
               </div>
-              <div className="flex flex-col justify-end ml-4">
+              <div className="flex flex-col justify-end ml-4 space-y-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="tertiary" disabled={isSubmitting || isLoading}>Update</Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                      onClick={() => setShowConfirmDialog(true)}
+                      onClick={() => handleVote('up')}
                       disabled={isSubmitting || isLoading}
                     >
-                      <Check className="mr-2 h-4 w-4 text-valid" />
-                      <span>Confirm</span>
+                      <ArrowUp className="h-4 w-4 mr-2 text-valid" />
+                      {previousVote === 'up' ? 'Remove upvote' : 'Upvote'}
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => setShowDeleteDialog(true)}
+                      onClick={() => handleVote('down')}
                       disabled={isSubmitting || isLoading}
                     >
-                      <Trash className="mr-2 h-4 w-4 text-destructive" />
-                      <span>Delete</span>
+                      <ArrowDown className="h-4 w-4 mr-2 text-destructive" />
+                      {previousVote === 'down' ? 'Remove downvote' : 'Downvote'}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -8,7 +8,7 @@ const disruptionSchema = z.object({
   city: z.string().min(1),
   lineName: z.string().min(1),
   station: z.string().min(1),
-  comment: z.string().max(180).optional(),
+  comment: z.string().max(40).optional(),
 });
 
 async function handler(request: Request) {

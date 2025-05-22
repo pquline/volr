@@ -28,7 +28,7 @@ import { logger } from "@/lib/logger";
 const formSchema = z.object({
   line: z.string().min(1, "Please select a line"),
   station: z.string().min(1, "Please select a station"),
-  comment: z.string().max(50, "Comment must be less than 50 characters").optional(),
+  comment: z.string().max(40, "Comment must be less than 40 characters").optional(),
 });
 
 interface ReportADisruptionProps {
@@ -244,7 +244,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                         placeholder="Enter an optional comment describing the disruption..."
                         className="resize-none"
                         {...field}
-                        maxLength={180}
+                        maxLength={40}
                         disabled={isSubmitting}
                       />
                     </FormControl>

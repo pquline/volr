@@ -6,7 +6,7 @@ const formSchema = z.object({
   city: z.string().min(1),
   line: z.string().min(1),
   station: z.string().min(1),
-  comment: z.string().max(180).optional(),
+  comment: z.string().max(40).optional(),
 });
 
 export async function submitDisruption(data: z.infer<typeof formSchema>) {

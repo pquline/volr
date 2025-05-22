@@ -15,7 +15,7 @@ import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
 import { useCity } from "./city-toggle";
 import React from "react";
 
-type SortField = "line" | "station" | "edits";
+type SortField = "line" | "station" | "votes";
 type SortDirection = "asc" | "desc";
 
 const normalizeText = (text: string) => {
@@ -33,7 +33,7 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   const { city, isLoading: isCityLoading } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
-  const [sortField, setSortField] = useState<SortField>("edits");
+  const [sortField, setSortField] = useState<SortField>("votes");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [filter, setFilter] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -128,7 +128,7 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
           ? a[sortField].localeCompare(b[sortField])
           : b[sortField].localeCompare(a[sortField]);
       }
-      return sortDirection === "asc" ? a.edits - b.edits : b.edits - a.edits;
+      return sortDirection === "asc" ? a.votes - b.votes : b.votes - a.votes;
     });
 
     setFilteredEntries(sorted);
@@ -193,8 +193,8 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
               <DropdownMenuItem onClick={() => handleSort("station")}>
                 {getSortIcon("station")} Station
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleSort("edits")}>
-                {getSortIcon("edits")} Number of Updates
+              <DropdownMenuItem onClick={() => handleSort("votes")}>
+                {getSortIcon("votes")} Accuracy Score
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

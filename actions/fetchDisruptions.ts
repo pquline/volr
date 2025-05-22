@@ -4,7 +4,7 @@ export interface Disruption {
   line: string;
   last_edit: Date;
   comment: string | null;
-  edits: number;
+  votes: number;
 }
 
 export async function fetchDisruptions(city: string): Promise<Disruption[]> {
@@ -23,9 +23,9 @@ export async function fetchDisruptions(city: string): Promise<Disruption[]> {
       id: entry.id.toString(),
       station: entry.station,
       line: entry.lineName,
-      last_edit: new Date(entry.updatedAt),
+      last_edit: entry.updatedAt,
       comment: entry.comment,
-      edits: entry.edits
+      votes: entry.votes
     }));
   } catch (error) {
     console.error('Error fetching disruptions:', error);

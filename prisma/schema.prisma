@@ -23,7 +23,7 @@ model Line {
 
 model Entry {
   id        Int      @id @default(autoincrement())
-  edits     Int      @default(0)
+  votes     Int      @default(0)
   updatedAt DateTime @updatedAt
   city      String
   station   String
