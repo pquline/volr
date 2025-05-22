@@ -3,6 +3,7 @@ import sys
 import psycopg2
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
 # Load environment variables
 load_dotenv()
@@ -10,7 +11,24 @@ load_dotenv()
 def get_db_connection():
     """Create a database connection."""
     try:
-        conn = psycopg2.connect(os.getenv('DATABASE_URL'))
+        # Parse the DATABASE_URL
+        url = urlparse(os.getenv('DATABASE_URL'))
+
+        # Extract connection parameters
+        dbname = url.path[1:]  # Remove leading slash
+        user = url.username
+        password = url.password
+        host = url.hostname
+        port = url.port or 5432
+
+        # Connect without pgbouncer parameters
+        conn = psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
         return conn
     except Exception as e:
         print(f"[{datetime.now().isoformat()}] Error connecting to database: {e}")
