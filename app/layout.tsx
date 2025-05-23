@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
@@ -6,21 +6,22 @@ import Footer from "@/components/footer";
 import { GeistSans } from "geist/font/sans";
 import { Toaster } from "@/components/ui/sonner";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#030712",
+};
+
 export const metadata: Metadata = {
   title: "volr",
   description:
     "The interactive platform for reporting and viewing public transportation disruptions in real time, ensuring more informed journeys.",
   manifest: "/manifest.json",
-  themeColor: "#030712",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "volr",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
   },
   icons: {
     icon: "/pwa.png",

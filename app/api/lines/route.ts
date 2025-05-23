@@ -19,9 +19,13 @@ async function handler(request: Request) {
         );
       }
 
+      // Format city name to match database format (capitalize first letter)
+      const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+      logger.debug(`Formatted city from "${city}" to "${formattedCity}"`);
+
       const lines = await prisma.line.findMany({
         where: {
-          city,
+          city: formattedCity,
           ...(name && { name })
         },
         include: {

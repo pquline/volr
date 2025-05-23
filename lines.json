@@ -3,7 +3,7 @@
 		"city": "Rennes",
 		"order": 0,
 		"name": "A",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Anatole France",
 			"Charles de Gaulle",
@@ -30,7 +30,7 @@
 		"city": "Rennes",
 		"order": 1,
 		"name": "B",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Atalante",
 			"Beaulieu - Université",
@@ -1908,7 +1908,7 @@
 		"city": "Paris",
 		"order": 0,
 		"name": "1",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Argentine",
 			"Bastille",
@@ -1945,7 +1945,7 @@
 		"city": "Paris",
 		"order": 1,
 		"name": "2",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Alexandre Dumas",
 			"Anvers",
@@ -1982,7 +1982,7 @@
 		"city": "Paris",
 		"order": 2,
 		"name": "3",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Anatole France",
 			"Arts et Métiers",
@@ -2019,7 +2019,7 @@
 		"city": "Paris",
 		"order": 3,
 		"name": "3bis",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Gambetta",
 			"Pelleport",
@@ -2035,7 +2035,7 @@
 		"city": "Paris",
 		"order": 4,
 		"name": "4",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Alésia",
 			"Bagneux - Lucie Aubrac",
@@ -2077,7 +2077,7 @@
 		"city": "Paris",
 		"order": 5,
 		"name": "5",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Bastille",
 			"Bobigny Pablo Picasso",
@@ -2111,7 +2111,7 @@
 		"city": "Paris",
 		"order": 6,
 		"name": "6",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Bel-Air",
 			"Bercy",
@@ -2151,7 +2151,7 @@
 		"city": "Paris",
 		"order": 7,
 		"name": "7",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Aubervilliers Pantin - Quatre Chemins",
 			"Cadet",
@@ -2202,7 +2202,7 @@
 		"city": "Paris",
 		"order": 8,
 		"name": "7bis",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Bolivar",
 			"Botzaris",
@@ -2222,7 +2222,7 @@
 		"city": "Paris",
 		"order": 9,
 		"name": "8",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Balard",
 			"Bastille",
@@ -2272,7 +2272,7 @@
 		"city": "Paris",
 		"order": 10,
 		"name": "9",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Alma-Marceau",
 			"Billancourt",
@@ -2321,7 +2321,7 @@
 		"city": "Paris",
 		"order": 11,
 		"name": "10",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Avenue Émile Zola",
 			"Boulogne - Jean Jaurès",
@@ -2356,7 +2356,7 @@
 		"city": "Paris",
 		"order": 12,
 		"name": "11",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Arts et Métiers",
 			"Belleville",
@@ -2381,7 +2381,7 @@
 		"city": "Paris",
 		"order": 13,
 		"name": "12",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Abbesses",
 			"Aimé Césaire",
@@ -2424,7 +2424,7 @@
 		"city": "Paris",
 		"order": 14,
 		"name": "13",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Basilique de Saint-Denis",
 			"Brochant",
@@ -2469,7 +2469,7 @@
 		"city": "Paris",
 		"order": 15,
 		"name": "14",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Aéroport d'Orly",
 			"Bercy",
@@ -3269,7 +3269,7 @@
 		"city": "Marseille",
 		"order": 0,
 		"name": "M1",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Baille",
 			"Castellane",
@@ -3299,7 +3299,7 @@
 		"city": "Marseille",
 		"order": 1,
 		"name": "M2",
-		"type": "subway",
+		"type": "metro",
 		"stations": [
 			"Bougainville",
 			"Castellane",

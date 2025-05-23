@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchTransportData } from "../actions/fetchTransportData";
 import { submitDisruption } from "../actions/submitDisruption";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -30,6 +29,30 @@ const formSchema = z.object({
   comment: z.string().max(40, "Comment must be less than 40 characters").optional(),
 });
 
+interface LineOption {
+  value: string;
+  label: string;
+  order: number;
+  type: string;
+}
+
+interface ApiLineData {
+  name: string;
+  order: number;
+  type?: string;
+}
+
+interface StationOption {
+  value: string;
+  label: string;
+}
+
+interface TransportData {
+  lines: LineOption[];
+  stations: StationOption[];
+  groupedLines: Record<string, LineOption[]>;
+}
+
 interface ReportADisruptionProps {
   onDisruptionSubmitted?: () => void;
 }
@@ -38,12 +61,10 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
   const { city, isLoading: isCityLoading } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isLoadingData, setIsLoadingData] = React.useState(false);
-  const [options, setOptions] = React.useState<{
-    lines: { value: string; label: string }[];
-    stations: { value: string; label: string }[];
-  }>({
+  const [options, setOptions] = React.useState<TransportData>({
     lines: [],
     stations: [],
+    groupedLines: {},
   });
   const [formData, setFormData] = useState({
     lineName: '',
@@ -64,25 +85,101 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     if (!city) return;
     try {
       setIsLoadingData(true);
-      logger.debug(`Loading transport data for city: ${city}, line: ${formData.lineName}`);
+      logger.debug(`Loading transport data for city: ${city}`);
 
       // Clear existing options while loading
       setOptions({
         lines: [],
-        stations: []
+        stations: [],
+        groupedLines: {},
       });
 
-      const data = await fetchTransportData(city, formData.lineName);
-      setOptions(data);
+      // Fetch lines from API
+      const linesResponse = await fetch(`/api/lines?city=${encodeURIComponent(city)}`);
+      if (!linesResponse.ok) {
+        throw new Error(`Failed to fetch lines: ${linesResponse.statusText}`);
+      }
+      const linesData = await linesResponse.json();
 
-      logger.debug(`Transport data loaded successfully. Lines: ${data.lines.length}, Stations: ${data.stations.length}`);
+      // Transform lines data to match our interface
+      const lineOptions: LineOption[] = linesData.map((line: ApiLineData) => ({
+        value: line.name,
+        label: line.name,
+        order: line.order,
+        type: line.type || 'bus'
+      }));
+
+      // Group lines by type
+      const groupedLines = lineOptions.reduce((acc, line) => {
+        const type = (line.type || 'bus').toUpperCase();
+        if (!acc[type]) {
+          acc[type] = [];
+        }
+        acc[type].push(line);
+        return acc;
+      }, {} as Record<string, LineOption[]>);
+
+      // Sort lines within each group by order
+      Object.keys(groupedLines).forEach(type => {
+        groupedLines[type].sort((a, b) => a.order - b.order);
+      });
+
+      // Don't fetch stations initially - only fetch when a line is selected
+      setOptions({
+        lines: lineOptions,
+        stations: [], // Empty initially
+        groupedLines
+      });
+
+      logger.debug(`Transport data loaded successfully. Lines: ${lineOptions.length}`);
     } catch (error) {
       logger.error('Error loading transport data', error);
       toast.error("Failed to load transport data. Please try again.");
     } finally {
       setIsLoadingData(false);
     }
-  }, [city, formData.lineName]);
+  }, [city]);
+
+  const loadStationsForLine = React.useCallback(async (lineName: string) => {
+    if (!city || !lineName) {
+      // Clear stations if no line selected
+      setOptions(prev => ({
+        ...prev,
+        stations: []
+      }));
+      return;
+    }
+
+    try {
+      logger.debug(`Loading stations for line: ${lineName} in city: ${city}`);
+
+      // Fetch stations for the specific line
+      const stationsResponse = await fetch(`/api/stations?city=${encodeURIComponent(city)}&line=${encodeURIComponent(lineName)}`);
+      if (!stationsResponse.ok) {
+        throw new Error(`Failed to fetch stations: ${stationsResponse.statusText}`);
+      }
+      const stationsData = await stationsResponse.json();
+
+      // Transform stations data
+      const stationOptions: StationOption[] = stationsData
+        .sort()
+        .map((station: string) => ({
+          value: station,
+          label: station
+        }));
+
+      // Update only the stations in the options
+      setOptions(prev => ({
+        ...prev,
+        stations: stationOptions
+      }));
+
+      logger.debug(`Stations loaded for line ${lineName}: ${stationOptions.length} stations`);
+    } catch (error) {
+      logger.error('Error loading stations for line', error);
+      toast.error("Failed to load stations. Please try again.");
+    }
+  }, [city]);
 
   useEffect(() => {
     if (!isCityLoading && city) {
@@ -114,6 +211,10 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
       station: '', // Reset station when line changes
     }));
     form.setValue("line", value);
+    form.setValue("station", ""); // Clear station in form too
+
+    // Load stations for the selected line
+    loadStationsForLine(value);
   };
 
   const handleStationChange = (value: string) => {
@@ -203,14 +304,19 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                             <option value="" disabled>
                               {isLoadingData ? "Loading lines..." : "Select a line..."}
                             </option>
-                            {options.lines.map((l) => (
-                              <option key={l.value} value={l.value}>
-                                {l.label}
-                              </option>
+                            {Object.entries(options.groupedLines).map(([type, lines]) => (
+                              <optgroup key={type} label={type}>
+                                {lines.map((line) => (
+                                  <option key={line.value} value={line.value}>
+                                    {line.label}
+                                  </option>
+                                ))}
+                              </optgroup>
                             ))}
                           </select>
-                          {/* Icon for dropdown */}
-                          <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                          <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
                         </div>
                       </div>
                     </FormControl>
@@ -245,14 +351,15 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                             <option value="" disabled>
                               {isLoadingData ? "Loading stations..." : "Select a station..."}
                             </option>
-                            {options.stations.map((s) => (
-                              <option key={s.value} value={s.value}>
-                                {s.label}
+                            {options.stations.map((station) => (
+                              <option key={station.value} value={station.value}>
+                                {station.label}
                               </option>
                             ))}
                           </select>
-                          {/* Icon for dropdown */}
-                          <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                          <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
                         </div>
                       </div>
                     </FormControl>

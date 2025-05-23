@@ -17,11 +17,15 @@ async function handler(request: Request) {
         );
       }
 
+      // Format city name to match database format (capitalize first letter)
+      const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+      logger.debug(`Formatted city from "${city}" to "${formattedCity}"`);
+
       // If lineName is provided, get stations for that specific line
       if (lineName) {
         const line = await prisma.line.findFirst({
           where: {
-            city,
+            city: formattedCity,
             name: lineName
           },
           select: {
@@ -42,7 +46,7 @@ async function handler(request: Request) {
 
       // If no lineName is provided, get all unique stations for the city
       const lines = await prisma.line.findMany({
-        where: { city },
+        where: { city: formattedCity },
         select: { stations: true }
       });
 
