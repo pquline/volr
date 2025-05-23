@@ -233,7 +233,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
               <div className="flex flex-col justify-end ml-4 space-y-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="tertiary" disabled={isSubmitting || isLoading}>Update</Button>
+                    <Button variant="tertiary" disabled={isSubmitting || isLoading}>Vote</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem

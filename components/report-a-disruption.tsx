@@ -142,7 +142,6 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
 
   const loadStationsForLine = React.useCallback(async (lineName: string) => {
     if (!city || !lineName) {
-      // Clear stations if no line selected
       setOptions(prev => ({
         ...prev,
         stations: []
@@ -153,14 +152,12 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     try {
       logger.debug(`Loading stations for line: ${lineName} in city: ${city}`);
 
-      // Fetch stations for the specific line
       const stationsResponse = await fetch(`/api/stations?city=${encodeURIComponent(city)}&line=${encodeURIComponent(lineName)}`);
       if (!stationsResponse.ok) {
         throw new Error(`Failed to fetch stations: ${stationsResponse.statusText}`);
       }
       const stationsData = await stationsResponse.json();
 
-      // Transform stations data
       const stationOptions: StationOption[] = stationsData
         .sort()
         .map((station: string) => ({
@@ -168,7 +165,6 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
           label: station
         }));
 
-      // Update only the stations in the options
       setOptions(prev => ({
         ...prev,
         stations: stationOptions
