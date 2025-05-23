@@ -42,6 +42,8 @@
 
 ## 🚀 Getting Started
 
+### Local Development Setup
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/pquline/volr.git
@@ -57,15 +59,24 @@
 
 3. Set up environment variables:
    Create a `.env` file in the root directory with the following variables:
-   ```
+   ```env
+   # Database
    DATABASE_URL="postgresql://user:password@localhost:5432/volr"
+
+   # Application
    NEXT_PUBLIC_BASE_URL="http://localhost:3000"
    ```
 
 4. Set up the database:
    ```bash
+   # Create the database
+   docker compose up -d
+
    # Run database migrations
    npx prisma migrate dev
+
+   # Generate Prisma client
+   npx prisma generate
 
    # Import initial line data
    npm run import
@@ -74,11 +85,21 @@
 5. Start the development server:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 The application will be available at `http://localhost:3000`.
+
+### Production Deployment
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Start the production server:
+   ```bash
+   npm run start
+   ```
 
 ## 📁 Project Structure
 
@@ -127,6 +148,18 @@ volr/
 - Reset database and apply migrations:
   ```bash
   npx prisma migrate reset
+  ```
+
+### Code Quality
+
+- Run ESLint:
+  ```bash
+  npm run lint
+  ```
+
+- Format code:
+  ```bash
+  npm run format
   ```
 
 ## 🤝 Contributing
