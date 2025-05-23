@@ -18,10 +18,10 @@ import React from "react";
 type SortField = "line" | "station" | "votes";
 type SortDirection = "asc" | "desc";
 
-const normalizeText = (text: string) => {
+const sanitizeText = (text: string) => {
   return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 };
 
@@ -29,7 +29,9 @@ interface ReportedDisruptionsProps {
   lastUpdate?: number;
 }
 
-export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsProps) {
+export default function ReportedDisruptions({
+  lastUpdate,
+}: ReportedDisruptionsProps) {
   const { city, isLoading: isCityLoading } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
@@ -41,32 +43,35 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const loadDisruptions = React.useCallback(async (isInitialLoad = false) => {
-    if (!city) return; // Don't load if no city is selected
-    try {
-      if (isInitialLoad) {
-        setIsLoading(true);
+  const loadDisruptions = React.useCallback(
+    async (isInitialLoad = false) => {
+      if (!city) return;
+      try {
+        if (isInitialLoad) {
+          setIsLoading(true);
+        }
+        const data = await fetchDisruptions(city);
+        setOriginalEntries(data);
+        setFilteredEntries(data);
+      } finally {
+        if (isInitialLoad) {
+          setIsLoading(false);
+        }
       }
-      const data = await fetchDisruptions(city);
-      setOriginalEntries(data);
-      setFilteredEntries(data);
-    } finally {
-      if (isInitialLoad) {
-        setIsLoading(false);
-      }
-    }
-  }, [city]);
+    },
+    [city]
+  );
 
   const handleEntryUpdate = async (updatedEntry: Disruption) => {
     if (!city) return;
     try {
-      setUpdatingIds(prev => new Set([...prev, updatedEntry.id]));
+      setUpdatingIds((prev) => new Set([...prev, updatedEntry.id]));
       const data = await fetchDisruptions(city);
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
       setTimeout(() => {
-        setUpdatingIds(prev => {
+        setUpdatingIds((prev) => {
           const newSet = new Set(prev);
           newSet.delete(updatedEntry.id);
           return newSet;
@@ -78,13 +83,13 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   const handleEntryDelete = async (deletedId: string) => {
     if (!city) return;
     try {
-      setUpdatingIds(prev => new Set([...prev, deletedId]));
+      setUpdatingIds((prev) => new Set([...prev, deletedId]));
       const data = await fetchDisruptions(city);
       setOriginalEntries(data);
       setFilteredEntries(data);
     } finally {
       setTimeout(() => {
-        setUpdatingIds(prev => {
+        setUpdatingIds((prev) => {
           const newSet = new Set(prev);
           newSet.delete(deletedId);
           return newSet;
@@ -93,7 +98,6 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
     }
   };
 
-  // Handle initial load and city changes
   useEffect(() => {
     if (!isCityLoading && city) {
       setIsLoading(true);
@@ -110,25 +114,51 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
   }, [lastUpdate, loadDisruptions]);
 
   useEffect(() => {
-    const normalizedFilter = normalizeText(filter);
+    const normalizedFilter = sanitizeText(filter);
     const filtered = originalEntries.filter(
       (entry) =>
-        normalizeText(entry.line).includes(normalizedFilter) ||
-        normalizeText(entry.station).includes(normalizedFilter)
+        sanitizeText(entry.line).includes(normalizedFilter) ||
+        sanitizeText(entry.station).includes(normalizedFilter)
     );
 
     const sorted = [...filtered].sort((a, b) => {
-      if (sortField === "line") {
-        // Extract numeric parts from line strings
-        const numA = parseInt(a.line.match(/\d+/)?.[0] || "0");
-        const numB = parseInt(b.line.match(/\d+/)?.[0] || "0");
-        return sortDirection === "asc" ? numA - numB : numB - numA;
+      const compareLines = (a: string, b: string) => {
+        const numA = parseInt(a);
+        const numB = parseInt(b);
+        if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+        if (!isNaN(numA)) return sortDirection === "asc" ? -1 : 1;
+        if (!isNaN(numB)) return sortDirection === "asc" ? 1 : -1;
+        return a.localeCompare(b);
+      };
+
+      if (sortField === "votes") {
+        const scoreCompare =
+          sortDirection === "asc" ? a.votes - b.votes : b.votes - a.votes;
+        if (scoreCompare !== 0) return scoreCompare;
+        const stationCompare = sanitizeText(a.station).localeCompare(
+          sanitizeText(b.station)
+        );
+        if (stationCompare !== 0) return stationCompare;
+        return compareLines(getLineValue(a.line), getLineValue(b.line));
       } else if (sortField === "station") {
-        return sortDirection === "asc"
-          ? a[sortField].localeCompare(b[sortField])
-          : b[sortField].localeCompare(a[sortField]);
+        const stationCompare =
+          sortDirection === "asc"
+            ? sanitizeText(a.station).localeCompare(sanitizeText(b.station))
+            : sanitizeText(b.station).localeCompare(sanitizeText(a.station));
+        if (stationCompare !== 0) return stationCompare;
+        const scoreCompare = b.votes - a.votes;
+        if (scoreCompare !== 0) return scoreCompare;
+        return compareLines(getLineValue(a.line), getLineValue(b.line));
+      } else {
+        const lineCompare = compareLines(
+          getLineValue(a.line),
+          getLineValue(b.line)
+        );
+        if (lineCompare !== 0) return lineCompare;
+        const scoreCompare = b.votes - a.votes;
+        if (scoreCompare !== 0) return scoreCompare;
+        return sanitizeText(a.station).localeCompare(sanitizeText(b.station));
       }
-      return sortDirection === "asc" ? a.votes - b.votes : b.votes - a.votes;
     });
 
     setFilteredEntries(sorted);
@@ -159,6 +189,12 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
     if (e.key === "Tab") {
       setIsOpen(false);
     }
+  };
+
+  const getLineValue = (line: string) => {
+    const match = line.match(/Line (.+)/);
+    if (!match) return line;
+    return match[1];
   };
 
   return (
@@ -206,7 +242,9 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
             <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
               <div className="p-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-semibold truncate">Loading disruptions...</h3>
+                  <h3 className="text-base font-semibold truncate">
+                    Loading disruptions...
+                  </h3>
                 </div>
               </div>
             </div>
@@ -225,7 +263,9 @@ export default function ReportedDisruptions({ lastUpdate }: ReportedDisruptionsP
           <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
             <div className="p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold truncate">No reported disruptions</h3>
+                <h3 className="text-base font-semibold truncate">
+                  No reported disruptions
+                </h3>
               </div>
             </div>
           </div>

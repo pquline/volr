@@ -11,6 +11,13 @@ const disruptionSchema = z.object({
   comment: z.string().max(40).optional(),
 });
 
+const sanitizeText = (text: string) => {
+  return text
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 async function handler(request: Request) {
   try {
     if (request.method === 'POST') {
@@ -28,34 +35,35 @@ async function handler(request: Request) {
 
       const { city, lineName, station, comment } = validationResult.data;
 
-      // Check if line exists, if not create it
+      const sanitizedLineName = sanitizeText(lineName);
+      const sanitizedStation = sanitizeText(station);
+
       let lineRecord = await prisma.line.findFirst({
         where: {
           city,
-          name: lineName,
+          name: sanitizedLineName,
         },
       });
 
       if (!lineRecord) {
-        // Create a new line record for custom line
         lineRecord = await prisma.line.create({
           data: {
             city,
-            name: lineName,
+            name: sanitizedLineName,
             type: 'custom',
-            order: 999, // Place custom lines at the end
-            stations: [station], // Add the custom station
+            order: 999,
+            stations: [sanitizedStation],
           },
         });
-        logger.info(`Created new custom line: ${lineName} for city: ${city}`);
+        logger.info(`Created new custom line: ${sanitizedLineName} for city: ${city}`);
       }
 
       const entry = await prisma.entry.create({
         data: {
           city,
-          lineName,
-          station,
-          comment,
+          lineName: sanitizedLineName,
+          station: sanitizedStation,
+          comment: comment || '',
           lineId: lineRecord.id,
         },
       });
