@@ -71,7 +71,7 @@ async function handler(request: Request) {
       { error: 'Method not allowed' },
       { status: 405 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

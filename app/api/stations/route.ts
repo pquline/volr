@@ -50,7 +50,7 @@ async function handler(request: Request) {
 
       // Get unique stations across all lines
       const uniqueStations = Array.from(
-        new Set(lines.flatMap(line => line.stations))
+        new Set(lines.flatMap((line: { stations: string[] }) => line.stations))
       );
 
       return NextResponse.json(uniqueStations);
@@ -60,8 +60,7 @@ async function handler(request: Request) {
       { error: 'Method not allowed' },
       { status: 405 }
     );
-  } catch (error) {
-    logger.error('Error in stations API:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
