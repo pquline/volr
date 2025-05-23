@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "delete-entries": "ts-node scripts/delete-all-entries.ts",
+    "delete": "ts-node scripts/delete-all-entries.ts",
     "import": "ts-node scripts/import-lines.ts"
   },
   "dependencies": {
