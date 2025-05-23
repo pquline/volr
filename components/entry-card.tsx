@@ -40,7 +40,6 @@ interface EntryCardProps {
     line: string
     last_edit: Date
     comment: string | null
-    edits: number
     votes: number
   }
   isLoading?: boolean
@@ -58,7 +57,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
   const handleConfirm = async () => {
     try {
       setIsSubmitting(true)
-      const result = await updateDisruption(entry.id, entry.edits)
+      const result = await updateDisruption(entry.id, 0)
       if (result.success) {
         onRefresh?.()
         setShowConfirmDialog(false)
