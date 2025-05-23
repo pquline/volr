@@ -7,8 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:setup": "npx ts-node scripts/dev-setup.ts",
-    "cleanup": "ts-node scripts/cleanup.ts",
+    "delete-entries": "ts-node scripts/delete-all-entries.ts",
     "import": "ts-node scripts/import-lines.ts"
   },
   "dependencies": {
