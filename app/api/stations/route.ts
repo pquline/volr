@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
 import { protectApiRoute } from '@/lib/security';
 
 async function handler(request: Request) {
