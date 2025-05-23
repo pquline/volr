@@ -71,6 +71,27 @@ def cleanup_old_disruptions(conn):
         conn.rollback()
         return False, 0
 
+def cleanup_orphan_custom_lines(conn):
+    """Delete custom lines with no entries."""
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                DELETE FROM "Line"
+                WHERE "isCustom" = TRUE
+                AND NOT EXISTS (
+                    SELECT 1 FROM "Entry" WHERE "Entry"."lineId" = "Line"."id"
+                )
+                RETURNING id
+            """)
+            count = cur.rowcount
+            conn.commit()
+            print(f"[{datetime.now().isoformat()}] Cleaned up {count} orphan custom lines")
+            return True, count
+    except Exception as e:
+        print(f"[{datetime.now().isoformat()}] Error cleaning up orphan custom lines: {e}")
+        conn.rollback()
+        return False, 0
+
 def main():
     """Main function to run cleanup operations."""
     conn = get_db_connection()
@@ -78,12 +99,13 @@ def main():
         # Run both cleanup operations
         low_accuracy_success, low_accuracy_count = cleanup_low_accuracy_disruptions(conn)
         old_success, old_count = cleanup_old_disruptions(conn)
+        orphan_success, orphan_count = cleanup_orphan_custom_lines(conn)
 
-        if not low_accuracy_success or not old_success:
+        if not low_accuracy_success or not old_success or not orphan_success:
             print("Some cleanup operations failed")
             sys.exit(1)
 
-        print(f"Cleanup completed successfully. Removed {low_accuracy_count + old_count} disruptions total.")
+        print(f"Cleanup completed successfully. Removed {low_accuracy_count + old_count} disruptions total and {orphan_count} orphan custom lines.")
     except Exception as e:
         print(f"Unexpected error: {e}")
         sys.exit(1)

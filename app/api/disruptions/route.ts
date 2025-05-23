@@ -53,6 +53,7 @@ async function handler(request: Request) {
             type: 'custom',
             order: 999,
             stations: [sanitizedStation],
+            isCustom: true
           },
         });
         logger.info(`Created new custom line: ${sanitizedLineName} for city: ${city}`);

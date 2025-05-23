@@ -15,6 +15,7 @@ model Line {
   type     String   @default("bus")
   stations String[]
   entries  Entry[]
+  isCustom Boolean  @default(false)
 
   @@index([city])
   @@index([name])

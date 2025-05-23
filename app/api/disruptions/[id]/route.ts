@@ -38,7 +38,7 @@ export async function PUT(request: NextRequest, context: any) {
       data: {
         station,
         comment,
-        edits: { increment: 1 }
+        updatedAt: new Date()
       },
       include: { line: true }
     });
@@ -64,9 +64,48 @@ export async function DELETE(request: NextRequest, context: any) {
       );
     }
 
+    // First get the entry to check if it's associated with a custom line
+    const entry = await prisma.entry.findUnique({
+      where: { id },
+      select: {
+        lineId: true,
+        line: {
+          select: {
+            isCustom: true,
+          }
+        }
+      }
+    });
+
+    if (!entry) {
+      return NextResponse.json(
+        { error: 'Entry not found' },
+        { status: 404 }
+      );
+    }
+
+    // Delete the entry
     await prisma.entry.delete({
       where: { id }
     });
+
+    // If the line is custom, check if it has any remaining entries
+    if (entry.line && entry.line.isCustom) {
+      const remainingEntries = await prisma.entry.count({
+        where: {
+          lineId: entry.lineId
+        }
+      });
+
+      // If no entries remain, delete the custom line
+      if (remainingEntries === 0) {
+        await prisma.line.delete({
+          where: {
+            id: entry.lineId
+          }
+        });
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -89,13 +128,9 @@ export async function PATCH(request: NextRequest, context: any) {
       );
     }
 
-    const body = await request.json();
-    const { edits } = body;
-
     const updatedEntry = await prisma.entry.update({
       where: { id },
       data: {
-        edits: edits + 1,
         updatedAt: new Date()
       }
     });
