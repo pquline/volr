@@ -19,7 +19,6 @@ async function handler(request: Request) {
 
       // Format city name to match database format (capitalize first letter)
       const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-      logger.debug(`Formatted city from "${city}" to "${formattedCity}"`);
 
       // If lineName is provided, get stations for that specific line
       if (lineName) {
@@ -40,7 +39,6 @@ async function handler(request: Request) {
           );
         }
 
-        logger.debug(`Fetched ${line.stations.length} stations for line ${lineName}`);
         return NextResponse.json(line.stations);
       }
 
@@ -55,7 +53,6 @@ async function handler(request: Request) {
         new Set(lines.flatMap(line => line.stations))
       );
 
-      logger.debug(`Fetched ${uniqueStations.length} unique stations`);
       return NextResponse.json(uniqueStations);
     }
 

@@ -19,9 +19,7 @@ async function handler(request: Request) {
         );
       }
 
-      // Format city name to match database format (capitalize first letter)
       const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-      logger.debug(`Formatted city from "${city}" to "${formattedCity}"`);
 
       const lines = await prisma.line.findMany({
         where: {
@@ -40,7 +38,6 @@ async function handler(request: Request) {
         }
       });
 
-      logger.debug(`Fetched lines: ${JSON.stringify(lines, null, 2)}`);
       return NextResponse.json(lines);
     }
 
@@ -67,7 +64,6 @@ async function handler(request: Request) {
         }
       });
 
-      logger.info(`Created new line: ${line.id}`);
       return NextResponse.json(line, { status: 201 });
     }
 
@@ -76,7 +72,6 @@ async function handler(request: Request) {
       { status: 405 }
     );
   } catch (error) {
-    logger.error('Error in lines API:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

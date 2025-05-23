@@ -28,7 +28,8 @@ async function handler(request: Request) {
 
       const { city, lineName, station, comment } = validationResult.data;
 
-      const lineRecord = await prisma.line.findFirst({
+      // Check if line exists, if not create it
+      let lineRecord = await prisma.line.findFirst({
         where: {
           city,
           name: lineName,
@@ -36,10 +37,17 @@ async function handler(request: Request) {
       });
 
       if (!lineRecord) {
-        return NextResponse.json(
-          { error: 'Line not found' },
-          { status: 404 }
-        );
+        // Create a new line record for custom line
+        lineRecord = await prisma.line.create({
+          data: {
+            city,
+            name: lineName,
+            type: 'custom',
+            order: 999, // Place custom lines at the end
+            stations: [station], // Add the custom station
+          },
+        });
+        logger.info(`Created new custom line: ${lineName} for city: ${city}`);
       }
 
       const entry = await prisma.entry.create({
@@ -89,7 +97,7 @@ async function handler(request: Request) {
       { status: 405 }
     );
   } catch (error) {
-    logger.error('Error in disruptions API:', error);
+    logger.error('Error handling disruption:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
