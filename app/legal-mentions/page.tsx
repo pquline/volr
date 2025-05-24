@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
+import { FileText, Server, Users, AlertTriangle, Mail, Calendar } from "lucide-react";
 
 export default function LegalMentions() {
   return (
@@ -11,6 +12,7 @@ export default function LegalMentions() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Legal Mentions</CardTitle>
+            <FileText className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -39,6 +41,7 @@ export default function LegalMentions() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Hosting</CardTitle>
+            <Server className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -56,6 +59,7 @@ export default function LegalMentions() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contributors</CardTitle>
+            <Users className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -75,6 +79,7 @@ export default function LegalMentions() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Liability</CardTitle>
+            <AlertTriangle className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -93,6 +98,7 @@ export default function LegalMentions() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
+            <Mail className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -105,6 +111,16 @@ export default function LegalMentions() {
               </Link>
               <br />
             </p>
+          </CardContent>
+        </Card>
+
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
+            <CardTitle>Last Updated</CardTitle>
+            <Calendar className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <p>24 may 2025</p>
           </CardContent>
         </Card>
       </div>

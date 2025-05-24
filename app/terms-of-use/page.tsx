@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
+import { FileText, Info, UserCheck, BookOpen, AlertTriangle, Ban, History, Mail, Calendar } from "lucide-react";
 
 export default function TermsOfUse() {
   return (
@@ -11,6 +12,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Terms of Use</CardTitle>
+            <FileText className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -23,6 +25,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Purpose</CardTitle>
+            <Info className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -37,25 +40,15 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>User Responsibilities</CardTitle>
+            <UserCheck className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>By using this platform, you agree to:</p>
-            <ul className="list-inside">
-              <li>
-                - Submit accurate and truthful information.
-              </li>
-              <li>
-                - Not include personal, sensitive, or
-                confidential information in reports.
-              </li>
-              <li>
-                - Refrain from using the platform for malicious
-                purposes, including but not limited to spam or harassment.
-              </li>
-              <li>
-                - Comply with all applicable laws and
-                regulations.
-              </li>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Submit accurate and truthful information.</li>
+              <li>Not include personal, sensitive, or confidential information in reports.</li>
+              <li>Refrain from using the platform for malicious purposes, including but not limited to spam or harassment.</li>
+              <li>Comply with all applicable laws and regulations.</li>
             </ul>
           </CardContent>
         </Card>
@@ -63,6 +56,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Content Ownership</CardTitle>
+            <BookOpen className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -77,6 +71,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Disclaimers</CardTitle>
+            <AlertTriangle className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -97,6 +92,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Termination</CardTitle>
+            <Ban className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -111,6 +107,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Changes to These Terms</CardTitle>
+            <History className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -124,6 +121,7 @@ export default function TermsOfUse() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
+            <Mail className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -136,6 +134,16 @@ export default function TermsOfUse() {
               </Link>
               <br />
             </p>
+          </CardContent>
+        </Card>
+
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
+            <CardTitle>Last Updated</CardTitle>
+            <Calendar className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <p>24 may 2025</p>
           </CardContent>
         </Card>
       </div>

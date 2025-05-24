@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
+import { Shield, Database, Code2, UserCheck, Mail, Calendar } from "lucide-react";
 
 export default function PrivacyPolicy() {
   return (
@@ -11,6 +12,7 @@ export default function PrivacyPolicy() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Privacy Policy</CardTitle>
+            <Shield className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -30,6 +32,7 @@ export default function PrivacyPolicy() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Data Collection</CardTitle>
+            <Database className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -47,6 +50,7 @@ export default function PrivacyPolicy() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Open Source</CardTitle>
+            <Code2 className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -66,6 +70,7 @@ export default function PrivacyPolicy() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>User Responsibility</CardTitle>
+            <UserCheck className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -84,6 +89,7 @@ export default function PrivacyPolicy() {
         <Card className="p-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
             <CardTitle>Contact</CardTitle>
+            <Mail className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <p>
@@ -96,6 +102,16 @@ export default function PrivacyPolicy() {
               </Link>
               <br />
             </p>
+          </CardContent>
+        </Card>
+
+        <Card className="p-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
+            <CardTitle>Last Updated</CardTitle>
+            <Calendar className="h-5 w-5 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <p>24 may 2025</p>
           </CardContent>
         </Card>
       </div>
