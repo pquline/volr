@@ -12,9 +12,11 @@ export default function Home() {
   };
 
   return (
-    <div className="grid place-items-center">
-      <div className="grid grid-cols-1 gap-8 sm:gap-6 max-w-xl w-full px-6 pb-4 sm:pt-2">
+    <div className="max-w-5xl mx-auto px-8 pb-4 sm:pt-2 min-h-screen flex flex-col lg:flex-row gap-8 sm:gap-6">
+      <div className="w-full lg:w-2/5">
         <ReportADisruption onDisruptionSubmitted={handleDisruptionUpdate} />
+      </div>
+      <div className="w-full lg:w-3/5">
         <ReportedDisruptions lastUpdate={lastUpdate} />
       </div>
     </div>
