@@ -47,7 +47,7 @@ export default function LegalMentions() {
             <p>
               <strong>Hosting Provider:</strong>{" "}
               <Link
-                href="https://vercel.com//"
+                href="https://vercel.com"
                 className="font-mono hover:underline"
               >
                 Vercel

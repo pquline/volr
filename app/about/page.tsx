@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Train, Clock, Database, Mail, Sparkles, ThumbsUp, Shield, Calendar } from "lucide-react";
+import { Train, Database, Mail, Sparkles, ThumbsUp, Shield, Calendar } from "lucide-react";
 
 export default function About() {
   return (
@@ -52,7 +52,7 @@ export default function About() {
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>Anyone can upvote or downvote a report.</li>
-              <li>The score is shown as an "Accuracy Score" badge on each report.</li>
+              <li>The score is shown as an &quot;Accuracy Score&quot; badge on each report.</li>
               <li>Reports with very low accuracy (e.g., -10 or less) are automatically deleted to keep the list relevant.</li>
             </ul>
           </CardContent>
