@@ -260,7 +260,7 @@ export default function ReportedDisruptions({
             />
           ))
         ) : (
-          <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
+          <div className="rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold truncate">

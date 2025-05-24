@@ -12,11 +12,11 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-8 pb-4 sm:pt-2 flex flex-col lg:flex-row gap-8 sm:gap-6">
-      <div className="w-full lg:w-2/5">
+    <div className="max-w-5xl mx-auto px-6 pb-4 sm:pt-2 flex flex-col md:flex-row gap-8 sm:gap-6">
+      <div className="w-full md:w-1/3">
         <ReportADisruption onDisruptionSubmitted={handleDisruptionUpdate} />
       </div>
-      <div className="w-full lg:w-3/5">
+      <div className="w-full md:w-2/3">
         <ReportedDisruptions lastUpdate={lastUpdate} />
       </div>
     </div>
