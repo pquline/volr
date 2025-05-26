@@ -8,16 +8,14 @@ const voteSchema = z.object({
   previousVote: z.enum(['up', 'down']).optional()
 });
 
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
-export async function POST(request: NextRequest, context: RouteContext) {
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = parseInt(context.params.id);
-    if (isNaN(id)) {
+    const params = await context.params;
+    const parsedId = parseInt(params.id);
+    if (isNaN(parsedId)) {
       return NextResponse.json(
         { error: 'Invalid ID format' },
         { status: 400 }
@@ -57,7 +55,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     const updatedEntry = await prisma.entry.update({
-      where: { id },
+      where: { id: parsedId },
       data: {
         votes: {
           increment: voteValue
