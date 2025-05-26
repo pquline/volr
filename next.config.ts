@@ -3,9 +3,9 @@ import withPWA from 'next-pwa';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  // Exclude scripts directory from Next.js build
+  // Enable type checking during build
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // Remove deprecated config
   // devIndicators: {
@@ -17,6 +17,5 @@ export default withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  maximumFileSizeToCacheInBytes: 4 * 1024 * 1024 // 4MB
+  disable: process.env.NODE_ENV === 'development'
 })(nextConfig);
