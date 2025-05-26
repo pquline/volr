@@ -163,7 +163,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
       const stationsData = await stationsResponse.json();
 
       const stationOptions: StationOption[] = stationsData
-        .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+        .sort((a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
         .map((station: string) => ({
           value: station,
           label: station
