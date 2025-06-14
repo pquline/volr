@@ -10,12 +10,13 @@ import {
 import { usePathname, useRouter } from "@/i18n/client";
 import { localeFlags, localeNames, locales } from "@/lib/i18n/config";
 import { Globe } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations();
 
   const handleLocaleChange = (newLocale: string) => {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '');
@@ -27,7 +28,7 @@ export function LanguageSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
           <Globe className="h-5 w-5" />
-          <span className="sr-only">Switch language</span>
+          <span className="sr-only">{t('language.switch')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

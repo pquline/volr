@@ -30,7 +30,7 @@ import { logger } from '@/lib/logger'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { ArrowDown, ArrowUp, Clock, Text, Train } from 'lucide-react'
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -51,6 +51,7 @@ interface EntryCardProps {
 
 export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpdate }: EntryCardProps) {
   const t = useTranslations("disruptions");
+  const locale = useLocale();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -201,7 +202,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
                       <Clock className="h-4 w-4 flex-shrink-0" />
                       <span className="truncate">
                         {formatDistanceToNow(lastEditDate, {
-                          locale: fr,
+                          locale: locale === 'fr' ? fr : undefined,
                           addSuffix: true
                         })}
                       </span>

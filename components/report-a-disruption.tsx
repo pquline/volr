@@ -25,12 +25,6 @@ import { toast } from "sonner";
 import { submitDisruption } from "../actions/submitDisruption";
 import { useCity } from "./city-toggle";
 
-const formSchema = z.object({
-  line: z.string().min(1, "Please select a line or enter a custom line"),
-  station: z.string().min(1, "Please select a station or enter a custom station"),
-  comment: z.string().max(40, "Comment must be less than 40 characters").optional(),
-});
-
 interface LineOption {
   value: string;
   label: string;
@@ -74,6 +68,12 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     station: '',
     isCustomLine: false,
     isCustomStation: false,
+  });
+
+  const formSchema = z.object({
+    line: z.string().min(1, t("report.form.validation.line")),
+    station: z.string().min(1, t("report.form.validation.station")),
+    comment: z.string().max(40, t("report.form.validation.comment")).optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
