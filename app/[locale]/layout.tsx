@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { GeistSans } from "geist/font/sans";
 import { notFound } from "next/navigation";
+import { NextResponse } from "next/server";
 import "../globals.css";
 import type { Metadata, Viewport } from "next";
 
@@ -46,11 +47,13 @@ export default async function RootLayout({
     notFound();
   }
 
-  const response = new Response();
-  response.headers.set(
-    'Set-Cookie',
-    `NEXT_LOCALE=${locale}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
-  );
+  const response = NextResponse.next();
+  response.cookies.set('NEXT_LOCALE', locale, {
+    path: '/',
+    maxAge: 31536000,
+    sameSite: 'lax',
+    secure: true
+  });
 
   return (
     <html lang={locale} suppressHydrationWarning className={GeistSans.className}>
