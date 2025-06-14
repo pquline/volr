@@ -23,6 +23,7 @@ export function SettingsMenu() {
 	const t = useTranslations();
 
 	const handleLocaleChange = (newLocale: string) => {
+		localStorage.setItem('preferredLocale', newLocale);
 		router.replace(pathname, { locale: newLocale });
 	};
 

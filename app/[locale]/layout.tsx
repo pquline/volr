@@ -46,6 +46,12 @@ export default async function RootLayout({
     notFound();
   }
 
+  const response = new Response();
+  response.headers.set(
+    'Set-Cookie',
+    `NEXT_LOCALE=${locale}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
+  );
+
   return (
     <html lang={locale} suppressHydrationWarning className={GeistSans.className}>
       <head />
