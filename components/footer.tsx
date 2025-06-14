@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/client";
 import { Badge } from "./ui/badge";
 
 const Footer = () => {
