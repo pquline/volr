@@ -48,6 +48,7 @@
   },
   "disruptions": {
     "title": "Reported Disruptions",
+    "loading": "Loading disruptions...",
     "filter": "Filter by line or station...",
     "search": {
       "placeholder": "Filter by line or station..."
@@ -93,7 +94,7 @@
     }
   },
   "report": {
-    "title": "Report a Disruption",
+    "title": "Report A Disruption",
     "form": {
       "labels": {
         "line": "Line",
@@ -151,7 +152,7 @@
     },
     "lastUpdated": {
       "title": "Last Updated",
-      "date": "24 May 2025"
+      "date": "14 June 2025"
     }
   },
   "legal": {
@@ -180,7 +181,7 @@
     },
     "lastUpdated": {
       "title": "Last Updated",
-      "date": "24 may 2025"
+      "date": "14 June 2025"
     }
   },
   "privacy": {
@@ -215,7 +216,7 @@
     },
     "lastUpdated": {
       "title": "Last Updated",
-      "date": "24 May 2025"
+      "date": "14 June 2025"
     }
   },
   "terms": {
@@ -264,7 +265,7 @@
     },
     "lastUpdated": {
       "title": "Last Updated",
-      "date": "24 May 2025"
+      "date": "14 June 2025"
     }
   }
 }

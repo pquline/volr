@@ -20,7 +20,7 @@
     "contact": "Contact",
     "settings": "Paramètres",
     "legalMentions": "Mentions légales",
-    "privacyPolicy": "Politique de confidentialité",
+    "privacyPolicy": "Confidentialité",
     "termsOfUse": "Conditions d'utilisation",
     "madeWith": "made with",
     "on": "on",
@@ -50,6 +50,7 @@
   },
   "disruptions": {
     "title": "Perturbations Signalées",
+    "loading": "Chargement des perturbations...",
     "filter": "Filtrer par ligne ou station...",
     "sort": {
       "title": "Trier par",
@@ -95,7 +96,7 @@
     }
   },
   "report": {
-    "title": "Signaler une Perturbation",
+    "title": "Signaler Une Perturbation",
     "form": {
       "labels": {
         "line": "Ligne",
@@ -153,7 +154,7 @@
     },
     "lastUpdated": {
       "title": "Dernière mise à jour",
-      "date": "24 mai 2025"
+      "date": "14 juin 2025"
     }
   },
   "legal": {
@@ -182,7 +183,7 @@
     },
     "lastUpdated": {
       "title": "Dernière mise à jour",
-      "date": "24 mai 2025"
+      "date": "14 juin 2025"
     }
   },
   "privacy": {
@@ -217,7 +218,7 @@
     },
     "lastUpdated": {
       "title": "Dernière mise à jour",
-      "date": "24 mai 2025"
+      "date": "14 juin 2025"
     }
   },
   "terms": {
@@ -266,7 +267,7 @@
     },
     "lastUpdated": {
       "title": "Dernière mise à jour",
-      "date": "24 mai 2025"
+      "date": "14 juin 2025"
     }
   }
 }

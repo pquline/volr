@@ -1,19 +1,20 @@
 "use client";
 
-import { Disruption, fetchDisruptions } from "@/actions/fetchDisruptions";
+import { useState, useEffect, KeyboardEvent, useRef } from "react";
+import { EntryCard } from "./entry-card";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useTranslations } from "next-intl";
-import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
 import { useCity } from "./city-toggle";
-import { EntryCard } from "./entry-card";
+import { useTranslations } from "next-intl";
+import React from "react";
 
 type SortField = "line" | "station" | "votes";
 type SortDirection = "asc" | "desc";
@@ -32,7 +33,7 @@ interface ReportedDisruptionsProps {
 export default function ReportedDisruptions({
   lastUpdate,
 }: ReportedDisruptionsProps) {
-  const t = useTranslations();
+  const t = useTranslations("disruptions");
   const { city, isLoading: isCityLoading } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
@@ -199,73 +200,78 @@ export default function ReportedDisruptions({
   };
 
   return (
-    <div className="w-full space-y-4">
-      <div className="h-[40px] flex items-center">
+    <div className="w-full flex flex-col gap-4 h-full">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-0">
         <h2 className="text-lg font-black truncate lg:text-xl">
-          {t('disruptions.title')}
+          {t("title")}
         </h2>
-      </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex space-x-4 w-full sm:w-auto">
           <Input
-            ref={inputRef}
-            type="text"
-            placeholder={t('disruptions.search.placeholder')}
+            placeholder={t("search.placeholder")}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onKeyDown={handleInputKeyDown}
-            className="w-full"
+            ref={inputRef}
+            className="max-w-auto border-foreground/10 dark:border-foreground/20 hover:bg-foreground/5 dark:bg-background dark:hover:bg-foreground/5"
           />
           <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full sm:w-auto">
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-                {t('disruptions.sort.title')}
+              <Button
+                variant="outline"
+                aria-label="dropdown-sort-filter"
+                aria-labelledby="dropdown-sort-filter"
+              >
+                <ArrowUpDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-auto">
               <DropdownMenuItem onClick={() => handleSort("line")}>
-                <div className="flex items-center gap-2">
-                  {getSortIcon("line")}
-                  {t('disruptions.sort.byLine')}
-                </div>
+                {getSortIcon("line")} {t("sort.byLine")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleSort("station")}>
-                <div className="flex items-center gap-2">
-                  {getSortIcon("station")}
-                  {t('disruptions.sort.byStation')}
-                </div>
+                {getSortIcon("station")} {t("sort.byStation")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleSort("votes")}>
-                <div className="flex items-center gap-2">
-                  {getSortIcon("votes")}
-                  {t('disruptions.sort.byVotes')}
-                </div>
+                {getSortIcon("votes")} {t("sort.byVotes")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="space-y-2">
-          {isLoading ? (
-            <div className="text-center py-4">{t('common.loading')}</div>
-          ) : filteredEntries.length === 0 ? (
-            <div className="text-center py-4">
-              {filter
-                ? t('disruptions.noResults')
-                : t('disruptions.noDisruptions')}
+      </div>
+      <div className="space-y-6">
+        {isLoading ? (
+          <>
+            <div className="mb-6 rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
+              <div className="p-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-semibold truncate">
+                    {t("loading")}
+                  </h3>
+                </div>
+              </div>
             </div>
-          ) : (
-            filteredEntries.map((entry) => (
-              <EntryCard
-                key={entry.id}
-                entry={entry}
-                onUpdate={handleEntryUpdate}
-                onDelete={handleEntryDelete}
-                isUpdating={updatingIds.has(entry.id)}
-              />
-            ))
-          )}
-        </div>
+          </>
+        ) : filteredEntries.length > 0 ? (
+          filteredEntries.map((entry) => (
+            <EntryCard
+              key={entry.id}
+              entry={entry}
+              onRefresh={() => handleEntryUpdate(entry)}
+              onDelete={() => handleEntryDelete(entry.id)}
+              isLoading={updatingIds.has(entry.id)}
+            />
+          ))
+        ) : (
+          <div className="rounded-lg border bg-white dark:bg-secondary border-foreground/10 dark:border-foreground/20 shadow">
+            <div className="p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold truncate">
+                  {t("noDisruptions")}
+                </h3>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

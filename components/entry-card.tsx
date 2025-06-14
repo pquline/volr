@@ -51,7 +51,7 @@ interface EntryCardProps {
 }
 
 export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpdate, isUpdating = false }: EntryCardProps) {
-  const t = useTranslations();
+  const t = useTranslations("disruptions");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -66,12 +66,12 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
         onRefresh?.()
         onUpdate?.(entry)
         setShowConfirmDialog(false)
-        toast.success(t('disruptions.update.success'))
+        toast.success(t("update.success"))
       } else {
-        toast.error(result.error || t('disruptions.update.error'))
+        toast.error(result.error || t("update.error"))
       }
     } catch (error) {
-      toast.error(t('common.error'))
+      toast.error(t("common.error"))
       logger.error('Error updating disruption:', error)
     } finally {
       setIsSubmitting(false)
@@ -85,12 +85,12 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
       if (result.success) {
         onDelete?.(entry.id)
         setShowDeleteDialog(false)
-        toast.success(t('disruptions.delete.success'))
+        toast.success(t("delete.success"))
       } else {
-        toast.error(result.error || t('disruptions.delete.error'))
+        toast.error(result.error || t("delete.error"))
       }
     } catch (error) {
-      toast.error(t('common.error'))
+      toast.error(t("common.error"))
       logger.error('Error deleting disruption:', error)
     } finally {
       setIsSubmitting(false)
@@ -121,9 +121,9 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
           localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
 
           onRefresh?.()
-          toast.success(t('disruptions.vote.removeSuccess'))
+          toast.success(t("vote.removeSuccess"))
         } else {
-          toast.error(result.error || t('disruptions.vote.removeError'))
+          toast.error(result.error || t("vote.removeError"))
         }
         return
       }
@@ -135,12 +135,12 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
         localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
 
         onRefresh?.()
-        toast.success(voteType === 'up' ? t('disruptions.vote.upSuccess') : t('disruptions.vote.downSuccess'))
+        toast.success(voteType === 'up' ? t("vote.upSuccess") : t("vote.downSuccess"))
       } else {
-        toast.error(result.error || t('disruptions.vote.error'))
+        toast.error(result.error || t("vote.error"))
       }
     } catch (error) {
-      toast.error(t('common.error'))
+      toast.error(t("common.error"))
       logger.error('Error voting:', error)
     } finally {
       setIsSubmitting(false)
@@ -170,17 +170,17 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
                   </h3>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{t('disruptions.card.station')}</p>
+                  <p>{t("card.station")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Badge variant="default">{entry.votes}</Badge>
+                  <Badge variant="default" className="text-sm">{entry.votes}</Badge>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{t('disruptions.card.accuracyScore')}</p>
+                  <p>{t("card.accuracyScore")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -194,23 +194,10 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
                       <Train className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">{t('disruptions.card.line', { line: entry.line })}</span>
+                      <span className="truncate">{t("card.line", { line: entry.line })}</span>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{t('disruptions.card.line')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="flex items-center space-x-4">
-                      <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">
-                        {formatDistanceToNow(lastEditDate, { addSuffix: true, locale: enUS })}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('disruptions.card.lastUpdated')}</p>
+                      <p>{t("card.line")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -222,37 +209,68 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
                         <span className="truncate">{entry.comment}</span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{t('disruptions.card.comment')}</p>
+                        <p>{t("card.comment")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 )}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger className="flex items-center space-x-4">
+                      <Clock className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">
+                        {formatDistanceToNow(lastEditDate, { addSuffix: true, locale: enUS })}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("card.lastUpdated")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <div className="flex flex-col items-end justify-between ml-4">
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleVote('up')}
-                    disabled={isSubmitting || isUpdating}
-                    className={previousVote === 'up' ? 'text-green-500' : ''}
-                  >
-                    <ArrowUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleVote('down')}
-                    disabled={isSubmitting || isUpdating}
-                    className={previousVote === 'down' ? 'text-red-500' : ''}
-                  >
-                    <ArrowDown className="h-4 w-4" />
-                  </Button>
+                <div className="flex space-x-2">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleVote('up')}
+                          disabled={isSubmitting || isUpdating}
+                          className={previousVote === 'up' ? 'text-green-500' : ''}
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t("vote.up")}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleVote('down')}
+                          disabled={isSubmitting || isUpdating}
+                          className={previousVote === 'down' ? 'text-red-500' : ''}
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t("vote.down")}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" disabled={isUpdating}>
-                      <span className="sr-only">{t('disruptions.card.actions')}</span>
+                    <Button variant="ghost" size="icon" disabled={isSubmitting || isUpdating}>
+                      <span className="sr-only">{t("card.actions")}</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -266,17 +284,17 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
                         className="h-4 w-4"
                       >
                         <circle cx="12" cy="12" r="1" />
-                        <circle cx="19" cy="12" r="1" />
-                        <circle cx="5" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
                       </svg>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setShowConfirmDialog(true)}>
-                      {t('disruptions.card.confirm')}
+                      {t("card.confirm")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
-                      {t('disruptions.card.delete')}
+                      {t("card.delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -289,17 +307,20 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
       <AlertDialog open={showConfirmDialog} onOpenChange={handleDialogClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('disruptions.confirm.title')}</AlertDialogTitle>
+            <AlertDialogTitle>{t("confirm.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('disruptions.confirm.description')}
+              {t("confirm.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isSubmitting}>
-              {t('common.cancel')}
+              {t("common.cancel")}
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm} disabled={isSubmitting}>
-              {isSubmitting ? t('common.loading') : t('common.confirm')}
+            <AlertDialogAction
+              onClick={handleConfirm}
+              disabled={isSubmitting}
+            >
+              {t("common.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -308,21 +329,25 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpd
       <AlertDialog open={showDeleteDialog} onOpenChange={handleDialogClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('disruptions.delete.title')}</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('disruptions.delete.description')}
+              {t("delete.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isSubmitting}>
-              {t('common.cancel')}
+              {t("common.cancel")}
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={isSubmitting}>
-              {isSubmitting ? t('common.loading') : t('common.delete')}
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={isSubmitting}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
+  )
 }
