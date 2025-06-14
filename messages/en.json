@@ -1,0 +1,270 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "noResults": "No results found",
+    "required": "Required"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "settings": "Settings",
+    "legalMentions": "Legal Mentions",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "madeWith": "made with",
+    "on": "on",
+    "noRightsReserved": "No rights reserved"
+  },
+  "language": {
+    "switch": "Switch language",
+    "current": "Current language",
+    "title": "Language",
+    "change": "Change language"
+  },
+  "theme": {
+    "title": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "settings": {
+    "title": "Settings",
+    "accessibility": "Accessibility"
+  },
+  "city": {
+    "select": "Select city",
+    "paris": "Paris",
+    "marseille": "Marseille",
+    "rennes": "Rennes"
+  },
+  "disruptions": {
+    "title": "Reported Disruptions",
+    "filter": "Filter by line or station...",
+    "search": {
+      "placeholder": "Filter by line or station..."
+    },
+    "sort": {
+      "title": "Sort by",
+      "byLine": "Line",
+      "byStation": "Station",
+      "byVotes": "Accuracy Score"
+    },
+    "noResults": "No disruptions match your search",
+    "noDisruptions": "No reported disruptions",
+    "card": {
+      "station": "Station",
+      "line": "Line {line}",
+      "lastUpdated": "Last Update",
+      "comment": "Comment",
+      "accuracyScore": "Accuracy Score",
+      "actions": "Actions",
+      "confirm": "Confirm",
+      "delete": "Delete"
+    },
+    "update": {
+      "success": "Disruption updated successfully!",
+      "error": "Failed to update disruption"
+    },
+    "delete": {
+      "title": "Delete Entry",
+      "description": "Are you sure you want to delete this entry? This action cannot be undone.",
+      "success": "Disruption deleted successfully!",
+      "error": "Failed to delete disruption"
+    },
+    "confirm": {
+      "title": "Confirm Entry",
+      "description": "Are you sure you want to confirm this entry? This action cannot be undone."
+    },
+    "vote": {
+      "upSuccess": "Upvoted successfully!",
+      "downSuccess": "Downvoted successfully!",
+      "removeSuccess": "Vote removed successfully!",
+      "removeError": "Failed to remove vote",
+      "error": "Failed to update accuracy"
+    }
+  },
+  "report": {
+    "title": "Report a Disruption",
+    "form": {
+      "labels": {
+        "line": "Line",
+        "station": "Station",
+        "comment": "Comment"
+      },
+      "placeholders": {
+        "line": "Select a line...",
+        "station": "Select a station...",
+        "comment": "Enter an optional comment describing the disruption..."
+      },
+      "validation": {
+        "line": "Please select a line or enter a custom line",
+        "station": "Please select a station or enter a custom station",
+        "comment": "Comment must be less than 40 characters"
+      },
+      "submit": "Submit",
+      "success": "Disruption reported successfully!",
+      "error": {
+        "noCity": "Please select a city first",
+        "submit": "Failed to submit disruption"
+      }
+    }
+  },
+  "about": {
+    "title": "About",
+    "description": "is a modern web application for reporting and tracking public transport disruptions. Users can add and view disruption reports for various cities and lines. No personal data is collected.",
+    "openSource": "Open source and free for everyone.",
+    "features": {
+      "title": "Features",
+      "list": "Real-time disruption reporting for public transport lines and stations,Multi-city support,Search and filter by line or station,Vote on the accuracy of reports,Automatic report deletion after a period of inactivity,Responsive design for mobile and desktop,No authentication required; open to all users,Dark mode"
+    },
+    "voting": {
+      "title": "Voting & Accuracy Score",
+      "description": "Each disruption report has an accuracy score based on community voting:",
+      "list": "Anyone can upvote or downvote a report,The score is shown as an \"Accuracy Score\" badge on each report,Reports with very low accuracy are automatically deleted to keep the list relevant"
+    },
+    "tech": {
+      "title": "Tech Stack",
+      "framework": "Framework",
+      "language": "Language",
+      "database": "Database",
+      "styling": "Styling",
+      "forms": "Forms",
+      "notifications": "Notifications"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "No personal data is collected or stored. Only disruption data (city, line, station, comment, votes) is saved. Reports are deleted automatically after a period of inactivity."
+    },
+    "contact": {
+      "title": "Contact & Contribution",
+      "openSource": "Open source",
+      "email": "Contact"
+    },
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "24 May 2025"
+    }
+  },
+  "legal": {
+    "title": "Legal Mentions",
+    "projectName": "Project Name",
+    "license": "License",
+    "licenseDescription": "This project is open source and distributed under the terms of the",
+    "sourceCode": "Source Code",
+    "sourceCodeDescription": "The source code is publicly available on",
+    "hosting": {
+      "title": "Hosting",
+      "provider": "Hosting Provider"
+    },
+    "contributors": {
+      "title": "Contributors",
+      "description": "This project is maintained by its contributors. For a list of contributors, visit the",
+      "link": "contributors page"
+    },
+    "liability": {
+      "title": "Liability",
+      "description": "This project is provided \"as is,\" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the contributors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "For inquiries or suggestions, reach out via email:"
+    },
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "24 may 2025"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "projectName": "Project Name",
+    "purpose": "Purpose",
+    "purposeDescription": "is a modern web app for reporting and tracking public transport disruptions. We are committed to protecting your privacy and ensuring transparency in how we handle data.",
+    "transparency": "Transparency",
+    "transparencyDescription": "We believe in complete transparency about our data practices. This policy explains what data we collect, how we use it, and your rights regarding your data.",
+    "dataCollection": {
+      "title": "Data Collection",
+      "what": "What We Collect",
+      "whatDescription": "We collect minimal data necessary for the app's functionality. This includes disruption reports, votes, and basic analytics. No personal data is collected.",
+      "analytics": "Analytics",
+      "analyticsDescription": "We use anonymous analytics to understand how the app is used and to improve its functionality. This data cannot be used to identify individual users."
+    },
+    "openSource": {
+      "title": "Open Source",
+      "transparency": "Code Transparency",
+      "transparencyDescription": "Our entire codebase is open source and available on",
+      "verification": "You can verify our data handling practices by reviewing the source code."
+    },
+    "userResponsibility": {
+      "title": "User Responsibility",
+      "content": "Content",
+      "contentDescription": "Users are responsible for the content they submit. Please review our",
+      "terms": "Terms of Use"
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "For any privacy-related questions or concerns, please contact us at"
+    },
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "24 May 2025"
+    }
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "projectName": "Project Name",
+    "purpose": "Purpose",
+    "purposeDescription": "is a platform for reporting and tracking public transport disruptions. By using our service, you agree to these terms.",
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "byUsing": "By Using the Service",
+      "byUsingDescription": "By accessing or using volr, you agree to be bound by these Terms of Use and all applicable laws and regulations.",
+      "changes": "Changes to Terms",
+      "changesDescription": "We reserve the right to modify these terms at any time. Your continued use of the service after any changes indicates your acceptance of the new terms."
+    },
+    "useOfService": {
+      "title": "Use of Service",
+      "accuracy": "Accuracy of Information",
+      "accuracyDescription": "You agree to provide accurate and truthful information when reporting disruptions. False or misleading reports may result in account termination.",
+      "prohibited": "Prohibited Activities",
+      "prohibitedDescription": "You may not use the service for any illegal or unauthorized purpose, or in any way that could damage or impair the service."
+    },
+    "userContent": {
+      "title": "User Content",
+      "ownership": "Ownership",
+      "ownershipDescription": "You retain ownership of any content you submit to the service. However, you grant us a license to use, modify, and display this content.",
+      "license": "License",
+      "licenseDescription": "By submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, and distribute your content."
+    },
+    "termination": {
+      "title": "Termination",
+      "rights": "Our Rights",
+      "rightsDescription": "We reserve the right to terminate or suspend your access to the service at any time, for any reason, without notice.",
+      "effect": "Effect of Termination",
+      "effectDescription": "Upon termination, your right to use the service will immediately cease, and you must cease all use of the service."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "right": "Our Right to Change",
+      "rightDescription": "We reserve the right to modify these terms at any time. We will notify users of any material changes.",
+      "notification": "Notification",
+      "notificationDescription": "We will notify you of any changes by posting the new terms on this page and updating the 'Last Updated' date."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "If you have any questions about these Terms, please contact us at"
+    },
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "24 May 2025"
+    }
+  }
+}

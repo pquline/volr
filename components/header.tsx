@@ -1,7 +1,6 @@
 "use client";
 
-import * as React from "react";
-import ModeToggle from "./mode-toggle";
+import { SettingsMenu } from "@/components/settings-menu";
 import Branding from "./branding";
 import CityToggle from "./city-toggle";
 
@@ -13,7 +12,7 @@ const Header = () => {
           <Branding />
           <div className="flex justify-between items-center space-x-4">
             <CityToggle />
-            <ModeToggle />
+            <SettingsMenu />
           </div>
         </div>
       </div>

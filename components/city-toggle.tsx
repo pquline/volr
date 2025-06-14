@@ -1,8 +1,9 @@
 "use client";
 
-import * as React from "react";
-import { ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+import * as React from "react";
 
 const cities = [
   { value: "marseille", label: "Marseille" },
@@ -45,6 +46,7 @@ export const useCity = () => {
 };
 
 const CityToggle: React.FC = () => {
+  const t = useTranslations();
   const { city, setCity } = useCity();
   const selectRef = React.useRef<HTMLSelectElement>(null);
 
@@ -58,11 +60,11 @@ const CityToggle: React.FC = () => {
           "w-full min-w-[110px] appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
           "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         )}
-        aria-label="Select city"
+        aria-label={t('city.select')}
       >
         {cities.map((c) => (
           <option key={c.value} value={c.value}>
-            {c.label}
+            {t(`city.${c.value}`)}
           </option>
         ))}
       </select>

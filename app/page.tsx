@@ -1,24 +1,13 @@
-"use client";
+import { defaultLocale } from '@/lib/i18n/config';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import * as React from "react";
-import ReportADisruption from "@/components/report-a-disruption";
-import ReportedDisruptions from "@/components/reported-disruptions";
+export const dynamic = 'force-dynamic';
 
-export default function Home() {
-  const [lastUpdate, setLastUpdate] = React.useState<number>(Date.now());
+export default async function RootPage() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get('accept-language');
+  const locale = acceptLanguage?.split(',')[0].split('-')[0] || defaultLocale;
 
-  const handleDisruptionUpdate = () => {
-    setLastUpdate(Date.now());
-  };
-
-  return (
-    <div className="max-w-5xl mx-auto px-6 pb-4 sm:pt-2 flex flex-col md:flex-row gap-8 sm:gap-6">
-      <div className="w-full md:w-1/3">
-        <ReportADisruption onDisruptionSubmitted={handleDisruptionUpdate} />
-      </div>
-      <div className="w-full md:w-2/3">
-        <ReportedDisruptions lastUpdate={lastUpdate} />
-      </div>
-    </div>
-  );
+  redirect(`/${locale}`);
 }

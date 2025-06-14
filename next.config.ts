@@ -1,21 +1,18 @@
-import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
 import withPWA from 'next-pwa';
 
-const nextConfig: NextConfig = {
-  output: 'standalone',
-  // Enable type checking during build
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  // Remove deprecated config
-  // devIndicators: {
-  //   appIsrStatus: false,
-  // },
-};
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-export default withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
-})(nextConfig);
+const config = withNextIntl(
+  withPWA({
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+  })({
+    images: {
+      domains: ['images.unsplash.com'],
+    },
+  })
+);
+
+export default config;

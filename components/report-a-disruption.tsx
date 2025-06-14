@@ -1,28 +1,29 @@
 "use client";
 
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useEffect, useState } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { submitDisruption } from "../actions/submitDisruption";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useCity } from "./city-toggle";
-import { logger } from "@/lib/logger";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { logger } from "@/lib/logger";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { submitDisruption } from "../actions/submitDisruption";
+import { useCity } from "./city-toggle";
 
 const formSchema = z.object({
   line: z.string().min(1, "Please select a line or enter a custom line"),
@@ -59,6 +60,7 @@ interface ReportADisruptionProps {
 }
 
 export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptionProps) {
+  const t = useTranslations();
   const { city, isLoading: isCityLoading } = useCity();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isLoadingData, setIsLoadingData] = React.useState(false);
@@ -251,35 +253,25 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!city) return;
-    try {
-      setIsSubmitting(true);
+    if (!city) {
+      toast.error(t('report.form.error.noCity'));
+      return;
+    }
 
-      const result = await submitDisruption({
+    setIsSubmitting(true);
+    try {
+      await submitDisruption({
         city,
         line: values.line,
         station: values.station,
-        comment: values.comment
+        comment: values.comment,
       });
-
-      if (result.success) {
-        logger.info(`Disruption submitted successfully for city: ${city}, line: ${values.line}, station: ${values.station}`);
-        toast.success("Disruption reported successfully!");
-        form.reset();
-        setFormData({
-          lineName: "",
-          station: "",
-          isCustomLine: false,
-          isCustomStation: false,
-        });
-        onDisruptionSubmitted?.();
-      } else {
-        logger.error(`Failed to submit disruption: ${result.error}`);
-        toast.error(result.error || "Failed to submit disruption");
-      }
+      toast.success(t('report.form.success'));
+      form.reset();
+      onDisruptionSubmitted?.();
     } catch (error) {
-      logger.error('Error submitting form', error);
-      toast.error("An unexpected error occurred. Please try again.");
+      logger.error('Error submitting disruption', error);
+      toast.error(t('report.form.error.submit'));
     } finally {
       setIsSubmitting(false);
     }
@@ -289,7 +281,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
     <div className="w-full space-y-4">
       <div className="h-[40px] flex items-center">
         <h2 className="text-lg font-black truncate lg:text-xl">
-          Report A Disruption
+          {t('report.title')}
         </h2>
       </div>
       <Card>
@@ -299,10 +291,11 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
               <FormField
                 control={form.control}
                 name="line"
-                render={() => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel className="px-2 font-bold">
-                      Line<span className="font-normal"> (Required)</span>
+                      {t('report.form.labels.line')}
+                      <span className="font-normal"> ({t('common.required')})</span>
                     </FormLabel>
                     <FormControl>
                       <div className={cn(
@@ -312,9 +305,10 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                         {formData.isCustomLine ? (
                           <div className="flex gap-2">
                             <Input
+                              {...field}
                               value={formData.lineName}
                               onChange={handleCustomLineChange}
-                              placeholder="Enter custom line name..."
+                              placeholder={t('report.form.placeholders.line')}
                               className="w-full"
                             />
                             <Button
@@ -326,7 +320,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                                   lineName: '',
                                   isCustomLine: false,
                                 }));
-                                form.setValue("line", "");
+                                field.onChange("");
                               }}
                               className="shrink-0"
                             >
@@ -336,6 +330,7 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                         ) : (
                           <div className="relative">
                             <select
+                              {...field}
                               value={formData.lineName}
                               onChange={e => handleLineChange(e.target.value)}
                               className={cn(
@@ -373,10 +368,11 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
               <FormField
                 control={form.control}
                 name="station"
-                render={() => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel className="px-2 font-bold">
-                      Station<span className="font-normal"> (Required)</span>
+                      {t('report.form.labels.station')}
+                      <span className="font-normal"> ({t('common.required')})</span>
                     </FormLabel>
                     <FormControl>
                       <div className={cn(
@@ -386,15 +382,17 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                         {formData.isCustomStation ? (
                           <div className="flex gap-2">
                             <Input
+                              {...field}
                               value={formData.station}
                               onChange={handleCustomStationChange}
-                              placeholder="Enter custom station name..."
+                              placeholder={t('report.form.placeholders.station')}
                               className="w-full"
                             />
                           </div>
                         ) : (
                           <div className="relative">
                             <select
+                              {...field}
                               value={formData.station}
                               onChange={e => handleStationChange(e.target.value)}
                               className={cn(
@@ -430,13 +428,13 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                 name="comment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="px-2 font-bold">Comment</FormLabel>
+                    <FormLabel className="px-2 font-bold">
+                      {t('report.form.labels.comment')}
+                    </FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter an optional comment describing the disruption..."
-                        className="resize-none"
                         {...field}
-                        maxLength={40}
+                        placeholder={t('report.form.placeholders.comment')}
                         disabled={isSubmitting}
                       />
                     </FormControl>
@@ -444,16 +442,9 @@ export function SignalDisruptionForm({ onDisruptionSubmitted }: ReportADisruptio
                   </FormItem>
                 )}
               />
-              <div className="w-full flex justify-end">
-                <Button
-                  variant="default"
-                  type="submit"
-                  className="justify-end"
-                  disabled={isSubmitting || !city || isLoadingData}
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </Button>
-              </div>
+              <Button type="submit" disabled={isSubmitting || isLoadingData}>
+                {isSubmitting ? t('common.loading') : t('report.form.submit')}
+              </Button>
             </form>
           </Form>
         </CardContent>
