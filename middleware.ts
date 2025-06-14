@@ -4,7 +4,7 @@ import { defaultLocale, locales } from './lib/i18n/config';
 export default createMiddleware({
   locales,
   defaultLocale,
-  localePrefix: 'always',
+  localePrefix: 'as-needed',
   localeDetection: true,
   alternateLinks: false
 });
@@ -14,5 +14,5 @@ export default createMiddleware({
 // - static files
 // - _next internals
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)', '/']
+  matcher: ['/((?!api|_next|.*\\..*).*)']
 };
