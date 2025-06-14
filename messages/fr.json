@@ -69,7 +69,7 @@
       "lastUpdated": "Dernière mise à jour",
       "comment": "Commentaire",
       "accuracyScore": "Score de précision",
-      "actions": "Actions",
+      "actions": "Actualiser",
       "confirm": "Confirmer",
       "delete": "Supprimer"
     },
@@ -88,6 +88,10 @@
       "description": "Êtes-vous sûr de vouloir confirmer cette entrée ? Cette action ne peut pas être annulée."
     },
     "vote": {
+      "upvote": "Voter pour",
+      "downvote": "Voter contre",
+      "removeUpvote": "Retirer le vote pour",
+      "removeDownvote": "Retirer le vote contre",
       "upSuccess": "Vote positif enregistré !",
       "downSuccess": "Vote négatif enregistré !",
       "removeSuccess": "Vote supprimé avec succès !",

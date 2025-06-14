@@ -67,7 +67,7 @@
       "lastUpdated": "Last Update",
       "comment": "Comment",
       "accuracyScore": "Accuracy Score",
-      "actions": "Actions",
+      "actions": "Update",
       "confirm": "Confirm",
       "delete": "Delete"
     },
@@ -86,6 +86,10 @@
       "description": "Are you sure you want to confirm this entry? This action cannot be undone."
     },
     "vote": {
+      "upvote": "Upvote",
+      "downvote": "Downvote",
+      "removeUpvote": "Remove upvote",
+      "removeDownvote": "Remove downvote",
       "upSuccess": "Upvoted successfully!",
       "downSuccess": "Downvoted successfully!",
       "removeSuccess": "Vote removed successfully!",
