@@ -1,37 +1,38 @@
+import { deleteDisruption } from "@/actions/deleteDisruption"
+import { updateDisruption } from "@/actions/updateDisruption"
+import { voteDisruption } from "@/actions/voteDisruption"
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Clock, Text, ArrowUp, ArrowDown, Train } from 'lucide-react'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { useState, useEffect } from "react"
-import { formatDistanceToNow } from 'date-fns';
-import { enUS } from 'date-fns/locale';
-import { updateDisruption } from "@/actions/updateDisruption";
-import { deleteDisruption } from "@/actions/deleteDisruption";
-import { toast } from "sonner";
-import { logger } from '@/lib/logger';
-import { voteDisruption } from "@/actions/voteDisruption";
+import { logger } from '@/lib/logger'
+import { formatDistanceToNow } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { ArrowDown, ArrowUp, Clock, Text, Train } from 'lucide-react'
+import { useTranslations, useLocale } from "next-intl"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 interface EntryCardProps {
   entry: {
@@ -44,10 +45,13 @@ interface EntryCardProps {
   }
   isLoading?: boolean
   onRefresh?: () => void
-  onDelete?: () => void
+  onDelete?: (id: string) => void
+  onUpdate?: (updatedEntry: EntryCardProps['entry']) => Promise<void>
 }
 
-export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: EntryCardProps) {
+export function EntryCard({ entry, isLoading = false, onRefresh, onDelete, onUpdate }: EntryCardProps) {
+  const t = useTranslations("disruptions");
+  const locale = useLocale();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,13 +64,14 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       const result = await updateDisruption(entry.id, 0)
       if (result.success) {
         onRefresh?.()
+        onUpdate?.(entry)
         setShowConfirmDialog(false)
-        toast.success("Disruption updated successfully!")
+        toast.success(t("update.success"))
       } else {
-        toast.error(result.error || "Failed to update disruption")
+        toast.error(result.error || t("update.error"))
       }
     } catch (error) {
-      toast.error("An unexpected error occurred")
+      toast.error(t("common.error"))
       logger.error('Error updating disruption:', error)
     } finally {
       setIsSubmitting(false)
@@ -78,14 +83,14 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
       setIsSubmitting(true)
       const result = await deleteDisruption(entry.id)
       if (result.success) {
-        onDelete?.()
+        onDelete?.(entry.id)
         setShowDeleteDialog(false)
-        toast.success("Disruption deleted successfully!")
+        toast.success(t("delete.success"))
       } else {
-        toast.error(result.error || "Failed to delete disruption")
+        toast.error(result.error || t("delete.error"))
       }
     } catch (error) {
-      toast.error("An unexpected error occurred")
+      toast.error(t("common.error"))
       logger.error('Error deleting disruption:', error)
     } finally {
       setIsSubmitting(false)
@@ -103,46 +108,41 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
     try {
       setIsSubmitting(true)
 
-      // Check if this device has already voted on this entry
       const votedEntries = JSON.parse(localStorage.getItem('votedEntries') || '{}')
       const previousVote = votedEntries[entry.id]
 
-      // If there's a previous vote and it's the same as the new vote, remove the vote
       if (previousVote === voteType) {
         const result = await voteDisruption(entry.id, 'remove', previousVote)
         if (result.success) {
-          // Remove the vote from localStorage
           delete votedEntries[entry.id]
           localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
 
           onRefresh?.()
-          toast.success('Vote removed successfully!')
+          toast.success(t("vote.removeSuccess"))
         } else {
-          toast.error(result.error || "Failed to remove vote")
+          toast.error(result.error || t("vote.removeError"))
         }
         return
       }
 
       const result = await voteDisruption(entry.id, voteType, previousVote)
       if (result.success) {
-        // Store the vote in localStorage
         votedEntries[entry.id] = voteType
         localStorage.setItem('votedEntries', JSON.stringify(votedEntries))
 
         onRefresh?.()
-        toast.success(`${voteType === 'up' ? 'Upvoted' : 'Downvoted'} successfully!`)
+        toast.success(voteType === 'up' ? t("vote.upSuccess") : t("vote.downSuccess"))
       } else {
-        toast.error(result.error || "Failed to update accuracy")
+        toast.error(result.error || t("vote.error"))
       }
     } catch (error) {
-      toast.error("An unexpected error occurred")
+      toast.error(t("common.error"))
       logger.error('Error voting:', error)
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  // Check if this device has already voted on this entry
   const votedEntries = JSON.parse(localStorage.getItem('votedEntries') || '{}')
   const previousVote = votedEntries[entry.id]
 
@@ -165,7 +165,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                   </h3>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Station</p>
+                  <p>{t("card.station")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -175,7 +175,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                   <Badge variant="default">{entry.votes}</Badge>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Accuracy Score</p>
+                  <p>{t("card.accuracyScore")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -189,10 +189,10 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                   <Tooltip>
                     <TooltipTrigger className="flex items-center space-x-4">
                       <Train className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">Line {entry.line}</span>
+                      <span className="truncate">{t("card.line", { line: entry.line })}</span>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Line</p>
+                      <p>{t("card.line")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -202,12 +202,13 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                       <Clock className="h-4 w-4 flex-shrink-0" />
                       <span className="truncate">
                         {formatDistanceToNow(lastEditDate, {
-                          locale: enUS
-                        })} ago
+                          locale: locale === 'fr' ? fr : undefined,
+                          addSuffix: true
+                        })}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Last Update</p>
+                      <p>{t("card.lastUpdated")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -223,7 +224,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Comment</p>
+                        <p>{t("card.comment")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -232,7 +233,7 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
               <div className="flex flex-col justify-end ml-4 space-y-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="tertiary" disabled={isSubmitting || isLoading}>Vote</Button>
+                    <Button variant="tertiary" disabled={isSubmitting || isLoading}>{t("card.actions")}</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
@@ -240,14 +241,14 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
                       disabled={isSubmitting || isLoading}
                     >
                       <ArrowUp className="h-4 w-4 mr-2 text-valid" />
-                      {previousVote === 'up' ? 'Remove upvote' : 'Upvote'}
+                      {previousVote === 'up' ? t("vote.removeUpvote") : t("vote.upvote")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => handleVote('down')}
                       disabled={isSubmitting || isLoading}
                     >
                       <ArrowDown className="h-4 w-4 mr-2 text-destructive" />
-                      {previousVote === 'down' ? 'Remove downvote' : 'Downvote'}
+                      {previousVote === 'down' ? t("vote.removeDownvote") : t("vote.downvote")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -267,24 +268,20 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
           <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-xl font-semibold mb-2">
-                Confirm Entry
+                {t("confirm.title")}
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm mb-4">
-                Are you sure you want to confirm{" "}
-                <span className="font-bold">
-                  {entry.station} (Line {entry.line})
-                </span>
-                ? This action cannot be undone.
+                {t("confirm.description")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="flex justify-end sm:space-x-2">
-              <AlertDialogCancel disabled={isSubmitting || isLoading}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isSubmitting || isLoading}>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleConfirm}
                 className="bg-valid hover:bg-valid/90"
                 disabled={isSubmitting || isLoading}
               >
-                {isSubmitting ? "Updating..." : "Confirm"}
+                {isSubmitting ? t("common.loading") : t("card.confirm")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -301,24 +298,20 @@ export function EntryCard({ entry, isLoading = false, onRefresh, onDelete }: Ent
           <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto p-4 rounded-lg">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-xl font-semibold mb-2">
-                Delete Entry
+                {t("delete.title")}
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm mb-4">
-                Are you sure you want to delete{" "}
-                <span className="font-bold">
-                  {entry.station} (Line {entry.line})
-                </span>
-                ? This action cannot be undone.
+                {t("delete.description")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="flex justify-end sm:space-x-2">
-              <AlertDialogCancel disabled={isSubmitting || isLoading}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isSubmitting || isLoading}>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
                 className="bg-destructive hover:bg-destructive/90"
                 disabled={isSubmitting || isLoading}
               >
-                {isSubmitting ? "Deleting..." : "Delete"}
+                {isSubmitting ? t("common.loading") : t("card.delete")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

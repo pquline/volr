@@ -1,0 +1,277 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat trouvé",
+    "confirm": "Confirmer",
+    "required": "Requis",
+    "notFound": "Page non trouvée",
+    "backToHome": "Retour à l'accueil"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact",
+    "settings": "Paramètres",
+    "legalMentions": "Mentions légales",
+    "privacyPolicy": "Confidentialité",
+    "termsOfUse": "Conditions d'utilisation",
+    "madeWith": "made with",
+    "on": "on",
+    "noRightsReserved": "Pas de droits réservés."
+  },
+  "language": {
+    "switch": "Changer de langue",
+    "current": "Langue actuelle",
+    "title": "Langue",
+    "change": "Changer de langue"
+  },
+  "theme": {
+    "title": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "accessibility": "Accessibilité"
+  },
+  "city": {
+    "select": "Sélectionner une ville",
+    "paris": "Paris",
+    "marseille": "Marseille",
+    "rennes": "Rennes"
+  },
+  "disruptions": {
+    "title": "Perturbations Signalées",
+    "loading": "Chargement des perturbations...",
+    "filter": "Filtrer par ligne ou station...",
+    "sort": {
+      "title": "Trier par",
+      "byLine": "Ligne",
+      "byStation": "Station",
+      "byVotes": "Score de précision"
+    },
+    "search": {
+      "placeholder": "Filtrer par ligne ou station..."
+    },
+    "noResults": "Aucune perturbation ne correspond à votre recherche",
+    "noDisruptions": "Aucune perturbation signalée",
+    "card": {
+      "station": "Station",
+      "line": "Ligne {line}",
+      "lastUpdated": "Dernière mise à jour",
+      "comment": "Commentaire",
+      "accuracyScore": "Score de précision",
+      "actions": "Actualiser",
+      "confirm": "Confirmer",
+      "delete": "Supprimer"
+    },
+    "update": {
+      "success": "Perturbation mise à jour avec succès !",
+      "error": "Échec de la mise à jour de la perturbation"
+    },
+    "delete": {
+      "title": "Supprimer l'entrée",
+      "description": "Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action ne peut pas être annulée.",
+      "success": "Perturbation supprimée avec succès !",
+      "error": "Échec de la suppression de la perturbation"
+    },
+    "confirm": {
+      "title": "Confirmer l'entrée",
+      "description": "Êtes-vous sûr de vouloir confirmer cette entrée ? Cette action ne peut pas être annulée."
+    },
+    "vote": {
+      "upvote": "Voter pour",
+      "downvote": "Voter contre",
+      "removeUpvote": "Retirer le vote pour",
+      "removeDownvote": "Retirer le vote contre",
+      "upSuccess": "Vote positif enregistré !",
+      "downSuccess": "Vote négatif enregistré !",
+      "removeSuccess": "Vote supprimé avec succès !",
+      "removeError": "Échec de la suppression du vote",
+      "error": "Échec de la mise à jour du score de précision"
+    }
+  },
+  "report": {
+    "title": "Signaler Une Perturbation",
+    "form": {
+      "labels": {
+        "line": "Ligne",
+        "station": "Station",
+        "comment": "Commentaire"
+      },
+      "placeholders": {
+        "line": "Sélectionner une ligne...",
+        "station": "Sélectionner une station...",
+        "comment": "Entrez un commentaire optionnel décrivant la perturbation..."
+      },
+      "validation": {
+        "line": "Veuillez sélectionner une ligne ou entrer une ligne personnalisée",
+        "station": "Veuillez sélectionner une station ou entrer une station personnalisée",
+        "comment": "Le commentaire doit faire moins de 40 caractères"
+      },
+      "submit": "Envoyer",
+      "success": "Perturbation signalée avec succès !",
+      "error": {
+        "noCity": "Veuillez d'abord sélectionner une ville",
+        "submit": "Échec de l'envoi de la perturbation"
+      }
+    }
+  },
+  "about": {
+    "title": "À propos de",
+    "description": "est une application web moderne pour signaler et suivre les perturbations des transports en commun. Les utilisateurs peuvent ajouter et consulter les rapports de perturbation pour différentes villes et lignes. Aucune donnée personnelle n'est collectée.",
+    "openSource": "Open source et gratuit pour tous.",
+    "features": {
+      "title": "Fonctionnalités",
+      "list": "Signalement en temps réel des perturbations des lignes et stations de transport en commun,Support multi-villes,Recherche et filtrage par ligne ou station,Vote sur la précision des rapports,Suppression automatique des rapports après une période d'inactivité,Design responsive pour mobile et desktop,Aucune authentification requise ; ouvert à tous les utilisateurs,Mode sombre"
+    },
+    "voting": {
+      "title": "Vote & Score de précision",
+      "description": "Chaque rapport de perturbation a un score de précision basé sur les votes de la communauté :",
+      "list": "Tout le monde peut voter pour ou contre un rapport,Le score est affiché sous forme de badge \"Score de précision\" sur chaque rapport,Les rapports avec une très faible précision sont automatiquement supprimés pour maintenir la liste pertinente"
+    },
+    "tech": {
+      "title": "Stack technique",
+      "framework": "Framework",
+      "language": "Langage",
+      "database": "Base de données",
+      "styling": "Style",
+      "forms": "Formulaires",
+      "notifications": "Notifications"
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "description": "Aucune donnée personnelle n'est collectée ou stockée. Seules les données de perturbation (ville, ligne, station, commentaire, votes) sont enregistrées. Les rapports sont automatiquement supprimés après une période d'inactivité."
+    },
+    "contact": {
+      "title": "Contact & Contribution",
+      "openSource": "Open source",
+      "email": "Contact"
+    },
+    "lastUpdated": {
+      "title": "Dernière mise à jour",
+      "date": "14 juin 2025"
+    }
+  },
+  "legal": {
+    "title": "Mentions légales",
+    "projectName": "Nom du projet",
+    "license": "Licence",
+    "licenseDescription": "Ce projet est open source et distribué sous les termes de la",
+    "sourceCode": "Code source",
+    "sourceCodeDescription": "Le code source est publiquement disponible sur",
+    "hosting": {
+      "title": "Hébergement",
+      "provider": "Fournisseur d'hébergement"
+    },
+    "contributors": {
+      "title": "Contributeurs",
+      "description": "Ce projet est maintenu par ses contributeurs. Pour une liste des contributeurs, visitez la",
+      "link": "page des contributeurs"
+    },
+    "liability": {
+      "title": "Responsabilité",
+      "description": "Ce projet est fourni \"tel quel\", sans garantie d'aucune sorte, expresse ou implicite, y compris, mais sans s'y limiter, les garanties de qualité marchande, d'adéquation à un usage particulier et de non-violation. En aucun cas, les contributeurs ou les détenteurs du droit d'auteur ne seront responsables de toute réclamation, dommage ou autre responsabilité, que ce soit dans une action de contrat, de délit ou autre, découlant de, en relation avec ou en rapport avec le logiciel ou l'utilisation ou d'autres transactions dans le logiciel."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Pour toute question ou suggestion, contactez-nous par email :"
+    },
+    "lastUpdated": {
+      "title": "Dernière mise à jour",
+      "date": "14 juin 2025"
+    }
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "projectName": "Nom du projet",
+    "purpose": "Objectif",
+    "purposeDescription": "est une application web moderne pour signaler et suivre les perturbations des transports publics. Nous nous engageons à protéger votre vie privée et à assurer la transparence dans le traitement des données.",
+    "transparency": "Transparence",
+    "transparencyDescription": "Nous croyons en une transparence totale de nos pratiques en matière de données. Cette politique explique quelles données nous collectons, comment nous les utilisons et vos droits concernant vos données.",
+    "dataCollection": {
+      "title": "Collecte de données",
+      "what": "Ce que nous collectons",
+      "whatDescription": "Nous collectons un minimum de données nécessaires au fonctionnement de l'application. Cela inclut les signalements de perturbations, les votes et les analyses de base. Aucune donnée personnelle n'est collectée.",
+      "analytics": "Analyses",
+      "analyticsDescription": "Nous utilisons des analyses anonymes pour comprendre comment l'application est utilisée et améliorer ses fonctionnalités. Ces données ne peuvent pas être utilisées pour identifier des utilisateurs individuels."
+    },
+    "openSource": {
+      "title": "Open Source",
+      "transparency": "Transparence du code",
+      "transparencyDescription": "Notre code source complet est open source et disponible sur",
+      "verification": "Vous pouvez vérifier nos pratiques de traitement des données en examinant le code source."
+    },
+    "userResponsibility": {
+      "title": "Responsabilité de l'utilisateur",
+      "content": "Contenu",
+      "contentDescription": "Les utilisateurs sont responsables du contenu qu'ils soumettent. Veuillez consulter nos",
+      "terms": "Conditions d'utilisation"
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Pour toute question ou préoccupation relative à la confidentialité, veuillez nous contacter à"
+    },
+    "lastUpdated": {
+      "title": "Dernière mise à jour",
+      "date": "14 juin 2025"
+    }
+  },
+  "terms": {
+    "title": "Conditions d'utilisation",
+    "projectName": "Nom du projet",
+    "purpose": "Objectif",
+    "purposeDescription": "est une plateforme pour signaler et suivre les perturbations des transports publics. En utilisant notre service, vous acceptez ces conditions.",
+    "acceptance": {
+      "title": "Acceptation des conditions",
+      "byUsing": "En utilisant le service",
+      "byUsingDescription": "En accédant ou en utilisant volr, vous acceptez d'être lié par ces Conditions d'utilisation et toutes les lois et réglementations applicables.",
+      "changes": "Modifications des conditions",
+      "changesDescription": "Nous nous réservons le droit de modifier ces conditions à tout moment. Votre utilisation continue du service après toute modification indique votre acceptation des nouvelles conditions."
+    },
+    "useOfService": {
+      "title": "Utilisation du service",
+      "accuracy": "Exactitude des informations",
+      "accuracyDescription": "Vous acceptez de fournir des informations exactes et véridiques lors du signalement des perturbations. Les signalements faux ou trompeurs peuvent entraîner la résiliation du compte.",
+      "prohibited": "Activités interdites",
+      "prohibitedDescription": "Vous ne pouvez pas utiliser le service à des fins illégales ou non autorisées, ou d'une manière qui pourrait endommager ou altérer le service."
+    },
+    "userContent": {
+      "title": "Contenu utilisateur",
+      "ownership": "Propriété",
+      "ownershipDescription": "Vous conservez la propriété de tout contenu que vous soumettez au service. Cependant, vous nous accordez une licence pour utiliser, modifier et afficher ce contenu.",
+      "license": "Licence",
+      "licenseDescription": "En soumettant du contenu, vous nous accordez une licence mondiale, non exclusive et gratuite pour utiliser, reproduire et distribuer votre contenu."
+    },
+    "termination": {
+      "title": "Résiliation",
+      "rights": "Nos droits",
+      "rightsDescription": "Nous nous réservons le droit de résilier ou de suspendre votre accès au service à tout moment, pour quelque raison que ce soit, sans préavis.",
+      "effect": "Effet de la résiliation",
+      "effectDescription": "Lors de la résiliation, votre droit d'utiliser le service prendra fin immédiatement et vous devez cesser toute utilisation du service."
+    },
+    "changes": {
+      "title": "Modifications des conditions",
+      "right": "Notre droit de modifier",
+      "rightDescription": "Nous nous réservons le droit de modifier ces conditions à tout moment. Nous informerons les utilisateurs de toute modification importante.",
+      "notification": "Notification",
+      "notificationDescription": "Nous vous informerons de toute modification en publiant les nouvelles conditions sur cette page et en mettant à jour la date de 'Dernière mise à jour'."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Si vous avez des questions concernant ces Conditions, veuillez nous contacter à"
+    },
+    "lastUpdated": {
+      "title": "Dernière mise à jour",
+      "date": "14 juin 2025"
+    }
+  }
+}

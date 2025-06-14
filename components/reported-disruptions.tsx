@@ -13,6 +13,7 @@ import {
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { fetchDisruptions, Disruption } from "@/actions/fetchDisruptions";
 import { useCity } from "./city-toggle";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 type SortField = "line" | "station" | "votes";
@@ -32,6 +33,7 @@ interface ReportedDisruptionsProps {
 export default function ReportedDisruptions({
   lastUpdate,
 }: ReportedDisruptionsProps) {
+  const t = useTranslations("disruptions");
   const { city, isLoading: isCityLoading } = useCity();
   const [originalEntries, setOriginalEntries] = useState<Disruption[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<Disruption[]>([]);
@@ -201,11 +203,11 @@ export default function ReportedDisruptions({
     <div className="w-full flex flex-col gap-4 h-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-0">
         <h2 className="text-lg font-black truncate lg:text-xl">
-          Reported Disruptions
+          {t("title")}
         </h2>
         <div className="flex space-x-4 w-full sm:w-auto">
           <Input
-            placeholder="Filter by line or station..."
+            placeholder={t("search.placeholder")}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onKeyDown={handleInputKeyDown}
@@ -224,13 +226,13 @@ export default function ReportedDisruptions({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-auto">
               <DropdownMenuItem onClick={() => handleSort("line")}>
-                {getSortIcon("line")} Line
+                {getSortIcon("line")} {t("sort.byLine")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleSort("station")}>
-                {getSortIcon("station")} Station
+                {getSortIcon("station")} {t("sort.byStation")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleSort("votes")}>
-                {getSortIcon("votes")} Accuracy Score
+                {getSortIcon("votes")} {t("sort.byVotes")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -243,7 +245,7 @@ export default function ReportedDisruptions({
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-semibold truncate">
-                    Loading disruptions...
+                    {t("loading")}
                   </h3>
                 </div>
               </div>
@@ -264,7 +266,7 @@ export default function ReportedDisruptions({
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold truncate">
-                  No reported disruptions
+                  {t("noDisruptions")}
                 </h3>
               </div>
             </div>
